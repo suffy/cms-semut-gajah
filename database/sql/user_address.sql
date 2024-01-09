@@ -1,0 +1,2 @@
+INSERT INTO `user_address` (`id`, `user_id`, `mapping_site_id`, `name`, `shop_name`, `address_name`, `address_phone`, `address`, `kelurahan`, `kecamatan`, `kota`, `provinsi`, `kode_pos`, `latitude`, `longitude`, `default_address`, `status`, `type`, `created_at`, `updated_at`, `deleted_at`) VALUES 
+(NULL, '14003', '1', 'user', 'toko user', NULL, NULL, 'telaga murni', 'telaga murni', 'Cikarang Barat', 'Bekasi', 'Jawa Barat', '17530', NULL, NULL, '1', '1', NULL, '2021-08-10 09:14:50', '2021-08-10 09:14:50', NULL);
