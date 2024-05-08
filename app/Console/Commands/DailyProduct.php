@@ -116,7 +116,7 @@ class DailyProduct extends Command
                 $brand = 'heavenly nutrition indonesia';
             }
 
-            $data = DB::table('products')->where('kodeprod', $product['kodeprod'])->select('image', 'updated_at')->first();
+            $data = DB::table('products')->where('kodeprod', $product['kodeprod'])->select('id', 'image', 'updated_at')->first();
 
             // postgres
             if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
