@@ -172,9 +172,9 @@ class DailyProduct extends Command
                 }
                 // end
 
-                $this->products->Create(
+                $productSave = $this->products->Create(
                     [
-                        'id'                       => $product['kodeprod'], //kodeprod
+                        // 'id'                       => $product['kodeprod'], //kodeprod
                         'kodeprod'                  => $product['kodeprod'],
                         'brand_id'                  => $product['supp'], //supp
                         'brand'                     => $brand,
@@ -223,7 +223,8 @@ class DailyProduct extends Command
                 // insert into product_detail table
                 if (count($product['master_harga']) > 0) {
                     $this->productPrices->updateOrCreate(
-                        ['product_id'                       => $product['kodeprod']], //kodeprod
+                        // ['product_id'                       => $product['kodeprod']], //kodeprod
+                        ['product_id'                       => $productSave->id], //kodeprod
                         [
                             'harga_ritel_gt'                   => $product['master_harga'][0]['apps_harga_ritel_gt'] != "" ? $product['master_harga'][0]['apps_harga_ritel_gt'] : NULL, // medium_retil
                             'harga_grosir_mt'                   => $product['master_harga'][0]['apps_harga_grosir_mt'] != "" ? $product['master_harga'][0]['apps_harga_grosir_mt'] : NULL, // medium_grosir
@@ -239,7 +240,8 @@ class DailyProduct extends Command
                 // type disc class or min transaction
                 if ($product['apps_discount_class'] == '0') {
                     $this->productStrata->Create([
-                        'product_id' => $product['kodeprod'],
+                        //'product_id' => $product['kodeprod'],
+                        'product_id' => $productSave->id,
                         'disc_percent' => $product['apps_discount_class_persen'],
                         'min_transaction' => $product['apps_discount_class_minimum_transaksi'],
                     ]);
@@ -248,9 +250,10 @@ class DailyProduct extends Command
                 // insert to logs table
                 $this->log->create(
                     [
-                        'table_id'     => $product['kodeprod'],
+                        //'table_id'     => $product['kodeprod'],
+                        'table_id'     => $productSave->id,
                         'log_time'     => Carbon::now(),
-                        'activity'      => 'Insert/update product from erp with id : ' . $product['kodeprod'],
+                        'activity'      => 'Insert/update product from erp with id : ' . $productSave->id,
                         'table_name'    => 'products',
                         'column_name'   => 'products.id, products.brand_id, products.status_herbana, products.invoice_name, products.name, products.search_name, products.satuan_online, products.konversi_sedang_ke_kecil, products.slug, products.category_id, products.description, products.image, products.weight, products.status_promosi_coret',
                         'from_user'     => null,
@@ -276,9 +279,10 @@ class DailyProduct extends Command
                                     // insert to logs table
                                     $this->log->create(
                                         [
-                                            'table_id'     => $product['kodeprod'],
+                                            //'table_id'     => $product['kodeprod'],
+                                            'table_id'     => $data->id,
                                             'log_time'     => Carbon::now(),
-                                            'activity'      => 'failed download image product from erp with id : ' . $product['kodeprod'],
+                                            'activity'      => 'failed download image product from erp with id : ' . $data->id,
                                             'table_name'    => 'products',
                                             'column_name'   => 'products.id, products.name, products.image',
                                             'from_user'     => null,
@@ -308,7 +312,8 @@ class DailyProduct extends Command
 
                     // insert into products table
                     $this->products->updateOrCreate(
-                        ['id'                       => $product['kodeprod']], //kodeprod
+                        //['id'                       => $product['kodeprod']], //kodeprod
+                        ['id'                       => $data->id], //kodeprod
                         [
                             'kodeprod'                 => $product['kodeprod'],
                             'brand_id'                  => $product['supp'], //supp
@@ -358,7 +363,8 @@ class DailyProduct extends Command
                     // insert into product_detail table
                     if (count($product['master_harga']) > 0) {
                         $this->productPrices->updateOrCreate(
-                            ['product_id'                       => $product['kodeprod']], //kodeprod
+                            //['product_id'                       => $product['kodeprod']], //kodeprod
+                            ['product_id'                       => $data->id], //kodeprod
                             [
                                 'harga_ritel_gt'                   => $product['master_harga'][0]['apps_harga_ritel_gt'] != "" ? $product['master_harga'][0]['apps_harga_ritel_gt'] : NULL, // medium_retil
                                 'harga_grosir_mt'                   => $product['master_harga'][0]['apps_harga_grosir_mt'] != "" ? $product['master_harga'][0]['apps_harga_grosir_mt'] : NULL, // medium_grosir
@@ -374,7 +380,8 @@ class DailyProduct extends Command
                     // type disc class or min transaction
                     if ($product['apps_discount_class'] == '0') {
                         $this->productStrata->updateOrCreate(
-                            ['product_id'     => $product['kodeprod']], //kodeprod
+                            //['product_id'     => $product['kodeprod']], //kodeprod
+                            ['product_id'     => $data->id], //kodeprod
                             [
                                 'disc_percent' => $product['apps_discount_class_persen'],
                                 'min_transaction' => $product['apps_discount_class_minimum_transaksi'],
@@ -388,10 +395,11 @@ class DailyProduct extends Command
 
                     // insert to logs table
                     $this->log->updateOrCreate(
-                        ['table_id'     => $product['kodeprod']],
+                        //['table_id'     => $product['kodeprod']],
+                        ['table_id'     => $products->id],
                         [
                             'log_time'     => Carbon::now(),
-                            'activity'      => 'Insert/update product from erp with id : ' . $product['kodeprod'],
+                            'activity'      => 'Insert/update product from erp with id : ' . $products->id,
                             'table_name'    => 'products',
                             'column_name'   => 'products.id, products.brand_id, products.status_herbana, products.invoice_name, products.name, products.search_name, products.satuan_online, products.konversi_sedang_ke_kecil, products.slug, products.category_id, products.description, products.image, products.weight, products.status_promosi_coret',
                             'from_user'     => null,
@@ -404,10 +412,11 @@ class DailyProduct extends Command
                 } else {
                     // insert to logs table
                     $this->log->updateOrCreate(
-                        ['table_id'     => $product['kodeprod']],
+                        //['table_id'     => $product['kodeprod']],
+                        ['table_id'     => $data->id],
                         [
                             'log_time'     => Carbon::now(),
-                            'activity'      => 'Already check product from erp with id : ' . $product['kodeprod'],
+                            'activity'      => 'Already check product from erp with id : ' . $data->id,
                             'table_name'    => 'products',
                             'column_name'   => 'products.id, products.brand_id, products.status_herbana, products.invoice_name, products.name, products.search_name, products.satuan_online, products.konversi_sedang_ke_kecil, products.slug, products.category_id, products.description, products.image, products.weight, products.status_promosi_coret',
                             'from_user'     => null,
