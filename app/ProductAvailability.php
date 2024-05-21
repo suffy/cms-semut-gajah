@@ -10,7 +10,7 @@ class ProductAvailability extends Model
 
     protected $table = "product_availability";
     protected $guarded = [];
-    
+
     public function product()
     {
         return $this->belongsTo('App\Product', 'product_id', 'id');

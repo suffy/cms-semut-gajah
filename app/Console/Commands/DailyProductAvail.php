@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\ProductAvailability;
+use App\Product;
 use App\Log;
 use App\MappingSite;
 use Illuminate\Support\Facades\Http;
@@ -30,14 +31,15 @@ class DailyProductAvail extends Command
      *
      * @return void
      */
-    protected $productAvailability, $mappingSites;
+    protected $productAvailability, $mappingSites, $product, $log;
 
-    public function __construct(ProductAvailability $productAvailability, Log $log, MappingSite $mappingSite)
+    public function __construct(ProductAvailability $productAvailability, Log $log, MappingSite $mappingSite, Product $product)
     {
         parent::__construct();
         $this->productAvailability  = $productAvailability;
         $this->log                  = $log;
         $this->mappingSites         = $mappingSite;
+        $this->product              = $product;
     }
 
     // get products from erp
@@ -45,7 +47,7 @@ class DailyProductAvail extends Command
     {
         // ambil data product_site dari erp
         $response = Http::get('http://site.muliaputramandiri.com/restapi/api/master_data/product_site', [
-            'X-API-KEY' => 123,
+            'X-API-KEY' => config('erp.x_api_key'),
             'token'     => config('erp.token_api')
         ])->json();
 
@@ -56,21 +58,23 @@ class DailyProductAvail extends Command
     public function store($products)
     {
         foreach($products as $row) {
+            // get product by kodeprod
+            $prod = $this->product->where('kodeprod', $row['kodeprod'])->first();
             // ambil data product dengan beberapa kondisi
-            $product = $this->productAvailability->where('site_code', $row['site_code'])->where('product_id', $row['kodeprod'])->first();
+            $product = $prod ? $this->productAvailability->where('site_code', $row['site_code'])->where('product_id', $prod->id)->first() : null;
 
-            // jika data sudah ada 
+            // jika data sudah ada
             if(isset($product)) {
                 // jika ada update data dari erp
                 if($product->updated_at != $row['last_updated']) {
                     $this->info('update' . $row['site_code'] . ' - ' . $row['kodeprod']);
                     // update data
                     $product->update([
-                        'site_code'     => $row['site_code'],
-                        'product_id'    => $row['kodeprod'],
+                        // 'site_code'     => $row['site_code'],
+                        // 'product_id'    => $row['kodeprod'],
                         'status'        => $row['status_aktif'],
                         'updated_at'    => $row['last_updated']
-                    ]); 
+                    ]);
 
                     // simpan data logs
                     $this->log->updateOrCreate(
@@ -98,19 +102,20 @@ class DailyProductAvail extends Command
                         'platform'      => 'web',
                         'created_at'    => Carbon::now()]);
                 }
-            // jika belum ada data 
+            // jika belum ada data
             } else {
                 $site = $this->mappingSites->where('kode', $row['site_code'])->first();
-                $this->info('create ' . $row['site_code'] . ' - ' . $row['kodeprod']);
+                $prod = $this->product->where('kodeprod', $row['kodeprod'])->first();
 
-                if(isset($site)) {
+                if(isset($site) && isset($prod)) {
+                    $this->info('create ' . $row['site_code'] . ' - ' . $row['kodeprod']);
                     // simpan data
                     $product = $this->productAvailability->create([
                         'site_code'     => $row['site_code'],
-                        'product_id'    => $row['kodeprod'],
+                        'product_id'    => $prod->id,
                         'status'        => $row['status_aktif'],
                         'updated_at'    => $row['last_updated']
-                    ]); 
+                    ]);
 
                     $this->log->updateOrCreate(
                         ['table_id'     => $product->id],
