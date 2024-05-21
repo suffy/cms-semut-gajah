@@ -12,3 +12,9 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+# Ignore Laravel cache files
+/bootstrap/cache/*.php
+
+# Specific ignore for config cache
+/bootstrap/cache/config.php
