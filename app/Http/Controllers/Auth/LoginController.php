@@ -39,10 +39,10 @@ class LoginController extends Controller
             $usr->last_login = date('Y-m-d H:i:s');
             $usr->fcm_token = $request->input('token');
             $usr->save();
-    
+
             Auth::loginUsingId($user->id);
             Session::put('id', $user->id);
-    
+
             // if ( $usr->account_role ) {// do your magic here
             //     return redirect()->route('dashboard');
             // }

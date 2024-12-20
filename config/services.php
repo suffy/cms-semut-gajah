@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    //telegram
+    'key_token_telegram' => env('KEY_TOKEN_TELEGRAM', '7725682591:AAG6TZDeaCyId_HsLplgh1JIXkK0IhFfVCY'),
+    'key_chatid_telegram' => env('KEY_CHATID_TELEGRAM', '-355061631'),
+
 ];
