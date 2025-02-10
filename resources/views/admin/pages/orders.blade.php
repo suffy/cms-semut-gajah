@@ -84,7 +84,7 @@
                 </select>
             </div>
 
-            
+
             <div class="col-md-6 my-1">
                 <form method="get" action="{{url('admin/orders')}}">
                     <div class="input-group">
@@ -105,8 +105,8 @@
 
   <div class="card border-light">
     <div class="table-responsive">
-                        
-        <a 
+
+        <a
             href="
                 @if($account_role == "manager")
                     {{url('manager/orders')}}
@@ -120,7 +120,7 @@
             "
             class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status_faktur')=="") active @endif"
         >Semua</a>
-        <a 
+        <a
             href="
                 @if($account_role == "manager")
                     {{url('manager/orders?status_faktur=F')}}
@@ -131,10 +131,10 @@
                 @elseif($account_role == "distributor")
                     {{url('distributor/orders?status_faktur=F')}}
                 @endif
-            " 
+            "
             class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status_faktur')=="F") active @endif"
         >Faktur</a>
-        <a 
+        <a
             href="
                 @if($account_role == "manager")
                     {{url('manager/orders?status_faktur=R')}}
@@ -145,7 +145,7 @@
                 @elseif($account_role == "distributor")
                     {{url('distributor/orders?status_faktur=R')}}
                 @endif
-            " 
+            "
             class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status_faktur')=="R") active @endif"
         >Retur</a>
       <table class="table default-table orderTable">
@@ -158,8 +158,8 @@
                 @if (auth()->user()->account_role != 'distributor')
                     <th>Site Name</th>
                 @endif
-                <th>Nominal</th>
-                <th>Pembayaran</th>
+                <th style="min-width: 150px;">Nominal</th>
+                <th style="min-width: 150px;">Pembayaran</th>
                 <th>Reward Point</th>
                 <th>Payment Point</th>
                 <th>Status</th>
@@ -178,11 +178,11 @@
                     @if (auth()->user()->account_role != 'distributor')
                         <td>{{ $order->branch_name }}</td>
                     @endif
-                    <td>Rp. {{ number_format($order->payment_total, 2, ',', '.') }}</td>
-                    <td>Rp. {{ number_format($order->payment_final, 2, ',', '.') }}</td>
+                    <td class="text-right">Rp. {{ number_format($order->payment_total, 2, ',', '.') }}</td>
+                    <td class="text-right">Rp. {{ number_format($order->payment_final, 2, ',', '.') }}</td>
                     <td>
                         @if($order->status == '4')
-                            @if($order->point) 
+                            @if($order->point)
                                 {{ $order->point }} Point
                             @else
                                 0 Point
@@ -192,7 +192,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($order->payment_point) 
+                        @if($order->payment_point)
                             {{ $order->payment_point }} Point
                         @else
                             0 Point
