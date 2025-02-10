@@ -67,7 +67,7 @@
                         @foreach ($topProducts as $topProduct)
                             <tr>
                                 <td width="600">{{ $topProduct->product }}</td>
-                                <td>{{ $topProduct->total }}</td>
+                                <td class="text-right">{{ $topProduct->total }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -83,33 +83,33 @@
                     <tbody>
                         <tr>
                             <td width="600">Jumlah Order</td>
-                            <td>{{ $totalOrders }}</td>
+                            <td class="text-right">{{ $totalOrders }}</td>
                         </tr>
                         <tr>
                             <td width="600">Order Pending</td>
-                            <td>{{ $totalPendingOrders }}</td>
+                            <td class="text-right">{{ $totalPendingOrders }}</td>
                         </tr>
                         <tr>
                             <td width="600">Order Terkonfirmasi</td>
-                            <td>{{ $totalConfirmationOrders }}</td>
+                            <td class="text-right">{{ $totalConfirmationOrders }}</td>
                         </tr>
                         <tr>
                             <td width="600">Pengiriman</td>
-                            <td>{{ $totalDeliveryOrders }}</td>
+                            <td class="text-right">{{ $totalDeliveryOrders }}</td>
                         </tr>
                         <tr>
                             <td width="600">Order Selesai</td>
-                            <td>{{ $totalSuccessOrders }}</td>
+                            <td class="text-right">{{ $totalSuccessOrders }}</td>
                         </tr>
                         <tr>
                             <td width="600">Order Batal</td>
-                            <td>{{ $totalFailedOrders }}</td>
+                            <td class="text-right">{{ $totalFailedOrders }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
     </div>
 </section>
 
