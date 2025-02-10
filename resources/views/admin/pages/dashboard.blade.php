@@ -7,14 +7,14 @@
                 $stat_all = \App\StatCounter::all();
                 $stat_today = \App\StatCounter::where('date', 'like' ,'%'.date('Y-m-d').'%')
                             ->first();
-            
+
                 $total_visitor = 0;
                 $total_view = 0;
                 foreach ($stat_all as $stat){
                     $total_visitor = $total_visitor+$stat->visitors;
                     $total_view = $total_view+$stat->views;
                 }
-            
+
                 @endphp
 
     <section class="panel col-md-6">
@@ -136,7 +136,7 @@
             </form>
         </div>
     </section>
-            
+
     <section class="panel">
         <div class="card-body">
             @if(auth()->user()->account_role == 'manager' || auth()->user()->account_role == 'superadmin' || auth()->user()->account_role == 'admin')
@@ -325,7 +325,7 @@
                             @forelse ($topProducts as $topProduct)
                                 <tr>
                                     <td width="600">{{ $topProduct->product }}</td>
-                                    <td>{{ number_format($topProduct->total, 0, '.', ',') }}</td>
+                                    <td class="text-right">{{ number_format($topProduct->total, 0, '.', ',') }}</td>
                                 </tr>
                             @empty
                                 <tr style="text-align:center;">
@@ -346,7 +346,7 @@
                             @forelse ($topRatings as $topRating)
                                 <tr>
                                     <td width="600">{{ $topRating->product }}</td>
-                                    <td>{{ $topRating->star_review }}</td>
+                                    <td class="text-right">{{ $topRating->star_review }}</td>
                                 </tr>
                             @empty
                                 <tr style="text-align:center;">
@@ -369,7 +369,7 @@
                                     <tr>
                                         <td>{{ $top_dist->kode }}</td>
                                         <td>{{ $top_dist->branch }} | {{ $top_dist->nama }}</td>
-                                        <td>Rp {{ number_format($top_dist->total, 0, '.', ',') }}</td>
+                                        <td class="text-right">Rp {{ number_format($top_dist->total, 0, '.', ',') }}</td>
                                     </tr>
                                 @empty
                                     <tr style="text-align:center;">
@@ -393,7 +393,7 @@
                                     <tr>
                                         <td>{{ $top_user->customer_code }}</td>
                                         <td>{{ $top_user->name }}</td>
-                                        <td>Rp {{ number_format($top_user->total, 0, '.', ',') }}</td>
+                                        <td class="text-right">Rp {{ number_format($top_user->total, 0, '.', ',') }}</td>
                                     </tr>
                                 @empty
                                     <tr style="text-align:center;">
@@ -496,7 +496,7 @@
             } else {
                 var label = topProductsChart.category;
             }
-            
+
             if(topProductsChart) {
                 if(topProductsChart.product) {
                     //pie chart data
@@ -535,7 +535,7 @@
                         }
                     ]
                     };
-            
+
                     var theHelp = Chart.helpers;
                     //options
                     var optionsTopProducts = {
@@ -611,7 +611,7 @@
                         }
                     ]
                     };
-            
+
                     //options
                     var optionsTopProducts = {
                         responsive: false,
@@ -629,7 +629,7 @@
                                 fontColor: "#333",
                                 fontSize: 16
                             }
-                        }, 
+                        },
                         tooltips: {
                             callbacks: {
                                 label: function(tooltipItem, data) {
@@ -656,7 +656,7 @@
                     }
                 ]
                 };
-            
+
                 //options
                 var optionsTopProducts = {
                     responsive: false,
@@ -690,7 +690,7 @@
                     }
                 };
             }
-       
+
             //create Pie Chart class object
             var chart1 = new Chart(ctxProductChart, {
                 type: "pie",
@@ -746,7 +746,7 @@
                         }
                     ]
                     };
-            
+
                     var theHelp = Chart.helpers;
                     //options
                     var optionsTopRatings = {
@@ -821,7 +821,7 @@
                         }
                     ]
                     };
-            
+
                     //options
                     var optionsTopRatings = {
                         responsive: false,
@@ -865,7 +865,7 @@
                     }
                 ]
                 };
-            
+
                 //options
                 var optionsTopRatings = {
                     responsive: false,
@@ -899,7 +899,7 @@
                     }
                 };
             }
-       
+
             //create Pie Chart class object
             var chart2 = new Chart(ctxRatingChart, {
                 type: "pie",
@@ -923,7 +923,7 @@
                     var data = topProductsChart;
                     var check_data = topProductsChart.product;
                     var dataTopProducts = new Array(check_data.length);
-                    Object.keys(check_data).forEach(function(key) {    
+                    Object.keys(check_data).forEach(function(key) {
                         dataTopProducts[key] = {
                             name: data.product[key],
                             y: data.total[key]
@@ -980,11 +980,11 @@
                             }
                         }
                     }
-                }, 
+                },
                 series: [{
                     name: label,
                     colorByPoint: true,
-                    data: topProductsSeries    
+                    data: topProductsSeries
                 }]});
         }
 
@@ -1003,7 +1003,7 @@
                     var data = topRatingsChart;
                     var check_data = topRatingsChart.product;
                     var dataTopRatings = new Array(check_data.length);
-                    Object.keys(check_data).forEach(function(key) {    
+                    Object.keys(check_data).forEach(function(key) {
                         dataTopRatings[key] = {
                             name: data.product[key],
                             y: data.star_review[key]
@@ -1060,11 +1060,11 @@
                             }
                         }
                     }
-                }, 
+                },
                 series: [{
                     name: label,
                     colorByPoint: true,
-                    data: topRatingsSeries    
+                    data: topRatingsSeries
                 }]});
         }
 
@@ -1119,7 +1119,7 @@
         $(document).ready(function(){
             var top = {!! json_encode($productTop) !!};
 
-            Object.keys(top).forEach(function(key) {    
+            Object.keys(top).forEach(function(key) {
                 if(((parseInt(key) + 1) % 2) != 0) {
                     generateTopOrder(top[key], (parseInt(key) + 1));
                     // topOrder(top[key], (parseInt(key) + 1));
@@ -1186,7 +1186,7 @@
 
             var orderChart = new Chart($("#order-chart"), config);
         });
-        
+
         $('.btn-chart').on('click', function(){
             if($('.btn-chart').attr("class") == "btn btn-secondary btn-chart" || $('.btn-chart').attr("class") == "btn btn-chart btn-secondary") {
                 $('.btn-chart').removeClass("btn-secondary");
