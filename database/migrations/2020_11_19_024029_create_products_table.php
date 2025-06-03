@@ -22,13 +22,13 @@ class CreateProductsTable extends Migration
             $table->string('invoice_name')->nullable();
             $table->string('name')->nullable();
             $table->string('search_name')->nullable();
-            // $table->string('large_unit')->nullable();
-            // $table->string('medium_unit')->nullable();
-            // $table->string('small_unit')->nullable();
+            $table->string('large_unit')->nullable();
+            $table->string('medium_unit')->nullable();
+            $table->string('small_unit')->nullable();
             $table->string('satuan_online')->nullable(); // update 21-09-21
-            // $table->string('large_qty')->nullable();
-            // $table->string('medium_qty')->nullable();
-            // $table->string('small_qty')->nullable();
+            $table->string('large_qty')->nullable();
+            $table->string('medium_qty')->nullable();
+            $table->string('small_qty')->nullable();
             $table->string('group_id')->nullable();
             $table->string('nama_group')->nullable();
             $table->string('subgroup')->nullable();
@@ -45,7 +45,7 @@ class CreateProductsTable extends Migration
             $table->string('slug')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->text('description')->nullable();
-            $table->integer('parent_id')->nullable();  
+            $table->integer('parent_id')->nullable();
             $table->string('sku')->nullable();
             $table->string('image')->nullable(); // update 12-01-2022
             $table->integer('spent')->nullable(); // update 12-01-2022
@@ -59,7 +59,7 @@ class CreateProductsTable extends Migration
             $table->string('cashback_2')->nullable();
             $table->integer('stock')->nullable();
             $table->integer('available')->nullable();
-            // $table->double('weight')->nullable();
+            $table->double('weight')->nullable();
             $table->boolean('featured')->nullable();
             $table->integer('menu_order')->nullable();
             $table->integer('admin_id')->nullable();
