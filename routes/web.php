@@ -352,6 +352,7 @@ Route::group(['middleware' => 'App\Http\Middleware\ManagerMiddleware'], function
 
         // voucher
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -645,7 +646,7 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
         Route::get('product/availability/{site_code}', 'Admin\ProductController@siteCode', ['as' => 'admin']);
 
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
-        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -1018,6 +1019,7 @@ Route::group(['middleware' => 'App\Http\Middleware\DistributorMiddleware'], func
         Route::get('product/availability/{site_code}', 'Distributor\ProductController@siteCode', ['as' => 'admin']);
 
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
 
         //Penawaran
         Route::get('product-offers', 'Admin\OffersController@index');
