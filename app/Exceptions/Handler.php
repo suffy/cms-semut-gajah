@@ -37,20 +37,22 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        $link = url()->full();
-        if(strlen($link) > 2000){
-            $link = substr($link, 0, 1000);
+        if (config('services.key_token_telegram')) {
+            $link = url()->full();
+            if(strlen($link) > 2000){
+                $link = substr($link, 0, 1000);
+            }
+
+            $url = "https://api.telegram.org/bot".config('services.key_token_telegram')."/sendMessage";
+
+            $data = [
+                "chat_id" => config('services.key_chatid_telegram'),
+                "text" => "Link : ".$link."\nFile : ".$exception->getFile()."\nLine : ".$exception->getLine()."\nCode : ".$exception->getCode()."\nMessage : ".$exception->getMessage(),
+                "disable_notification" => false
+            ];
+
+            (new ClientService)->request('get', $url, 'json', null, $data);
         }
-
-        $url = "https://api.telegram.org/bot".config('services.key_token_telegram')."/sendMessage";
-
-        $data = [
-            "chat_id" => config('services.key_chatid_telegram'),
-            "text" => "Link : ".$link."\nFile : ".$exception->getFile()."\nLine : ".$exception->getLine()."\nCode : ".$exception->getCode()."\nMessage : ".$exception->getMessage(),
-            "disable_notification" => false
-        ];
-
-        (new ClientService)->request('get', $url, 'json', null, $data);
 
         parent::report($exception);
     }
