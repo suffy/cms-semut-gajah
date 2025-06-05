@@ -645,6 +645,7 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
         Route::get('product/availability/{site_code}', 'Admin\ProductController@siteCode', ['as' => 'admin']);
 
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -870,7 +871,6 @@ Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function (
 
         Route::get('product-status/{id}', 'Admin\ProductController@updateStatus');
         Route::get('product-avail-status/{id}', 'Admin\ProductController@updateAvailStatus');
-        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // Logs
         Route::get('logs', 'LogController@export');
