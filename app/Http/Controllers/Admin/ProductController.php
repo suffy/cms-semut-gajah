@@ -515,6 +515,42 @@ class ProductController extends Controller
             ->with('message', "Data Deleted!");
     }
 
+    public function updateProductStatus(Request $request)
+    {
+        $product = Product::find($request->id);
+        if ($product) {
+            if ($product->status == "1") {
+                $product->status = "0";
+            } else {
+                $product->status = "1";
+            }
+
+            $logs = $this->logs;
+            $logs->log_time     = Carbon::now();
+            $logs->activity     = "change status product to " . $product->status;
+            $logs->table_id     = $request->id;
+            $logs->table_name   = 'product';
+            $logs->from_user    = auth()->user()->id;
+            $logs->to_user      = null;
+            $logs->platform     = "web";
+            $logs->save();
+
+            $product->save();
+
+            $status = 1;
+            $msg = 'Update sukses ' . $product->status;
+            return redirect($request->input('url'))
+                ->with('status', $status)
+                ->with('message', $msg);
+        } else {
+            $status = 0;
+            $msg = 'Update Gagal';
+            return redirect($request->input('url'))
+                ->with('status', $status)
+                ->with('message', $msg);
+        }
+    }
+
     public function searchListProduct(Request $request)
     {
 
