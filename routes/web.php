@@ -352,7 +352,7 @@ Route::group(['middleware' => 'App\Http\Middleware\ManagerMiddleware'], function
 
         // voucher
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
-        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -646,7 +646,7 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
         Route::get('product/availability/{site_code}', 'Admin\ProductController@siteCode', ['as' => 'admin']);
 
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
-        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -840,6 +840,7 @@ Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function (
         Route::post('product-upload-excel', 'Admin\ProductController@uploadExcel', ['as' => 'admin']);
         Route::get('product/availability', 'Admin\ProductController@availability', ['as' => 'admin']);
         Route::get('product/availability/{site_code}', 'Admin\ProductController@siteCode', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // promo
         Route::get('promo', 'Admin\PromoController@index', ['as' => 'admin']);
@@ -1019,7 +1020,7 @@ Route::group(['middleware' => 'App\Http\Middleware\DistributorMiddleware'], func
         Route::get('product/availability/{site_code}', 'Distributor\ProductController@siteCode', ['as' => 'admin']);
 
         Route::resource('vouchers', 'Admin\VoucherController', ['as' => 'admin']);
-        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus', ['as' => 'admin']);
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         //Penawaran
         Route::get('product-offers', 'Admin\OffersController@index');
