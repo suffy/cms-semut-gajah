@@ -870,6 +870,7 @@ Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function (
 
         Route::get('product-status/{id}', 'Admin\ProductController@updateStatus');
         Route::get('product-avail-status/{id}', 'Admin\ProductController@updateAvailStatus');
+        Route::post('update-product-status', 'Admin\ProductController@updateProductStatus');
 
         // Logs
         Route::get('logs', 'LogController@export');
