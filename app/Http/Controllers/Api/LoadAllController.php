@@ -99,27 +99,27 @@ class LoadAllController extends Controller
         // Kondisi untuk harga biar sesuai dengan user yang login
         if ($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
             $arrayPrice = DB::raw("
-                                    product_prices.id, 
-                                    product_id,  
-                                    harga_grosir_mt, 
-                                    harga_promosi_coret_ritel_gt, 
-                                    harga_promosi_coret_grosir_mt, 
+                                    product_prices.id,
+                                    product_id,
+                                    harga_grosir_mt,
+                                    harga_promosi_coret_ritel_gt,
+                                    harga_promosi_coret_grosir_mt,
                                     products.brand_id,
                                     harga_ritel_gt as ritel_gt,
-                                    (CASE 
-                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt 
+                                    (CASE
+                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt
                                         WHEN products.brand_id::integer=001 THEN harga_ritel_gt
-                                        ELSE harga_grosir_mt 
+                                        ELSE harga_grosir_mt
                                         END) as harga_ritel_gt
                                 ");
         } else {
             $arrayPrice = DB::raw("
-                                    product_prices.id, 
-                                    product_id, 
-                                    harga_ritel_gt, 
-                                    harga_grosir_mt, 
-                                    harga_promosi_coret_ritel_gt, 
-                                    harga_promosi_coret_grosir_mt, 
+                                    product_prices.id,
+                                    product_id,
+                                    harga_ritel_gt,
+                                    harga_grosir_mt,
+                                    harga_promosi_coret_ritel_gt,
+                                    harga_promosi_coret_grosir_mt,
                                     products.brand_id,
                                     harga_ritel_gt as rt_backup
                                 ");
@@ -168,7 +168,7 @@ class LoadAllController extends Controller
                     $categories = cache()->get('categories-' . $userId);
                 } else {
                     $categories = cache()->remember('categories-' . $userId, 50, function () {
-                        return $this->categories->get();
+                        return $this->categories->orderBy('menu_order', 'asc')->get();
                     });
                 }
             } catch (Exception $e) {
@@ -720,8 +720,8 @@ class LoadAllController extends Controller
                     $name  = ($category) ?  explode('-', $category->slug) : "";                                                      //  get name product from recent view below
                     $productsByname = $products                                                                 //  get product by similar name from recent view
                         // ->where('product_availability.status', 1)
-                        // ->whereRaw( 
-                        //         "MATCH(products.name) AGAINST(?)", 
+                        // ->whereRaw(
+                        //         "MATCH(products.name) AGAINST(?)",
                         //         array($name[0])
                         // )
                         ->orwhere(function ($q) use ($kode_type) {
