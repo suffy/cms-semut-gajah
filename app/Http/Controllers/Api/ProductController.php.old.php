@@ -67,34 +67,34 @@ class ProductController extends Controller
         // return ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
         if ($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
             return DB::raw("
-                                    product_prices.id,
-                                    product_id,
-                                    harga_grosir_mt,
-                                    harga_promosi_coret_ritel_gt,
-                                    harga_promosi_coret_grosir_mt,
+                                    product_prices.id, 
+                                    product_id,  
+                                    harga_grosir_mt, 
+                                    harga_promosi_coret_ritel_gt, 
+                                    harga_promosi_coret_grosir_mt, 
                                     products.brand_id,
                                     harga_ritel_gt as ritel_gt,
-                                    (CASE
-                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt
+                                    (CASE 
+                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt 
                                         WHEN products.brand_id::integer=001 THEN harga_ritel_gt
-                                        ELSE harga_grosir_mt
+                                        ELSE harga_grosir_mt 
                                         END) as harga_ritel_gt
                                 ");
         } else {
             return DB::raw("
-                                    product_prices.id,
-                                    product_id,
-                                    harga_ritel_gt,
-                                    harga_grosir_mt,
-                                    harga_promosi_coret_ritel_gt,
-                                    harga_promosi_coret_grosir_mt,
+                                    product_prices.id, 
+                                    product_id, 
+                                    harga_ritel_gt, 
+                                    harga_grosir_mt, 
+                                    harga_promosi_coret_ritel_gt, 
+                                    harga_promosi_coret_grosir_mt, 
                                     products.brand_id,
                                     harga_ritel_gt as rt_backup
                                 ");
         };
     }
 
-    public function get(Request $request)                                    // get data mpm api product promo
+    public function get(Request $request)                                    // get data mpm api product promo 
     {
         try {                                                                   // check token
             if (!JWTAuth::parseToken()->authenticate()) {
@@ -139,33 +139,33 @@ class ProductController extends Controller
                 $array              = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'products.type_status'];
                 $arrayProductPromo = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'products.kodeprod', 'products.name', 'products.description', 'products.image', 'products.brand_id', 'products.category_id', 'products.satuan_online',  'products.kecil', 'products.konversi_sedang_ke_kecil', 'products.status_promosi_coret', 'products.status_herbana', 'products.status_terlaris', 'products.status_terbaru', 'products.status_renceng', 'products.created_at'];
             }
-            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
+            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];     
             $arrayPrice     = $this->arraySelectPrice();
 
             // Kondisi untuk harga biar sesuai dengan user yang login
             // if($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
             //     $arrayPrice = DB::raw("
-            //                             product_prices.id,
-            //                             product_id,
-            //                             harga_grosir_mt,
-            //                             harga_promosi_coret_ritel_gt,
-            //                             harga_promosi_coret_grosir_mt,
+            //                             product_prices.id, 
+            //                             product_id,  
+            //                             harga_grosir_mt, 
+            //                             harga_promosi_coret_ritel_gt, 
+            //                             harga_promosi_coret_grosir_mt, 
             //                             products.brand_id,
             //                             harga_ritel_gt as ritel_gt,
-            //                             (CASE
-            //                                 WHEN products.brand_id=005 THEN harga_ritel_gt
+            //                             (CASE 
+            //                                 WHEN products.brand_id=005 THEN harga_ritel_gt 
             //                                 WHEN products.brand_id=0001 THEN harga_ritel_gt
-            //                                 ELSE harga_grosir_mt
+            //                                 ELSE harga_grosir_mt 
             //                                 END) as harga_ritel_gt
             //                         ");
             // } else {
             //     $arrayPrice = DB::raw("
-            //                             product_prices.id,
-            //                             product_id,
-            //                             harga_ritel_gt,
-            //                             harga_grosir_mt,
-            //                             harga_promosi_coret_ritel_gt,
-            //                             harga_promosi_coret_grosir_mt,
+            //                             product_prices.id, 
+            //                             product_id, 
+            //                             harga_ritel_gt, 
+            //                             harga_grosir_mt, 
+            //                             harga_promosi_coret_ritel_gt, 
+            //                             harga_promosi_coret_grosir_mt, 
             //                             products.brand_id,
             //                             harga_ritel_gt as rt_backup
             //                         ");
@@ -300,7 +300,7 @@ class ProductController extends Controller
                 $products = $products
                     ->where('products.name', 'like', '%' . ucwords($request->search) . '%')
                     // ->whereRaw(
-                    //         "MATCH(name) AGAINST(?)",
+                    //         "MATCH(name) AGAINST(?)", 
                     //         array($request->search)
                     // )
                     ->where('product_availability.status', '1')
@@ -549,7 +549,7 @@ class ProductController extends Controller
 
                 $productsByname = $products                                                                 //  get product by similar name from recent view
                     // ->whereRaw(
-                    //     "MATCH(products.name) AGAINST(?)",
+                    //     "MATCH(products.name) AGAINST(?)", 
                     //     array($name[0])
                     // )
                     ->where('products.name', 'like', '%' . ucwords($name[0]) . '%')
@@ -900,20 +900,20 @@ class ProductController extends Controller
 
         $review     = "SELECT product_id, star_review FROM product_review WHERE product_id = " . $id;
         $star   = "" .
-            "SELECT
-            product_id,
-            SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) as total_five_star,
-            SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) as total_four_star,
-            SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) as total_three_star,
-            SUM(CASE WHEN star_review  = 2 THEN 1 ELSE 0 END) as total_two_star,
-            SUM(CASE WHEN star_review  = 1 THEN 1 ELSE 0 END) as total_one_star
-            FROM product_review
+            "SELECT 
+            product_id, 
+            SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) as total_five_star, 
+            SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) as total_four_star, 
+            SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) as total_three_star, 
+            SUM(CASE WHEN star_review  = 2 THEN 1 ELSE 0 END) as total_two_star, 
+            SUM(CASE WHEN star_review  = 1 THEN 1 ELSE 0 END) as total_one_star 
+            FROM product_review 
             WHERE product_id = " . $id .
             "GROUP BY product_id";
 
         $percent = "" .
-            "SELECT
-            product_id,
+            "SELECT 
+            product_id, 
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_five_star,
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_four_star,
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_three_star,
@@ -925,18 +925,18 @@ class ProductController extends Controller
 
         $response = DB::select(DB::raw("
             SELECT
-            review.product_id,
-            ROUND(avg(star_review)::numeric, 1) as avg_star,
+            review.product_id, 
+            ROUND(avg(star_review)::numeric, 1) as avg_star, 
             star.*,
             percent.*
-            from (" . $review . ") as review
-            left join (" . $star . ") as star
+            from (" . $review . ") as review 
+            left join (" . $star . ") as star 
             on review.product_id = star.product_id
-            left join (" . $percent . ") as percent
+            left join (" . $percent . ") as percent 
             on review.product_id = percent.product_id
-            group by
-                review.product_id,
-                star.product_id, star.total_five_star, star.total_four_star, star.total_three_star, star.total_two_star, star.total_one_star,
+            group by 
+                review.product_id, 
+                star.product_id, star.total_five_star, star.total_four_star, star.total_three_star, star.total_two_star, star.total_one_star, 
                 percent.product_id, percent.percent_five_star, percent.percent_four_star, percent.percent_three_star, percent.percent_two_star, percent.percent_one_star,
                 percent.avg_rating
         "));
@@ -1005,10 +1005,10 @@ class ProductController extends Controller
         $arrayPrice     = $this->arraySelectPrice();
 
         try {
-            if (cache()->has('masukAngin-' . $userId)) {
-                $masukAngin = cache()->get('masukAngin-' . $userId);
+            if (cache()->has('herbal-' . $userId)) {
+                $herbal = cache()->get('herbal-' . $userId);
             } else {
-                $masukAngin = cache()->remember('masukAngin-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $herbal = cache()->remember('herbal-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('category_id', '1')
@@ -1036,16 +1036,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products masuk angin failed',
+                'message' => 'Get products herbal failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('obatBatuk-' . $userId)) {
-                $obatBatuk = cache()->get('obatBatuk-' . $userId);
+            if (cache()->has('supmul-' . $userId)) {
+                $supmul = cache()->get('supmul-' . $userId);
             } else {
-                $obatBatuk = cache()->remember('obatBatuk-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $supmul = cache()->remember('supmul-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('category_id', '2')
@@ -1073,16 +1073,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products obat batuk failed',
+                'message' => 'Get products suplemen multivitamin failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('sariawanPanasDalam-' . $userId)) {
-                $sariawanPanasDalam = cache()->get('sariawanPanasDalam-' . $userId);
+            if (cache()->has('foodbeverage-' . $userId)) {
+                $foodbeverage = cache()->get('foodbeverage-' . $userId);
             } else {
-                $sariawanPanasDalam = cache()->remember('sariawanPanasDalam-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $foodbeverage = cache()->remember('foodbeverage-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('category_id', '3')
@@ -1110,16 +1110,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products sariawan dan panas dalam failed',
+                'message' => 'Get products food beverage failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('pegalLinuStamina-' . $userId)) {
-                $pegalLinuStamina = cache()->get('pegalLinuStamina-' . $userId);
+            if (cache()->has('minyakbalsem-' . $userId)) {
+                $minyakbalsem = cache()->get('minyakbalsem-' . $userId);
             } else {
-                $pegalLinuStamina = cache()->remember('pegalLinuStamina-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $minyakbalsem = cache()->remember('minyakbalsem-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('category_id', '4')
@@ -1147,201 +1147,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products pegal linu dan stamina failed',
+                'message' => 'Get products minyak balsem failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('produkWanita-' . $userId)) {
-                $produkWanita = cache()->get('produkWanita-' . $userId);
+            if (cache()->has('herbal_newest-' . $userId)) {
+                $herbal_newest = cache()->get('herbal_newest-' . $userId);
             } else {
-                $produkWanita = cache()->remember('produkWanita-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('category_id', '5')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products produk wanita failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('permen-' . $userId)) {
-                $permen = cache()->get('permen-' . $userId);
-            } else {
-                $permen = cache()->remember('permen-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('category_id', '6')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products permen failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbaMojo-' . $userId)) {
-                $herbaMojo = cache()->get('herbaMojo-' . $userId);
-            } else {
-                $herbaMojo = cache()->remember('herbaMojo-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('category_id', '7')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herba mojo failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbana-' . $userId)) {
-                $herbana = cache()->get('herbana-' . $userId);
-            } else {
-                $herbana = cache()->remember('herbana-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('category_id', '8')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herbana failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('madu-' . $userId)) {
-                $madu = cache()->get('madu-' . $userId);
-            } else {
-                $madu = cache()->remember('madu-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('category_id', '9')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products madu failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('masukAnginNewest-' . $userId)) {
-                $masukAnginNewest = cache()->get('masukAnginNewest-' . $userId);
-            } else {
-                $masukAnginNewest = cache()->remember('masukAnginNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $herbal_newest = cache()->remember('herbal_newest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terbaru', '1')
@@ -1370,16 +1185,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products masuk angin failed',
+                'message' => 'Get products herbal failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('obatBatukNewest-' . $userId)) {
-                $obatBatukNewest = cache()->get('obatBatukNewest-' . $userId);
+            if (cache()->has('supmul_newest-' . $userId)) {
+                $supmul_newest = cache()->get('supmul_newest-' . $userId);
             } else {
-                $obatBatukNewest = cache()->remember('obatBatukNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $supmul_newest = cache()->remember('supmul_newest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terbaru', '1')
@@ -1408,16 +1223,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products obat batuk failed',
+                'message' => 'Get products suplemen multivitamin failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('sariawanPanasDalamNewest-' . $userId)) {
-                $sariawanPanasDalamNewest = cache()->get('sariawanPanasDalamNewest-' . $userId);
+            if (cache()->has('foodbeverage_newest-' . $userId)) {
+                $foodbeverage_newest = cache()->get('foodbeverage_newest-' . $userId);
             } else {
-                $sariawanPanasDalamNewest = cache()->remember('sariawanPanasDalamNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $foodbeverage_newest = cache()->remember('foodbeverage_newest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terbaru', '1')
@@ -1446,16 +1261,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products sariawan dan panas dalam failed',
+                'message' => 'Get products food beverage failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('pegalLinuStaminaNewest-' . $userId)) {
-                $pegalLinuStaminaNewest = cache()->get('pegalLinuStaminaNewest-' . $userId);
+            if (cache()->has('minyakbalsem_newest-' . $userId)) {
+                $minyakbalsem_newest = cache()->get('minyakbalsem_newest-' . $userId);
             } else {
-                $pegalLinuStaminaNewest = cache()->remember('pegalLinuStaminaNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $minyakbalsem_newest = cache()->remember('minyakbalsem_newest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terbaru', '1')
@@ -1484,206 +1299,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products pegal linu dan panas dalam failed',
+                'message' => 'Get products minyak balsem failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('produkWanitaNewest-' . $userId)) {
-                $produkWanitaNewest = cache()->get('produkWanitaNewest-' . $userId);
+            if (cache()->has('herbal_popular-' . $userId)) {
+                $herbal_popular = cache()->get('herbal_popular-' . $userId);
             } else {
-                $produkWanitaNewest = cache()->remember('produkWanitaNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terbaru', '1')
-                        ->where('category_id', '5')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products peroduk wanita failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('permenNewest-' . $userId)) {
-                $permenNewest = cache()->get('permenNewest-' . $userId);
-            } else {
-                $permenNewest = cache()->remember('permenNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terbaru', '1')
-                        ->where('category_id', '6')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products permen failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbaMojoNewest-' . $userId)) {
-                $herbaMojoNewest = cache()->get('herbaMojoNewest-' . $userId);
-            } else {
-                $herbaMojoNewest = cache()->remember('herbaMojoNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terbaru', '1')
-                        ->where('category_id', '7')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herba mojo failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbanaNewest-' . $userId)) {
-                $herbanaNewest = cache()->get('herbanaNewest-' . $userId);
-            } else {
-                $herbanaNewest = cache()->remember('herbanaNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terbaru', '1')
-                        ->where('category_id', '8')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herbana failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('maduNewest-' . $userId)) {
-                $maduNewest = cache()->get('maduNewest-' . $userId);
-            } else {
-                $maduNewest = cache()->remember('maduNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terbaru', '1')
-                        ->where('category_id', '9')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products madu failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('masukAnginPopular-' . $userId)) {
-                $masukAnginPopular = cache()->get('masukAnginPopular-' . $userId);
-            } else {
-                $masukAnginPopular = cache()->remember('masukAnginPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $herbal_popular = cache()->remember('herbal_popular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terlaris', '1')
@@ -1712,16 +1337,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products masuk angin failed',
+                'message' => 'Get products herbal failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('obatBatukPopular-' . $userId)) {
-                $obatBatukPopular = cache()->get('obatBatukPopular-' . $userId);
+            if (cache()->has('supmul_popular-' . $userId)) {
+                $supmul_popular = cache()->get('supmul_popular-' . $userId);
             } else {
-                $obatBatukPopular = cache()->remember('obatBatukPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $supmul_popular = cache()->remember('supmul_popular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terlaris', '1')
@@ -1750,16 +1375,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products obat batuk failed',
+                'message' => 'Get products suplemen multivitamin failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('sariawanPanasDalamPopular-' . $userId)) {
-                $sariawanPanasDalamPopular = cache()->get('sariawanPanasDalamPopular-' . $userId);
+            if (cache()->has('foodbeverage_popular-' . $userId)) {
+                $foodbeverage_popular = cache()->get('foodbeverage_popular-' . $userId);
             } else {
-                $sariawanPanasDalamPopular = cache()->remember('sariawanPanasDalamPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $foodbeverage_popular = cache()->remember('foodbeverage_popular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terlaris', '1')
@@ -1788,16 +1413,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products sariawan dan panas dalam failed',
+                'message' => 'Get products food beverage failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('pegalLinuStaminaPopular-' . $userId)) {
-                $pegalLinuStaminaPopular = cache()->get('pegalLinuStaminaPopular-' . $userId);
+            if (cache()->has('minyabalsem_popular-' . $userId)) {
+                $minyakbalsem_popular = cache()->get('minyakbalsem_popular-' . $userId);
             } else {
-                $pegalLinuStaminaPopular = cache()->remember('pegalLinuStaminaPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $minyakbalsem_popular = cache()->remember('minyakbalsem_popular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
                         ->where('status_terlaris', '1')
@@ -1826,197 +1451,7 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products pegal linu dan stamina failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('produkWanitaPopular-' . $userId)) {
-                $produkWanitaPopular = cache()->get('produkWanitaPopular-' . $userId);
-            } else {
-                $produkWanitaPopular = cache()->remember('produkWanitaPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terlaris', '1')
-                        ->where('category_id', '5')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products produk wanita failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('permenPopular-' . $userId)) {
-                $permenPopular = cache()->get('permenPopular-' . $userId);
-            } else {
-                $permenPopular = cache()->remember('permenPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terlaris', '1')
-                        ->where('category_id', '6')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products permen failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbaMojoPopular-' . $userId)) {
-                $herbaMojoPopular = cache()->get('herbaMojoPopular-' . $userId);
-            } else {
-                $herbaMojoPopular = cache()->remember('herbaMojoPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terlaris', '1')
-                        ->where('category_id', '7')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herba mojo failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbanaPopular-' . $userId)) {
-                $herbanaPopular = cache()->get('herbanaPopular-' . $userId);
-            } else {
-                $herbanaPopular = cache()->remember('herbanaPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terlaris', '1')
-                        ->where('category_id', '8')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herbana failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('maduPopular-' . $userId)) {
-                $maduPopular = cache()->get('maduPopular-' . $userId);
-            } else {
-                $maduPopular = cache()->remember('maduPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->where('product_availability.status', '1')
-                        ->where('status_terlaris', '1')
-                        ->where('category_id', '9')
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($array)
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products madu failed',
+                'message' => 'Get products minyak balsem failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
@@ -2032,10 +1467,10 @@ class ProductController extends Controller
 
             // array_walk($array, function(&$value, $key) { $value = 'products.' . $value; } );
 
-            if (cache()->has('masukAnginRecent-' . $userId)) {
-                $masukAnginRecent = cache()->get('masukAnginRecent-' . $userId);
+            if (cache()->has('herbal_recent-' . $userId)) {
+                $herbal_recent = cache()->get('herbal_recent-' . $userId);
             } else {
-                $masukAnginRecent = cache()->remember('masukAnginRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $herbal_recent = cache()->remember('herbal_recent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
                         ->join('orders', 'order_detail.order_id', '=', 'orders.id')
@@ -2069,16 +1504,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products masuk angin failed',
+                'message' => 'Get products herbal failed',
                 'data'    => $e->getMessage() . "\n"
             ], 500);
         }
 
         try {
-            if (cache()->has('obatBatukRecent-' . $userId)) {
-                $obatBatukRecent = cache()->get('obatBatukRecent-' . $userId);
+            if (cache()->has('supmul_recent-' . $userId)) {
+                $supmul_recent = cache()->get('supmul_recent-' . $userId);
             } else {
-                $obatBatukRecent = cache()->remember('obatBatukRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $supmul_recent = cache()->remember('supmul_recent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
                         ->join('orders', 'order_detail.order_id', '=', 'orders.id')
@@ -2112,16 +1547,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products obat batuk failed',
+                'message' => 'Get products suplemen multivitamin failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('sariawanPanasDalamRecent-' . $userId)) {
-                $sariawanPanasDalamRecent = cache()->get('sariawanPanasDalamRecent-' . $userId);
+            if (cache()->has('foodbeverage_recent-' . $userId)) {
+                $foodbeverage_recent = cache()->get('foodbeverage_recent-' . $userId);
             } else {
-                $sariawanPanasDalamRecent = cache()->remember('sariawanPanasDalamRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $foodbeverage_recent = cache()->remember('foodbeverage_recent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
                         ->join('orders', 'order_detail.order_id', '=', 'orders.id')
@@ -2155,16 +1590,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products sariawan dan panas dalam failed',
+                'message' => 'Get products food beverage failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         try {
-            if (cache()->has('pegalLinuStaminaRecent-' . $userId)) {
-                $pegalLinuStaminaRecent = cache()->get('pegalLinuStaminaRecent-' . $userId);
+            if (cache()->has('minyakbalsem_recent-' . $userId)) {
+                $minyakbalsem_recent = cache()->get('minyakbalsem_recent-' . $userId);
             } else {
-                $pegalLinuStaminaRecent = cache()->remember('pegalLinuStaminaRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                $minyakbalsem_recent = cache()->remember('minyakbalsem_recent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
                         ->join('orders', 'order_detail.order_id', '=', 'orders.id')
@@ -2198,263 +1633,28 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Get products pegal linu dan stamina failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('produkWanitaRecent-' . $userId)) {
-                $produkWanitaRecent = cache()->get('produkWanitaRecent-' . $userId);
-            } else {
-                $produkWanitaRecent = cache()->remember('produkWanitaRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
-                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereIn('order_detail.id', $arrayId)
-                        ->where('status_faktur', 'F')
-                        ->where('product_availability.status', '1')
-                        ->where('products.category_id', '5')
-                        ->where('orders.customer_id', $userId)
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($arrayProductPromo)
-                        ->distinct('order_detail.product_id')
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products produk wanita failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('permenRecent-' . $userId)) {
-                $permenRecent = cache()->get('permenRecent-' . $userId);
-            } else {
-                $permenRecent = cache()->remember('permenRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
-                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereIn('order_detail.id', $arrayId)
-                        ->where('status_faktur', 'F')
-                        ->where('product_availability.status', '1')
-                        ->where('products.category_id', '6')
-                        ->where('orders.customer_id', $userId)
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($arrayProductPromo)
-                        ->distinct('order_detail.product_id')
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products permen failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbaMojoRecent-' . $userId)) {
-                $herbaMojoRecent = cache()->get('herbaMojoRecent-' . $userId);
-            } else {
-                $herbaMojoRecent = cache()->remember('herbaMojoRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
-                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereIn('order_detail.id', $arrayId)
-                        ->where('status_faktur', 'F')
-                        ->where('product_availability.status', '1')
-                        ->where('products.category_id', '7')
-                        ->where('orders.customer_id', $userId)
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($arrayProductPromo)
-                        ->distinct('order_detail.product_id')
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herba mojo failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('herbanaRecent-' . $userId)) {
-                $herbanaRecent = cache()->get('herbanaRecent-' . $userId);
-            } else {
-                $herbanaRecent = cache()->remember('herbanaRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
-                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereIn('order_detail.id', $arrayId)
-                        ->where('status_faktur', 'F')
-                        ->where('product_availability.status', '1')
-                        ->where('products.category_id', '8')
-                        ->where('orders.customer_id', $userId)
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($arrayProductPromo)
-                        ->distinct('order_detail.product_id')
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products herbana failed',
-                'data'    => $e->getMessage()
-            ], 500);
-        }
-
-        try {
-            if (cache()->has('maduRecent-' . $userId)) {
-                $maduRecent = cache()->get('maduRecent-' . $userId);
-            } else {
-                $maduRecent = cache()->remember('maduRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
-                    return $this->products
-                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
-                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereIn('order_detail.id', $arrayId)
-                        ->where('status_faktur', 'F')
-                        ->where('product_availability.status', '1')
-                        ->where('products.category_id', '9')
-                        ->where('orders.customer_id', $userId)
-                        ->where('product_availability.site_code', $siteCode)
-                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
-                        ->with(['price' => function ($query) use ($arrayPrice) {
-                            $query->select($arrayPrice)
-                                ->join('products', 'products.id', '=', 'product_prices.product_id');
-                        }, 'review' => function ($query) {
-                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
-                                ->groupBy('product_id');
-                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
-                            $query->where('user_id', $userId)
-                                ->select($arrayCart);
-                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
-                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
-                                ->select($arrayPromoSku)
-                                ->where('promos.status', 1)
-                                ->limit(1);
-                        }])
-                        ->select($arrayProductPromo)
-                        ->distinct('order_detail.product_id')
-                        ->paginate(10);
-                });
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Get products madu failed',
+                'message' => 'Get products minyak balsem failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
 
         $allData = [
-            'masukAngin'                => [$masukAngin],
-            'obatBatuk'                => [$obatBatuk],
-            'sariawanPanasDalam'          => [$sariawanPanasDalam],
-            'pegalLinuStamina'          => [$pegalLinuStamina],
-            'produkWanita'          => [$produkWanita],
-            'permen'          => [$permen],
-            'herbaMojo'          => [$herbaMojo],
-            'herbana'          => [$herbana],
-            'madu'          => [$madu],
-            'masukAnginNewest'                => [$masukAnginNewest],
-            'obatBatukNewest'                => [$obatBatukNewest],
-            'sariawanPanasDalamNewest'          => [$sariawanPanasDalamNewest],
-            'pegalLinuStaminaNewest'          => [$pegalLinuStaminaNewest],
-            'produkWanitaNewest'          => [$produkWanitaNewest],
-            'permenNewest'          => [$permenNewest],
-            'herbaMojoNewest'          => [$herbaMojoNewest],
-            'herbanaNewest'          => [$herbanaNewest],
-            'maduNewest'          => [$maduNewest],
-            'masukAnginPopular'                => [$masukAnginPopular],
-            'obatBatukPopular'                => [$obatBatukPopular],
-            'sariawanPanasDalamPopular'          => [$sariawanPanasDalamPopular],
-            'pegalLinuStaminaPopular'          => [$pegalLinuStaminaPopular],
-            'produkWanitaPopular'          => [$produkWanitaPopular],
-            'permenPopular'          => [$permenPopular],
-            'herbaMojoPopular'          => [$herbaMojoPopular],
-            'herbanaPopular'          => [$herbanaPopular],
-            'maduPopular'          => [$maduPopular],
-            'masukAnginRecent'                => [$masukAnginRecent],
-            'obatBatukRecent'                => [$obatBatukRecent],
-            'sariawanPanasDalamRecent'          => [$sariawanPanasDalamRecent],
-            'pegalLinuStaminaRecent'          => [$pegalLinuStaminaRecent],
-            'produkWanitaRecent'          => [$produkWanitaRecent],
-            'permenRecent'          => [$permenRecent],
-            'herbaMojoRecent'          => [$herbaMojoRecent],
-            'herbanaRecent'          => [$herbanaRecent],
-            'maduRecent'          => [$maduRecent]
+            'herbal'                => [$herbal],
+            'supmul'                => [$supmul],
+            'foodbeverage'          => [$foodbeverage],
+            'minyakbalsem'          => [$minyakbalsem],
+            'herbal_newest'         => [$herbal_newest],
+            'supmul_newest'         => [$supmul_newest],
+            'foodbeverage_newest'   => [$foodbeverage_newest],
+            'minyakbalsem_newest'   => [$minyakbalsem_newest],
+            'herbal_popular'        => [$herbal_popular],
+            'supmul_popular'        => [$supmul_popular],
+            'foodbeverage_popular'  => [$foodbeverage_popular],
+            'minyakbalsem_popular'  => [$minyakbalsem_popular],
+            'herbal_recent'         => [$herbal_recent],
+            'supmul_recent'         => [$supmul_recent],
+            'foodbeverage_recent'   => [$foodbeverage_recent],
+            'minyakbalsem_recent'   => [$minyakbalsem_recent]
         ];
 
         return response()->json([
@@ -2504,7 +1704,7 @@ class ProductController extends Controller
             } else {
                 $array      = ['products.id', 'status', 'kodeprod', 'name', 'description', 'image', 'kecil', 'status_renceng', 'status_redeem', 'redeem_point', 'redeem_desc', 'redeem_snk', 'products.created_at'];
             }
-            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
+            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];    
 
             $products       = $products
                 // ->where('status', '1')
@@ -2572,27 +1772,27 @@ class ProductController extends Controller
             // Kondisi untuk harga biar sesuai dengan user yang login
             if ($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
                 $arrayPrice = DB::raw("
-                                        product_prices.id,
-                                        product_id,
-                                        harga_grosir_mt,
-                                        harga_promosi_coret_ritel_gt,
-                                        harga_promosi_coret_grosir_mt,
+                                        product_prices.id, 
+                                        product_id,  
+                                        harga_grosir_mt, 
+                                        harga_promosi_coret_ritel_gt, 
+                                        harga_promosi_coret_grosir_mt, 
                                         products.brand_id,
                                         harga_ritel_gt as ritel_gt,
-                                        (CASE
-                                            WHEN products.brand_id::integer=005 THEN harga_ritel_gt
+                                        (CASE 
+                                            WHEN products.brand_id::integer=005 THEN harga_ritel_gt 
                                             WHEN products.brand_id::integer=001 THEN harga_ritel_gt
-                                            ELSE harga_grosir_mt
+                                            ELSE harga_grosir_mt 
                                             END) as harga_ritel_gt
                                     ");
             } else {
                 $arrayPrice = DB::raw("
-                                        product_prices.id,
-                                        product_id,
-                                        harga_ritel_gt,
-                                        harga_grosir_mt,
-                                        harga_promosi_coret_ritel_gt,
-                                        harga_promosi_coret_grosir_mt,
+                                        product_prices.id, 
+                                        product_id, 
+                                        harga_ritel_gt, 
+                                        harga_grosir_mt, 
+                                        harga_promosi_coret_ritel_gt, 
+                                        harga_promosi_coret_grosir_mt, 
                                         products.brand_id,
                                         harga_ritel_gt as rt_backup
                                     ");
