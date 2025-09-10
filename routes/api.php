@@ -201,6 +201,7 @@ Route::group([
         Route::post('/verify', 'Api\OtpController@verify');
         Route::post('/no-auth/sms', 'Api\OtpController@not_authenticated_otp_sms');
         Route::post('/no-auth/wa', 'Api\OtpController@not_authenticated_otp_wa');
+        Route::post('/no-auth/email', 'Api\OtpController@not_authenticated_otp_email');
         Route::post('/phone-number/sms', 'Api\OtpController@update_phone_sms');
         Route::post('/phone-number/wa', 'Api\OtpController@update_phone_wa');
     });

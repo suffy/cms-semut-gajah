@@ -562,6 +562,121 @@ class OtpController extends Controller
         }
     }
 
+    //otp for using forgot password via whatsapp
+    public function not_authenticated_otp_email(Request $request)
+    {
+        // check user login
+        $otp = Otp::where('email_phone', '=', $request->email)
+                ->where('valid_until', '>=', Carbon::now())
+                ->whereNull('verified_at')
+                ->latest()->first();
+
+        // $otp = Otp::where('customer_code', '=', $request->customer_code)
+        //         ->where('valid_until', '>=', Carbon::now())
+        //         ->whereNull('verified_at')
+        //         ->latest()->first();
+
+        try {
+            // generate otp code
+            if (is_null($otp)) {
+                $otpCode = random_int(100000, 999999);
+            } else {
+                $otpCode = $otp->otp_code;
+            }
+            $otpCodeMsg = implode(' ',str_split($otpCode));
+
+            // send otp code
+            $url = 'https://sds-mail.onevour.com/send';
+            $apiKey = '0a8504351e384e7c8fa1688ff160f815';
+
+            $payload = [
+                "recipients" => [
+                    $request->email
+                ],
+                "subject" => "OTP Semut Gajah",
+                "encode" => "url",
+                "content" => 'Akses Masuk Semut Gajah - ' . $otpCodeMsg. '. JANGAN BERI angka ini ke siapa pun',
+                "file" => ""
+            ];
+
+            $curlHandle = curl_init();
+
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 500);
+            curl_setopt($curlHandle, CURLOPT_POST, true);
+
+            // kirim JSON body
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($payload));
+
+            // set headers
+            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'apikey: ' . $apiKey
+            ]);
+
+            $response = curl_exec($curlHandle);
+
+            if (curl_errno($curlHandle)) {
+                echo 'Curl error: ' . curl_error($curlHandle);
+            } else {
+                $results = json_decode($response, true);
+            }
+
+            curl_close($curlHandle);
+
+            // insert otp code
+            if (is_null($otp)) {
+                // insert otp code
+                Otp::create([
+                    'email_phone'   => $request->email,
+                    'type'          => OtpTypeEnum::FORGOT,
+                    'otp_code'      => $otpCode,
+                    'customer_code' => $request->customer_code,
+                    'valid_until'   => Carbon::now()->addMinutes(30)
+                ]);
+
+                // insert otp into erp
+                Http::post('http://site.muliaputramandiri.com/restapi/api/master_data/otp', [
+                    'X-API-KEY'     => config('erp.x_api_key'),
+                    'token'         => config('erp.token_api'),
+                    'email_phone'   => $request->email,
+                    'customer_code' => $request->customer_code,
+                    'type'          => OtpTypeEnum::REGISTER,
+                    'otp_code'      => $otpCode,
+                    'verified_at'   => null,
+                    'valid_until'   => Carbon::now()->addMinutes(30)->format('Y-m-d H:i:s'),
+                    'created_at'    => Carbon::now(),
+                    'updated_at'    => Carbon::now(),
+                    'server'        => config('server.server')
+                ]);
+
+                // Otp::create([
+                //     'email_phone' => $request->phone,
+                //     'customer_code' => $request->customer_code,
+                //     'type' => OtpTypeEnum::FORGOT,
+                //     'otp_code' => $otpCode,
+                //     'valid_until' => Carbon::now()->addMinutes(30)
+                // ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Send Forgot OTP Code successfully',
+                'data'    => $results
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Send Forgot OTP Code failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+    }
+
     //otp register via sms
     public function update_phone_sms(Request $request)
     {
