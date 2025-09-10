@@ -197,6 +197,7 @@ Route::group([
     Route::group(['prefix' => 'otp'], function () {
         Route::post('/', 'Api\OtpController@store');
         Route::post('/wa', 'Api\OtpController@storeWa');
+        Route::post('/email', 'Api\OtpController@storeEmail');
         Route::post('/verify', 'Api\OtpController@verify');
         Route::post('/no-auth/sms', 'Api\OtpController@not_authenticated_otp_sms');
         Route::post('/no-auth/wa', 'Api\OtpController@not_authenticated_otp_wa');
