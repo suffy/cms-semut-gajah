@@ -408,6 +408,7 @@ class UserController extends Controller
                     'longitude'         => $request->get('longitude'),
                     'X-API-KEY'         => config('erp.x_api_key'),
                     'token'             => config('erp.token_api'),
+                    'code_approval'     => ""
                 ]);
 
                 // insert users into erp
