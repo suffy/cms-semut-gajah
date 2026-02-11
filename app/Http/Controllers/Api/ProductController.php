@@ -1338,6 +1338,302 @@ class ProductController extends Controller
         }
 
         try {
+            if (cache()->has('freshcare-' . $userId)) {
+                $freshcare = cache()->get('freshcare-' . $userId);
+            } else {
+                $freshcare = cache()->remember('freshcare-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '10')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshcare failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('hotin-' . $userId)) {
+                $hotin = cache()->get('hotin-' . $userId);
+            } else {
+                $hotin = cache()->remember('hotin-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '11')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products hotin failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('maduTj-' . $userId)) {
+                $maduTj = cache()->get('maduTj-' . $userId);
+            } else {
+                $maduTj = cache()->remember('maduTj-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '11')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products maduTj failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('tresnojoyo-' . $userId)) {
+                $tresnojoyo = cache()->get('tresnojoyo-' . $userId);
+            } else {
+                $tresnojoyo = cache()->remember('tresnojoyo-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '13')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products tresnojoyo failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('bebio-' . $userId)) {
+                $bebio = cache()->get('bebio-' . $userId);
+            } else {
+                $bebio = cache()->remember('bebio-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '14')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products bebio failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('freshliving-' . $userId)) {
+                $freshliving = cache()->get('freshliving-' . $userId);
+            } else {
+                $freshliving = cache()->remember('freshliving-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '15')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshliving failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('mywell-' . $userId)) {
+                $mywell = cache()->get('mywell-' . $userId);
+            } else {
+                $mywell = cache()->remember('mywell-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '16')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products mywell failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('herbal-' . $userId)) {
+                $herbal = cache()->get('herbal-' . $userId);
+            } else {
+                $herbal = cache()->remember('herbal-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('category_id', '17')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products herbal failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
             if (cache()->has('masukAnginNewest-' . $userId)) {
                 $masukAnginNewest = cache()->get('masukAnginNewest-' . $userId);
             } else {
@@ -1680,6 +1976,310 @@ class ProductController extends Controller
         }
 
         try {
+            if (cache()->has('freshcareNewest-' . $userId)) {
+                $freshcareNewest = cache()->get('freshcareNewest-' . $userId);
+            } else {
+                $freshcareNewest = cache()->remember('freshcareNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '10')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshcare failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('hotinNewest-' . $userId)) {
+                $hotinNewest = cache()->get('hotinNewest-' . $userId);
+            } else {
+                $hotinNewest = cache()->remember('hotinNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '11')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products hotin failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('maduTjNewest-' . $userId)) {
+                $maduTjNewest = cache()->get('maduTjNewest-' . $userId);
+            } else {
+                $maduTjNewest = cache()->remember('maduTjNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '12')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products maduTj failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('tresnojoyoNewest-' . $userId)) {
+                $tresnojoyoNewest = cache()->get('tresnojoyoNewest-' . $userId);
+            } else {
+                $tresnojoyoNewest = cache()->remember('tresnojoyoNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '13')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products tresnojoyo failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('bebioNewest-' . $userId)) {
+                $bebioNewest = cache()->get('bebioNewest-' . $userId);
+            } else {
+                $bebioNewest = cache()->remember('bebioNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '14')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products bebio failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('freshlivingNewest-' . $userId)) {
+                $freshlivingNewest = cache()->get('freshlivingNewest-' . $userId);
+            } else {
+                $freshlivingNewest = cache()->remember('freshlivingNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '15')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshliving failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('mywellNewest-' . $userId)) {
+                $mywellNewest = cache()->get('mywellNewest-' . $userId);
+            } else {
+                $mywellNewest = cache()->remember('mywellNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '16')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products mywell failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('herbalNewest-' . $userId)) {
+                $herbalNewest = cache()->get('herbalNewest-' . $userId);
+            } else {
+                $herbalNewest = cache()->remember('herbalNewest-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terbaru', '1')
+                        ->where('category_id', '17')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products herbal failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
             if (cache()->has('masukAnginPopular-' . $userId)) {
                 $masukAnginPopular = cache()->get('masukAnginPopular-' . $userId);
             } else {
@@ -2017,6 +2617,310 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Get products madu failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('freshcarePopular-' . $userId)) {
+                $freshcarePopular = cache()->get('freshcarePopular-' . $userId);
+            } else {
+                $freshcarePopular = cache()->remember('freshcarePopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '10')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshcare failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('hotinPopular-' . $userId)) {
+                $hotinPopular = cache()->get('hotinPopular-' . $userId);
+            } else {
+                $hotinPopular = cache()->remember('hotinPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '11')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products hotin failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('maduTjPopular-' . $userId)) {
+                $maduTjPopular = cache()->get('maduTjPopular-' . $userId);
+            } else {
+                $maduTjPopular = cache()->remember('maduTjPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '12')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products maduTj failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('tresnojoyoPopular-' . $userId)) {
+                $tresnojoyoPopular = cache()->get('tresnojoyoPopular-' . $userId);
+            } else {
+                $tresnojoyoPopular = cache()->remember('tresnojoyoPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '13')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products tresnojoyo failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('bebioPopular-' . $userId)) {
+                $bebioPopular = cache()->get('bebioPopular-' . $userId);
+            } else {
+                $bebioPopular = cache()->remember('bebioPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '14')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products bebio failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('freshlivingPopular-' . $userId)) {
+                $freshlivingPopular = cache()->get('freshlivingPopular-' . $userId);
+            } else {
+                $freshlivingPopular = cache()->remember('freshlivingPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '15')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshliving failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('mywellPopular-' . $userId)) {
+                $mywellPopular = cache()->get('mywellPopular-' . $userId);
+            } else {
+                $mywellPopular = cache()->remember('mywellPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '16')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products mywell failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('herbalPopular-' . $userId)) {
+                $herbalPopular = cache()->get('herbalPopular-' . $userId);
+            } else {
+                $herbalPopular = cache()->remember('herbalPopular-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->where('product_availability.status', '1')
+                        ->where('status_terlaris', '1')
+                        ->where('category_id', '17')
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($array)
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products herbal failed',
                 'data'    => $e->getMessage()
             ], 500);
         }
@@ -2418,6 +3322,350 @@ class ProductController extends Controller
             ], 500);
         }
 
+        try {
+            if (cache()->has('freshcareRecent-' . $userId)) {
+                $freshcareRecent = cache()->get('freshcareRecent-' . $userId);
+            } else {
+                $freshcareRecent = cache()->remember('freshcareRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '10')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshcare failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('hotinRecent-' . $userId)) {
+                $hotinRecent = cache()->get('hotinRecent-' . $userId);
+            } else {
+                $hotinRecent = cache()->remember('hotinRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '11')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products hotin failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('maduTjRecent-' . $userId)) {
+                $maduTjRecent = cache()->get('maduTjRecent-' . $userId);
+            } else {
+                $maduTjRecent = cache()->remember('maduTjRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '12')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products maduTj failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('tresnojoyoRecent-' . $userId)) {
+                $tresnojoyoRecent = cache()->get('tresnojoyoRecent-' . $userId);
+            } else {
+                $tresnojoyoRecent = cache()->remember('tresnojoyoRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '13')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products tresnojoyo failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('bebioRecent-' . $userId)) {
+                $bebioRecent = cache()->get('bebioRecent-' . $userId);
+            } else {
+                $bebioRecent = cache()->remember('bebioRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '14')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products bebio failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('freshlivingRecent-' . $userId)) {
+                $freshlivingRecent = cache()->get('freshlivingRecent-' . $userId);
+            } else {
+                $freshlivingRecent = cache()->remember('freshlivingRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '15')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products freshliving failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('mywellRecent-' . $userId)) {
+                $mywellRecent = cache()->get('mywellRecent-' . $userId);
+            } else {
+                $mywellRecent = cache()->remember('mywellRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '16')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products mywell failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
+        try {
+            if (cache()->has('herbalRecent-' . $userId)) {
+                $herbalRecent = cache()->get('herbalRecent-' . $userId);
+            } else {
+                $herbalRecent = cache()->remember('herbalRecent-' . $userId, 60, function () use ($arrayId, $userId, $arrayProductPromo, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
+                    return $this->products
+                        ->join('order_detail', 'order_detail.product_id', '=', 'products.id')
+                        ->join('orders', 'order_detail.order_id', '=', 'orders.id')
+                        ->whereIn('order_detail.id', $arrayId)
+                        ->where('status_faktur', 'F')
+                        ->where('product_availability.status', '1')
+                        ->where('products.category_id', '17')
+                        ->where('orders.customer_id', $userId)
+                        ->where('product_availability.site_code', $siteCode)
+                        ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
+                        ->with(['price' => function ($query) use ($arrayPrice) {
+                            $query->select($arrayPrice)
+                                ->join('products', 'products.id', '=', 'product_prices.product_id');
+                        }, 'review' => function ($query) {
+                            $query->select('product_id', DB::raw('ROUND(avg(star_review)::numeric, 1) as avg_rating'))
+                                ->groupBy('product_id');
+                        }, 'cart' => function ($query) use ($userId, $arrayCart) {
+                            $query->where('user_id', $userId)
+                                ->select($arrayCart);
+                        }, 'promo_sku' => function ($query) use ($arrayPromoSku) {
+                            $query->leftJoin('promos', 'promos.id', '=', 'promo_id')
+                                ->select($arrayPromoSku)
+                                ->where('promos.status', 1)
+                                ->limit(1);
+                        }])
+                        ->select($arrayProductPromo)
+                        ->distinct('order_detail.product_id')
+                        ->paginate(10);
+                });
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Get products herbal failed',
+                'data'    => $e->getMessage()
+            ], 500);
+        }
+
         $allData = [
             'masukAngin'                => [$masukAngin],
             'obatBatuk'                => [$obatBatuk],
@@ -2428,6 +3676,14 @@ class ProductController extends Controller
             'herbaMojo'          => [$herbaMojo],
             'herbana'          => [$herbana],
             'madu'          => [$madu],
+            'freshcare'          => [$freshcare],
+            'hotin'          => [$hotin],
+            'maduTj'          => [$maduTj],
+            'tresnojoyo'          => [$tresnojoyo],
+            'bebio'          => [$bebio],
+            'freshliving'          => [$freshliving],
+            'mywell'          => [$mywell],
+            'herbal'          => [$herbal],
             'masukAnginNewest'                => [$masukAnginNewest],
             'obatBatukNewest'                => [$obatBatukNewest],
             'sariawanPanasDalamNewest'          => [$sariawanPanasDalamNewest],
@@ -2437,6 +3693,14 @@ class ProductController extends Controller
             'herbaMojoNewest'          => [$herbaMojoNewest],
             'herbanaNewest'          => [$herbanaNewest],
             'maduNewest'          => [$maduNewest],
+            'freshcareNewest'          => [$freshcareNewest],
+            'hotinNewest'          => [$hotinNewest],
+            'maduTjNewest'          => [$maduTjNewest],
+            'tresnojoyoNewest'          => [$tresnojoyoNewest],
+            'bebioNewest'          => [$bebioNewest],
+            'freshlivingNewest'          => [$freshlivingNewest],
+            'mywellNewest'          => [$mywellNewest],
+            'herbalNewest'          => [$herbalNewest],
             'masukAnginPopular'                => [$masukAnginPopular],
             'obatBatukPopular'                => [$obatBatukPopular],
             'sariawanPanasDalamPopular'          => [$sariawanPanasDalamPopular],
@@ -2446,6 +3710,14 @@ class ProductController extends Controller
             'herbaMojoPopular'          => [$herbaMojoPopular],
             'herbanaPopular'          => [$herbanaPopular],
             'maduPopular'          => [$maduPopular],
+            'freshcarePopular'          => [$freshcarePopular],
+            'hotinPopular'          => [$hotinPopular],
+            'maduTjPopular'          => [$maduTjPopular],
+            'tresnojoyoPopular'          => [$tresnojoyoPopular],
+            'bebioPopular'          => [$bebioPopular],
+            'freshlivingPopular'          => [$freshlivingPopular],
+            'mywellPopular'          => [$mywellPopular],
+            'herbalPopular'          => [$herbalPopular],
             'masukAnginRecent'                => [$masukAnginRecent],
             'obatBatukRecent'                => [$obatBatukRecent],
             'sariawanPanasDalamRecent'          => [$sariawanPanasDalamRecent],
@@ -2454,7 +3726,15 @@ class ProductController extends Controller
             'permenRecent'          => [$permenRecent],
             'herbaMojoRecent'          => [$herbaMojoRecent],
             'herbanaRecent'          => [$herbanaRecent],
-            'maduRecent'          => [$maduRecent]
+            'maduRecent'          => [$maduRecent],
+            'freshcareRecent'          => [$freshcareRecent],
+            'hotinRecent'          => [$hotinRecent],
+            'maduTjRecent'          => [$maduTjRecent],
+            'tresnojoyoRecent'          => [$tresnojoyoRecent],
+            'bebioRecent'          => [$bebioRecent],
+            'freshlivingRecent'          => [$freshlivingRecent],
+            'mywellRecent'          => [$mywellRecent],
+            'herbalRecent'          => [$herbalRecent],
         ];
 
         return response()->json([
