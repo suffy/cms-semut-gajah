@@ -1418,7 +1418,7 @@ class ProductController extends Controller
                 $maduTj = cache()->remember('maduTj-' . $userId, 60, function () use ($array, $userId, $arrayCart, $arrayPromoSku, $arrayPrice, $siteCode) {
                     return $this->products
                         ->where('product_availability.status', '1')
-                        ->where('category_id', '11')
+                        ->where('category_id', '12')
                         ->where('product_availability.site_code', $siteCode)
                         ->join('product_availability', 'product_availability.product_id', '=', 'products.id')
                         ->with(['price' => function ($query) use ($arrayPrice) {
