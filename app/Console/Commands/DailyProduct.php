@@ -65,28 +65,28 @@ class DailyProduct extends Command
             $slug = strtolower(str_replace(" ", "-", preg_replace('/[^A-Za-z0-9 !@#$%^&*()-.]/u', '', strip_tags(strtolower(str_replace(" ", "-", $product['namaprod'])))))); // namaprod
 
             // check category
-            $category_id = null; // apps_kategori_online
+            $category_id = $product['apps_category_id']; // apps_kategori_online
             $brand = null; // supp
 
-            if ($product['apps_kategori_online'] == 'HERBAL') {
-                $category_id = '1';
-            }
+            // if ($product['apps_kategori_online'] == 'HERBAL') {
+            //     $category_id = '1';
+            // }
 
-            if ($product['apps_kategori_online'] == 'SUPPLEMEN & MULTIVITAMIN') {
-                $category_id = '2';
-            }
+            // if ($product['apps_kategori_online'] == 'SUPPLEMEN & MULTIVITAMIN') {
+            //     $category_id = '2';
+            // }
 
-            if ($product['apps_kategori_online'] == 'FOOD & BEV') {
-                $category_id = '3';
-            }
+            // if ($product['apps_kategori_online'] == 'FOOD & BEV') {
+            //     $category_id = '3';
+            // }
 
-            if ($product['apps_kategori_online'] == 'MINYAK ANGIN & BALSAM') {
-                $category_id = '4';
-            }
+            // if ($product['apps_kategori_online'] == 'MINYAK ANGIN & BALSAM') {
+            //     $category_id = '4';
+            // }
 
-            if ($product['apps_kategori_online'] == '') {
-                $category_id = null;
-            }
+            // if ($product['apps_kategori_online'] == '') {
+            //     $category_id = null;
+            // }
 
             if ($product['supp']        == '001') {
                 $brand = 'deltomed';
