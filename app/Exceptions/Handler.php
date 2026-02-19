@@ -45,9 +45,15 @@ class Handler extends ExceptionHandler
 
             $url = "https://api.telegram.org/bot".config('services.key_token_telegram')."/sendMessage";
 
+            $message = "Link : ".$link."\n".
+            "File : ".$exception->getFile()."\n".
+            "Line : ".$exception->getLine()."\n".
+            "Code : ".$exception->getCode()."\n".
+            "Message : ".mb_substr($exception->getMessage(), 0, 1000);
+
             $data = [
                 "chat_id" => config('services.key_chatid_telegram'),
-                "text" => "Link : ".$link."\nFile : ".$exception->getFile()."\nLine : ".$exception->getLine()."\nCode : ".$exception->getCode()."\nMessage : ".$exception->getMessage(),
+                "text" => $message,
                 "disable_notification" => false
             ];
 
