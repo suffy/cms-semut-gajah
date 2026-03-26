@@ -18,3 +18,5 @@ yarn-error.log
 
 # Specific ignore for config cache
 /bootstrap/cache/config.php
+
+public/json
