@@ -141,6 +141,15 @@ class UserController extends Controller
         }
         // $user = $this->user->with(['user_address', 'credit_limits'])->find(Auth::id());
 
+        //for user blacklist
+        if ($user->status_blacklist == 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User blacklist',
+                'data' => null,
+            ], 200);
+        }
+
         if ($user->otp_verified_at == null) {
             return response()->json([
                 'success' => false,
