@@ -138,7 +138,18 @@ Route::get('customer-binaan-daily', function () {
 });
 
 Route::get('product-daily', function () {
-    \Artisan::call('product:daily');
+    // \Artisan::call('product:daily');
+
+    // return response()->json([
+    //     'status' => 'success'
+    // ]);
+
+    $php = PHP_BINARY;
+    $artisan = base_path('artisan');
+
+    pclose(
+        popen("{$php} {$artisan} product:daily > /dev/null 2>&1 &", 'r')
+    );
 
     return response()->json([
         'status' => 'success'
