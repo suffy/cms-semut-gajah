@@ -56,6 +56,17 @@ class DailyProduct extends Command
         $this->store($response['data']);
     }
 
+    // notif wa
+    public function sendWaGroup($msg)
+    {
+        Http::withHeaders([
+            'x-api-key' => config('wabot.x_api_key')
+        ])->post(config('wabot.url').'/send-group', [
+            'groupId' => config('wabot.group_id'),
+            'message' => $msg
+        ])->json();
+    }
+
     // insert into products & product_prices table
     public function store($products)
     {
@@ -438,8 +449,14 @@ class DailyProduct extends Command
      */
     public function handle()
     {
-        $this->get();
-
-        $this->info('Insert products from erp successfully');
+        try {
+            $this->sendWaGroup('Product Daily sedang di proses');
+            $this->get();
+            $this->sendWaGroup('Product Daily sukses di proses');
+            $this->info('Insert products from erp successfully');
+        } catch (\Exception $e) {
+            $this->sendWaGroup($e->getMessage());
+            $this->error($e->getMessage());
+        }
     }
 }
