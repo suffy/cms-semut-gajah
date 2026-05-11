@@ -465,13 +465,15 @@ class DailyProduct extends Command
 
         $nowDate = Carbon::now();
         $products = collect($datas)->filter(function ($product) use ($nowDate) {
-            if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
-                return true;
-            } else {
-                if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 24) {
-                    return true;
-                }
-            }
+            // if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
+            //     return true;
+            // } else {
+            //     if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 24) {
+            //         return true;
+            //     }
+            // }
+
+            return true;
         });
 
         $existingProducts = Product::select('id', 'kodeprod', 'image', 'updated_at', 'sync_hash')->whereIn('kodeprod', $products->pluck('kodeprod'))->get()->keyBy('kodeprod');
@@ -522,42 +524,43 @@ class DailyProduct extends Command
                 $product_image = NULL;
                 if ($product['apps_images']) {
                     try {
-                        $url             = $product['apps_images'];
-                        $info            = pathinfo($url);
-                        $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
-                        $contents        = file_get_contents($url);
-                        if (!is_array($http_response_header)) {
-                            if (strpos($http_response_header, "did not properly respond") !== false) {
-                                // insert to logs table
-                                $this->log->create(
-                                    [
-                                        'table_id'     => $product['kodeprod'],
-                                        'log_time'     => Carbon::now(),
-                                        'activity'      => 'failed download image product from erp with id : ' . $product['kodeprod'],
-                                        'table_name'    => 'products',
-                                        'column_name'   => 'products.id, products.name, products.image',
-                                        'from_user'     => null,
-                                        'to_user'       => null,
-                                        'data_content'  => null,
-                                        'platform'      => 'web',
-                                        'created_at'    => Carbon::now()
-                                    ]
-                                );
-                                $contents = file_get_contents($url);
-                            }
-                        }
+                        // $url             = $product['apps_images'];
+                        // $info            = pathinfo($url);
+                        // $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
+                        // $contents        = file_get_contents($url);
+                        // if (!is_array($http_response_header)) {
+                        //     if (strpos($http_response_header, "did not properly respond") !== false) {
+                        //         // insert to logs table
+                        //         $this->log->create(
+                        //             [
+                        //                 'table_id'     => $product['kodeprod'],
+                        //                 'log_time'     => Carbon::now(),
+                        //                 'activity'      => 'failed download image product from erp with id : ' . $product['kodeprod'],
+                        //                 'table_name'    => 'products',
+                        //                 'column_name'   => 'products.id, products.name, products.image',
+                        //                 'from_user'     => null,
+                        //                 'to_user'       => null,
+                        //                 'data_content'  => null,
+                        //                 'platform'      => 'web',
+                        //                 'created_at'    => Carbon::now()
+                        //             ]
+                        //         );
+                        //         $contents = file_get_contents($url);
+                        //     }
+                        // }
                         $rel_path        = '/images/product/';
                         if (!file_exists(public_path($rel_path))) {
                             mkdir(public_path($rel_path), 0777, true);
                         }
-                        $new_name        = $product['kodeprod'] . "." . $info['extension'];
-                        $product_image   = $rel_path . $new_name;
+                        // $new_name        = $product['kodeprod'] . "." . $info['extension'];
+                        // $product_image   = $rel_path . $new_name;
                         // if (file_exists(public_path() . $product_image)) {
                         //     unlink(public_path() . $product_image); //menghapus file lama
                         // }
 
-                        $image_resize = InterImage::make($contents);
-                        $image_resize->save(('public/images/product/' . $new_name));
+                        // $image_resize = InterImage::make($contents);
+                        // $image_resize->save(('public/images/product/' . $new_name));
+                        $this->download($product);
                     } catch (\Exception $e) {
                         $this->info($e->getMessage());
                     }
@@ -663,39 +666,40 @@ class DailyProduct extends Command
                     $product_image   = $old_image;
                     if ($product['apps_images']) {
                         try {
-                            $url             = $product['apps_images'];
-                            $info            = pathinfo($url);
-                            $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
-                            $contents        = file_get_contents($url);
-                            if (!is_array($http_response_header)) {
-                                if (strpos($http_response_header, "did not properly respond") !== false) {
-                                    // insert to logs table
-                                    $this->log->create(
-                                        [
-                                            //'table_id'     => $product['kodeprod'],
-                                            'table_id'     => $data->id,
-                                            'log_time'     => Carbon::now(),
-                                            'activity'      => 'failed download image product from erp with id : ' . $data->id,
-                                            'table_name'    => 'products',
-                                            'column_name'   => 'products.id, products.name, products.image',
-                                            'from_user'     => null,
-                                            'to_user'       => null,
-                                            'data_content'  => null,
-                                            'platform'      => 'web',
-                                            'created_at'    => Carbon::now()
-                                        ]
-                                    );
-                                    $contents = file_get_contents($url);
-                                }
-                            }
-                            $new_name        = $product['kodeprod'] . "." . $info['extension'];
-                            $rel_path        = '/images/product/';
-                            $product_image   = $rel_path . $new_name;
+                            // $url             = $product['apps_images'];
+                            // $info            = pathinfo($url);
+                            // $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
+                            // $contents        = file_get_contents($url);
+                            // if (!is_array($http_response_header)) {
+                            //     if (strpos($http_response_header, "did not properly respond") !== false) {
+                            //         // insert to logs table
+                            //         $this->log->create(
+                            //             [
+                            //                 //'table_id'     => $product['kodeprod'],
+                            //                 'table_id'     => $data->id,
+                            //                 'log_time'     => Carbon::now(),
+                            //                 'activity'      => 'failed download image product from erp with id : ' . $data->id,
+                            //                 'table_name'    => 'products',
+                            //                 'column_name'   => 'products.id, products.name, products.image',
+                            //                 'from_user'     => null,
+                            //                 'to_user'       => null,
+                            //                 'data_content'  => null,
+                            //                 'platform'      => 'web',
+                            //                 'created_at'    => Carbon::now()
+                            //             ]
+                            //         );
+                            //         $contents = file_get_contents($url);
+                            //     }
+                            // }
+                            // $new_name        = $product['kodeprod'] . "." . $info['extension'];
+                            // $rel_path        = '/images/product/';
+                            // $product_image   = $rel_path . $new_name;
                             if (file_exists(public_path() . $old_image)) {
                                 unlink(public_path() . $old_image); //menghapus file lama
                             }
-                            $image_resize = InterImage::make($contents);
-                            $image_resize->save(('public/images/product/' . $new_name));
+                            // $image_resize = InterImage::make($contents);
+                            // $image_resize->save(('public/images/product/' . $new_name));
+                            $this->download($product);
                         } catch (\Exception $e) {
                             $this->info($e->getMessage());
                         }
@@ -823,6 +827,57 @@ class DailyProduct extends Command
                 }
             }
         }
+    }
+
+    public function download($row)
+    {
+        $url = $row['apps_images'];
+        $info = pathinfo($url);
+        $new_name = $row['kodeprod'] . "." . $info['extension'];
+
+        $ch = curl_init($url);
+
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_CONNECTTIMEOUT => 20,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_USERAGENT => 'Mozilla/5.0'
+        ]);
+
+        $contents = curl_exec($ch);
+
+        $error = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
+        curl_close($ch);
+
+        if ($error) {
+            throw new \Exception($error);
+        }
+
+        if ($httpCode != 200) {
+            throw new \Exception('HTTP Error: '.$url.' Code: '. $httpCode);
+        }
+
+        if (!str_contains($contentType, 'image')) {
+            throw new \Exception('Response bukan image');
+        }
+
+        $image_resize = InterImage::make($contents);
+
+        $image_resize->resize(800, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $image_resize->save(
+            public_path('images/product/' . $new_name),
+            80
+        );
     }
 
     /**
