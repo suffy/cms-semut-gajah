@@ -85,37 +85,46 @@ class CheckImage extends Command
         $info = pathinfo($url);
         $new_name = $row->kodeprod . "." . $info['extension'];
 
-        $ch = curl_init($url);
+        $response = Http::withOptions([
+            'verify' => false,
 
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT => 60,
-            CURLOPT_CONNECTTIMEOUT => 20,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_USERAGENT => 'Mozilla/5.0'
-        ]);
+            // connect timeout
+            'connect_timeout' => 60,
 
-        $contents = curl_exec($ch);
+            // force ipv4
+            'curl' => [
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            ],
+        ])
+        ->withHeaders([
+            'User-Agent' => 'Mozilla/5.0'
+        ])
+        ->timeout(120)
+        ->retry(3, 2000)
+        ->get($url);
 
-        $error = curl_error($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        // cek response
+        if (!$response->successful()) {
 
-        curl_close($ch);
+            throw new \Exception(
+                'HTTP Error : '.$url.' Status: '. $response->status()
+            );
 
-        if ($error) {
-            throw new \Exception($error);
         }
 
-        if ($httpCode != 200) {
-            throw new \Exception('HTTP Error: '.$url.' Code: '. $httpCode);
-        }
+        // cek mime type
+        $contentType = $response->header('Content-Type');
 
         if (!str_contains($contentType, 'image')) {
-            throw new \Exception('Response bukan image');
+
+            throw new \Exception(
+                'Response bukan gambar'
+            );
+
         }
+
+        // ambil body image
+        $contents = $response->body();
 
         $image_resize = InterImage::make($contents);
 

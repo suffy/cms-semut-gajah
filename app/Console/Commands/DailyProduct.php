@@ -465,15 +465,13 @@ class DailyProduct extends Command
 
         $nowDate = Carbon::now();
         $products = collect($datas)->filter(function ($product) use ($nowDate) {
-            // if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
-            //     return true;
-            // } else {
-            //     if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 24) {
-            //         return true;
-            //     }
-            // }
-
-            return true;
+            if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
+                return true;
+            } else {
+                if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 24) {
+                    return true;
+                }
+            }
         });
 
         $existingProducts = Product::select('id', 'kodeprod', 'image', 'updated_at', 'sync_hash')->whereIn('kodeprod', $products->pluck('kodeprod'))->get()->keyBy('kodeprod');
@@ -486,26 +484,6 @@ class DailyProduct extends Command
             // check category
             $category_id = $product['apps_category_id']; // apps_kategori_online
             $brand = null; // supp
-
-            // if ($product['apps_kategori_online'] == 'HERBAL') {
-            //     $category_id = '1';
-            // }
-
-            // if ($product['apps_kategori_online'] == 'SUPPLEMEN & MULTIVITAMIN') {
-            //     $category_id = '2';
-            // }
-
-            // if ($product['apps_kategori_online'] == 'FOOD & BEV') {
-            //     $category_id = '3';
-            // }
-
-            // if ($product['apps_kategori_online'] == 'MINYAK ANGIN & BALSAM') {
-            //     $category_id = '4';
-            // }
-
-            // if ($product['apps_kategori_online'] == '') {
-            //     $category_id = null;
-            // }
 
             $brand = $this->brands[$product['supp']] ?? null;
 
@@ -524,42 +502,10 @@ class DailyProduct extends Command
                 $product_image = NULL;
                 if ($product['apps_images']) {
                     try {
-                        // $url             = $product['apps_images'];
-                        // $info            = pathinfo($url);
-                        // $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
-                        // $contents        = file_get_contents($url);
-                        // if (!is_array($http_response_header)) {
-                        //     if (strpos($http_response_header, "did not properly respond") !== false) {
-                        //         // insert to logs table
-                        //         $this->log->create(
-                        //             [
-                        //                 'table_id'     => $product['kodeprod'],
-                        //                 'log_time'     => Carbon::now(),
-                        //                 'activity'      => 'failed download image product from erp with id : ' . $product['kodeprod'],
-                        //                 'table_name'    => 'products',
-                        //                 'column_name'   => 'products.id, products.name, products.image',
-                        //                 'from_user'     => null,
-                        //                 'to_user'       => null,
-                        //                 'data_content'  => null,
-                        //                 'platform'      => 'web',
-                        //                 'created_at'    => Carbon::now()
-                        //             ]
-                        //         );
-                        //         $contents = file_get_contents($url);
-                        //     }
-                        // }
                         $rel_path        = '/images/product/';
                         if (!file_exists(public_path($rel_path))) {
                             mkdir(public_path($rel_path), 0777, true);
                         }
-                        // $new_name        = $product['kodeprod'] . "." . $info['extension'];
-                        // $product_image   = $rel_path . $new_name;
-                        // if (file_exists(public_path() . $product_image)) {
-                        //     unlink(public_path() . $product_image); //menghapus file lama
-                        // }
-
-                        // $image_resize = InterImage::make($contents);
-                        // $image_resize->save(('public/images/product/' . $new_name));
                         $this->download($product);
                     } catch (\Exception $e) {
                         $this->info($e->getMessage());
@@ -666,39 +612,9 @@ class DailyProduct extends Command
                     $product_image   = $old_image;
                     if ($product['apps_images']) {
                         try {
-                            // $url             = $product['apps_images'];
-                            // $info            = pathinfo($url);
-                            // $context         = stream_context_create(['http' => ['ignore_errors' => true]]);
-                            // $contents        = file_get_contents($url);
-                            // if (!is_array($http_response_header)) {
-                            //     if (strpos($http_response_header, "did not properly respond") !== false) {
-                            //         // insert to logs table
-                            //         $this->log->create(
-                            //             [
-                            //                 //'table_id'     => $product['kodeprod'],
-                            //                 'table_id'     => $data->id,
-                            //                 'log_time'     => Carbon::now(),
-                            //                 'activity'      => 'failed download image product from erp with id : ' . $data->id,
-                            //                 'table_name'    => 'products',
-                            //                 'column_name'   => 'products.id, products.name, products.image',
-                            //                 'from_user'     => null,
-                            //                 'to_user'       => null,
-                            //                 'data_content'  => null,
-                            //                 'platform'      => 'web',
-                            //                 'created_at'    => Carbon::now()
-                            //             ]
-                            //         );
-                            //         $contents = file_get_contents($url);
-                            //     }
-                            // }
-                            // $new_name        = $product['kodeprod'] . "." . $info['extension'];
-                            // $rel_path        = '/images/product/';
-                            // $product_image   = $rel_path . $new_name;
                             if (file_exists(public_path() . $old_image)) {
                                 unlink(public_path() . $old_image); //menghapus file lama
                             }
-                            // $image_resize = InterImage::make($contents);
-                            // $image_resize->save(('public/images/product/' . $new_name));
                             $this->download($product);
                         } catch (\Exception $e) {
                             $this->info($e->getMessage());
@@ -835,37 +751,46 @@ class DailyProduct extends Command
         $info = pathinfo($url);
         $new_name = $row['kodeprod'] . "." . $info['extension'];
 
-        $ch = curl_init($url);
+        $response = Http::withOptions([
+            'verify' => false,
 
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT => 60,
-            CURLOPT_CONNECTTIMEOUT => 20,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_USERAGENT => 'Mozilla/5.0'
-        ]);
+            // connect timeout
+            'connect_timeout' => 60,
 
-        $contents = curl_exec($ch);
+            // force ipv4
+            'curl' => [
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            ],
+        ])
+        ->withHeaders([
+            'User-Agent' => 'Mozilla/5.0'
+        ])
+        ->timeout(120)
+        ->retry(3, 2000)
+        ->get($url);
 
-        $error = curl_error($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        // cek response
+        if (!$response->successful()) {
 
-        curl_close($ch);
+            throw new \Exception(
+                'HTTP Error : '.$url.' Status: '. $response->status()
+            );
 
-        if ($error) {
-            throw new \Exception($error);
         }
 
-        if ($httpCode != 200) {
-            throw new \Exception('HTTP Error: '.$url.' Code: '. $httpCode);
-        }
+        // cek mime type
+        $contentType = $response->header('Content-Type');
 
         if (!str_contains($contentType, 'image')) {
-            throw new \Exception('Response bukan image');
+
+            throw new \Exception(
+                'Response bukan gambar'
+            );
+
         }
+
+        // ambil body image
+        $contents = $response->body();
 
         $image_resize = InterImage::make($contents);
 
