@@ -75,11 +75,13 @@ class DailyProduct extends Command
     // notif wa
     public function sendWaGroup($msg)
     {
+        $link = config('app.url');
+
         Http::withHeaders([
             'x-api-key' => config('wabot.x_api_key')
         ])->post(config('wabot.url').'/send-group', [
             'groupId' => config('wabot.group_id'),
-            'message' => $msg
+            'message' =>  $link."\n".$msg
         ])->json();
     }
 
