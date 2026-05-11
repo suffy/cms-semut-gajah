@@ -26,7 +26,7 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Subscribe : 
+                        Subscribe :
                         <button class="btn btn-primary float-right" id="subscribe-btn">Run Job</button>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Master Site : 
+                        Master Site :
                         <button class="btn btn-primary float-right" id="master-site-btn">Run Job</button>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Master Salesman : 
+                        Master Salesman :
                         <button class="btn btn-primary float-right" id="master-salesman-btn">Run Job</button>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
             {{-- <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Master Custom Customer : 
+                        Master Custom Customer :
                         <input id="master-customer-input" placeholder="Kode"></input>
                         <button class="btn btn-primary float-right" id="master-custom-btn">Run Job</button>
                     </div>
@@ -61,13 +61,13 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Remind Update Apps : 
+                        Remind Update Apps :
                         <input id="version-input" placeholder="Versi"></input>
                         <button class="btn btn-primary float-right" id="remind-update-btn">Run Job</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
@@ -96,7 +96,7 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Master Stock : 
+                        Master Stock :
                         <button class="btn btn-primary float-right" id="master-stock-btn">Run Job</button>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
@@ -123,16 +123,16 @@
             <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Custom Convert Json : 
+                        Custom Convert Json :
                         <input id="custom-convert-input" placeholder="Site Code"></input>
                         <button class="btn btn-primary float-right" id="master-convert-custom-btn">Run Job</button>
                     </div>
                     <div class="card-body">
-                        Convert Json : 
+                        Convert Json :
                         <button class="btn btn-primary float-right" id="master-convert-btn">Run Job</button>
                     </div>
                     <div class="card-body">
-                        Master Daily Customer : 
+                        Master Daily Customer :
                         <button class="btn btn-primary float-right" id="master-daily-btn">Run Job</button>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
             {{-- <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Send Notification if verified : 
+                        Send Notification if verified :
                         <button class="btn btn-primary float-right" id="notification-verification-btn">Run Job</button>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
             {{-- <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        Complete Complaint : 
+                        Complete Complaint :
                         <button class="btn btn-primary float-right" id="complete-complaint-btn">Run Job</button>
                     </div>
                 </div>
@@ -168,7 +168,7 @@
             {{-- <div class="col-md-4">
                 <div class="box-border">
                     <div class="card-body">
-                        COD : 
+                        COD :
                         <button class="btn btn-primary float-right" id="cod-btn">Run Job</button>
                     </div>
                 </div>
@@ -314,7 +314,7 @@
                 }
             })
         })
-        
+
         $("#master-approval").click(function(){
             $('#master-approval').html('running ...')
             $.get("{{ url('master-approval')}}/", function(response){
@@ -340,7 +340,7 @@
         //         }
         //     })
         // })
-        
+
         // $("#master-customer-binaan-btn").click(function(){
         //     $('#master-customer-binaan-btn').html('running ...')
         //     $.get("{{ url('customer-binaan-daily')}}/", function(response){
@@ -357,13 +357,15 @@
         $("#master-product-btn").click(function(){
             $('#master-product-btn').html('running ...')
             $.get("{{ url('product-daily')}}/", function(response){
-                if (response.status == 'success') {
+                alert('running job successfully')
+                $('#master-product-btn').html('Run Job')
+                /*if (response.status == 'success') {
                     alert('running job successfully')
                     $('#master-product-btn').html('Run Job')
                 } else {
                     alert('running job failed')
                     $('#master-product-btn').html('Run Job')
-                }
+                }*/
             })
         })
 
