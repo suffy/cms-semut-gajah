@@ -42,7 +42,7 @@ class CheckImage extends Command
     public function check()
     {
         // memanggil semua produk beserta image
-        $list = $this->products->select('id', 'kodeprod', 'image', 'image_backup')->get();
+        $list = $this->products->select('id', 'kodeprod', 'image', 'image_backup')->where('status', 1)->get();
         foreach($list as $row) {
             // check apakah url image yg tersimpan di database ada di folder
             if(!file_exists(public_path($row->image))) {
