@@ -89,7 +89,7 @@ class CheckImage extends Command
             'verify' => false,
 
             // connect timeout
-            'connect_timeout' => 60,
+            'connect_timeout' => 5,
 
             // force ipv4
             'curl' => [
