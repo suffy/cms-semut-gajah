@@ -58,13 +58,13 @@ class SubscribeController extends Controller
         }
 
         $id             = Auth::user()->id;
-        $arrayNew       = ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
-        $app_version    = Auth::user()->app_version; 
+        $arrayNew       = ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        $app_version    = Auth::user()->app_version;
 
         if($app_version == '1.1.1') {
-            $array      = ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
-        } else {   
-            $array      = ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at', 'updated_at'];
+            $array      = ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        } else {
+            $array      = ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at', 'updated_at'];
         }
 
         try {
@@ -113,7 +113,7 @@ class SubscribeController extends Controller
             ], 500);
         }
     }
-    
+
     public function store(Request $request)
     {
         try {
@@ -180,7 +180,7 @@ class SubscribeController extends Controller
                 'data'    => null
             ], 500);
         }
-        
+
         try {
 
             // Insert
@@ -366,7 +366,7 @@ class SubscribeController extends Controller
                 'data'    => null
             ], 400);
         }
-        
+
         try {
             $this->logs
                     ->where('activity', 'like', '%subscribe h-%')
@@ -374,7 +374,7 @@ class SubscribeController extends Controller
                     ->update(['status' => 0]);
 
             $this->subscribes->destroy($id);
-            
+
             // remove log to show in notification list
 
             // logs
@@ -447,7 +447,7 @@ class SubscribeController extends Controller
                                 })
                                 ->where('table_name', 'subscribes')
                                 ->where(function($query) use ($id) {
-                                    // check user login                                    
+                                    // check user login
                                     $query->where('from_user', $id)
                                     ->orWhere('to_user', $id);
                                 })
@@ -484,11 +484,11 @@ class SubscribeController extends Controller
                                 })
                                 ->whereNull('status')
                                 ->orderBy('log_time', 'DESC');
-                
+
                 // counting total
                 $total = $this->logs
                                     ->whereNull('user_seen')
-                                    ->where(function($query) {                           
+                                    ->where(function($query) {
                                         $query->where('activity', 'subscribe h-2')
                                         ->orWhere('activity', 'subscribe h-1');
                                     })
@@ -512,19 +512,19 @@ class SubscribeController extends Controller
                                 })
                                 ->where('table_name', 'subscribes')
                                 ->where(function($query) use ($id) {
-                                    // check user login                                    
+                                    // check user login
                                     $query->where('from_user', $id)
                                         ->orWhere('to_user', $id);
                                 })
                                 ->whereNull('status')
                                 ->orderBy('log_time', 'DESC')
                                 ->paginate(10);
-                                
+
                 // counting total
                 $total = $this->logs
                                     ->whereNull('user_seen')
                                     ->whereNull('status')
-                                    ->where(function($query) {                           
+                                    ->where(function($query) {
                                         $query->where('activity', 'subscribe h-2')
                                         ->orWhere('activity', 'subscribe h-1');
                                     })
@@ -535,7 +535,7 @@ class SubscribeController extends Controller
                                     })
                                     ->count();
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Get subscribes notification successfully',

@@ -44,13 +44,13 @@ class ComplaintController extends Controller
     // array for select product
     private function arraySelectProduct()
     {
-        return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_renceng', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_renceng', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
-    
+
     // array for select product
     private function arraySelectProductOld()
     {
-        return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
 
     public function get(Request $request)
@@ -86,17 +86,17 @@ class ComplaintController extends Controller
         // check user login
         $id          = Auth::user()->id;
         $app_version = Auth::user()->app_version;
-        $array       = $this->arraySelectComplaint();             
+        $array       = $this->arraySelectComplaint();
         $arrayOrder  = ['id', 'invoice', 'customer_id', 'subscribe_id', 'name', 'phone', 'address', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'payment_method', 'order_time', 'status', 'payment_total', 'payment_final', 'status_faktur', 'site_code', 'created_at', 'updated_at', 'delivery_service'];
         $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point'];
         if($app_version == '1.1.1') {
-            $arrayProduct      = $this->arraySelectProductOld();             
+            $arrayProduct      = $this->arraySelectProductOld();
         } else {
-            $arrayProduct      = $this->arraySelectProduct();             
+            $arrayProduct      = $this->arraySelectProduct();
         }
 
         try {
-            if($app_version =='1.1') { 
+            if($app_version =='1.1') {
                     $complaints         = $this->complaints->query();
                 // $complaintDetails   = $this->complaintDetails->query();
 
@@ -127,7 +127,7 @@ class ComplaintController extends Controller
                                                     ->where('user_id', $id)
                                                     ->where('responded', "true")
                                                     ->count();
-                }            
+                }
 
                 // filter complain confirmed by admiin
                 if ($request->status == 'completed') {
@@ -228,7 +228,7 @@ class ComplaintController extends Controller
             } else {
                 $complaints         = $this->complaints->query();
                 // $complaintDetails   = $this->complaintDetails->query();
-    
+
                 // search complaints
                 if ($request->invoice) {
                     $complaints = $complaints
@@ -242,7 +242,7 @@ class ComplaintController extends Controller
                                 })
                                 ->where('user_id', $id);
                 }
-    
+
                 // status no response yet
                 if ($request->status == 'no response yet') {
                     // get user complaint no respond
@@ -251,7 +251,7 @@ class ComplaintController extends Controller
                                                         ->where('responded', 'false')
                                                         ->count();
                 }
-    
+
                 // status no response yet
                 if ($request->status == 'response') {
                     // get user complaint no respond
@@ -259,8 +259,8 @@ class ComplaintController extends Controller
                                                         ->where('user_id', $id)
                                                         ->where('responded', "true")
                                                         ->count();
-                }            
-    
+                }
+
                 // filter complain confirmed by admiin
                 if ($request->status == 'completed') {
                     $complaints = $complaints
@@ -280,7 +280,7 @@ class ComplaintController extends Controller
                                         ->where('status', 'confirmed')
                                         ->orderBy('id', 'DESC');
                 }
-    
+
                 // filter complain rejected by admiin
                 if($request->status == 'rejected'){
                     $complaints = $complaints
@@ -300,7 +300,7 @@ class ComplaintController extends Controller
                                     ->where('status', 'rejected')
                                     ->orderBy('id', 'DESC');
                 }
-    
+
                 if ($request->invoice) {
                     // get search invoice
                     $complaints = $complaints->paginate(10);
@@ -325,7 +325,7 @@ class ComplaintController extends Controller
                                                 ->where('responded', 'false')
                                                 ->orderBy('id', 'DESC')
                                                 ->paginate(10);
-    
+
                     } else {
                         $complaints = $this->complaints
                                                 ->with(['complaint_detail' => function($query) use ($array) {
@@ -431,14 +431,14 @@ class ComplaintController extends Controller
                                             ->orderBy('id', 'DESC')
                                             ->paginate(10);
                 }
-    
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Get complaints successfully',
                     'data'    => $complaints
                 ], 200);
             }
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -483,11 +483,11 @@ class ComplaintController extends Controller
             $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point'];
             $app_version        = auth()->user()->app_version;
             if($app_version == '1.1.1') {
-                $arrayProduct      = $this->arraySelectProductOld();             
+                $arrayProduct      = $this->arraySelectProductOld();
             } else {
-                $arrayProduct      = $this->arraySelectProduct();             
+                $arrayProduct      = $this->arraySelectProduct();
             }
-    
+
             $complaints = $this->complaints
                                     ->where('id', $id)
                                     ->with(['complaint_detail' => function($query) {
@@ -617,9 +617,9 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_1')) {
                 $file = $request->file('file_1');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "-1." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_1 = '/images/complaint/'.$newName;
@@ -628,9 +628,9 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_2')) {
                 $file = $request->file('file_2');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "-2." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_2 = '/images/complaint/'.$newName;
@@ -639,18 +639,18 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_3')) {
                 $file = $request->file('file_3');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "-3." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_3 = '/images/complaint/'.$newName;
             }
-            
+
             if ($request->hasFile('file_4')) {
                 $file = $request->file('file_4');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "-vid." . $ext;
 
                 $path = public_path().'/videos/complaint/';
@@ -791,9 +791,9 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_1')) {
                 $file = $request->file('file_1');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_1 = '/images/complaint/'.$newName;
@@ -802,9 +802,9 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_2')) {
                 $file = $request->file('file_2');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_2 = '/images/complaint/'.$newName;
@@ -813,18 +813,18 @@ class ComplaintController extends Controller
             if ($request->hasFile('file_3')) {
                 $file = $request->file('file_3');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "." . $ext;
-    
+
                 $image_resize = InterImage::make($file->getRealPath());
                 $image_resize->save(('images/complaint/' . $newName));
                 $complaintFile->file_3 = '/images/complaint/'.$newName;
             }
-            
+
             if ($request->hasFile('file_4')) {
                 $file = $request->file('file_4');
                 $ext = $file->getClientOriginalExtension();
-    
+
                 $newName = "complaint" . date('YmdHis') . "." . $ext;
 
                 $path = public_path().'/videos/complaint/';
@@ -979,7 +979,7 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
             if ($request->status == "replied") {
                 $notifications  = $notifications
@@ -994,7 +994,7 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
             if ($request->status == "confirm") {
                 $notifications  = $notifications
@@ -1009,7 +1009,7 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
             if ($request->status == "reject") {
                 $notifications  = $notifications
@@ -1024,7 +1024,7 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
             if ($request->status == "sended stuff") {
                 $notifications  = $notifications
@@ -1039,7 +1039,7 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
             if ($request->status == "sended credit") {
                 $notifications  = $notifications
@@ -1054,16 +1054,16 @@ class ComplaintController extends Controller
                 $total  = $notifications
                         ->where('user_seen', null)
                         ->count();
-            } 
+            }
 
-            if(!$request->status) { 
+            if(!$request->status) {
                 $notifications  = $notifications
                                     ->select('logs.*')
                                     ->where('activity', 'not like', '%new complaint%')
                                     ->where('activity', 'not like', '%successfully sent credit%')
                                     ->where('activity', 'not like', '%successfully ordered complaint%')
                                     ->where('table_name', 'like', '%complaints%')
-                                    ->where(function($query) use ($id) {                                    
+                                    ->where(function($query) use ($id) {
                                         $query->where('to_user', $id);
                                     })
                                     ->orderBy('log_time', 'DESC');

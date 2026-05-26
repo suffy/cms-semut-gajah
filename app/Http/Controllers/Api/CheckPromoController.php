@@ -50,13 +50,13 @@ class CheckPromoController extends Controller
     // array for select product
     private function arraySelectProduct()
     {
-        return ['id', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_renceng', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_renceng', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
 
     // array for select product
     private function arraySelectProductOld()
     {
-        return ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
 
 
@@ -164,7 +164,7 @@ class CheckPromoController extends Controller
             if (round($totalPrice) >= round($orderMin)) {
                 foreach ($productStrata as $update) {
                     $shoppingCart = $this->shoppingCarts->find($update->id);
-                    // Get Disc 
+                    // Get Disc
                     $disc = $strataDisc->where('product_id', $shoppingCart->product_id)->first()->disc_percent;
 
                     // count Price and Disc
@@ -222,7 +222,7 @@ class CheckPromoController extends Controller
                 $detail_promo           = $this->countWithoutPromo($id_shoppingCart);
                 // jika ada promo
             } else {
-                // panggil method validatePromo                 
+                // panggil method validatePromo
                 $promo_result           = $this->validatePromo($shopping_cart_id, $data, $id, $first_order);
                 $return_detail_promo    = $this->countPromo($shopping_cart_id, $promo_result, $id);
 
@@ -328,7 +328,7 @@ class CheckPromoController extends Controller
         //                             ->pluck('promo_id');
         $sku           = $promo_products;
 
-        // ambil data promo 
+        // ambil data promo
         $promo         = $this->promo
             ->select($array)
             ->where('status', 1)
@@ -437,7 +437,7 @@ class CheckPromoController extends Controller
                     $promo_multiple = null;
                     // jika detail_termcondition minimal jumlah total product
                     if ($row->detail_termcondition == 1) {
-                        // jika cart tidak null                                          
+                        // jika cart tidak null
                         if (!is_null($carts)) {
                             $carts_qty = $carts->qty;
                             $total_qty += $carts->qty;
@@ -540,7 +540,7 @@ class CheckPromoController extends Controller
                             // get qty at shoppingcart
                             $carts_qty = $this->shoppingCarts->where('product_id', $min->product_id)->pluck('qty')->first();
 
-                            // push to array $cek_id 
+                            // push to array $cek_id
                             array_push($cek_id, $carts->product_id);
                             // push to array $shopping_cart_id_promo
                             array_push($shopping_cart_id_promo, $carts->product_id);
@@ -695,7 +695,7 @@ class CheckPromoController extends Controller
                                 }
                                 // jika tidak butuh tipe dan class
                             } else {
-                                // kondisi promo gimmick disini 
+                                // kondisi promo gimmick disini
                                 $promo_status = 1;
                                 $this->shoppingCarts
                                     ->whereIn('product_id', $shopping_cart_id_promo)
@@ -840,7 +840,7 @@ class CheckPromoController extends Controller
                         // jika tidak dapat promo
                     } else {
                         $promo_result = "Anda belum memenuhi syarat promo " . $row->title . ". Untuk mendapatkan promo tambahkan product sejumlah " . ($row->min_qty - $total_qty) . " sesuai syarat yang berlaku";
-                        // check jika promo berdasarkan class dan tipe 
+                        // check jika promo berdasarkan class dan tipe
                         if (isset($message_class)) {
                             $promo_result = "Tipe dan kelas toko anda tidak memenuhi syarat promo";
                         }
@@ -868,7 +868,7 @@ class CheckPromoController extends Controller
                     } else {
                         // return $min_qty - $carts_qty;
                         $promo_result = "Anda belum memenuhi syarat promo " . $row->title . ". Untuk mendapatkan promo, tambahkan product sejumlah " . ($min_qty - $carts_qty) . " sesuai syarat yang berlaku";
-                        // check jika promo berdasarkan class dan tipe 
+                        // check jika promo berdasarkan class dan tipe
                         if (isset($message_class)) {
                             $promo_result = "Tipe dan kelas toko anda tidak memenuhi syarat promo";
                         }
@@ -879,7 +879,7 @@ class CheckPromoController extends Controller
                     $promo_result = "Selamat anda mendapatkan promo " . $row->title;
                 } else {
                     $promo_result = "Anda belum memenuhi syarat promo " . $row->title . ". Untuk mendapatkan promo, tambahkan transaksi sejumlah Rp. " . (number_format(round($row->min_transaction - $total_transactions))) . " sesuai syarat yang berlaku";
-                    // check jika promo berdasarkan class dan tipe 
+                    // check jika promo berdasarkan class dan tipe
                     if (isset($message_class)) {
                         $promo_result = "Tipe dan kelas toko anda tidak memenuhi syarat promo";
                     }
@@ -918,7 +918,7 @@ class CheckPromoController extends Controller
                         }
                         $promo_result = "Anda belum memenuhi syarat promo " . $row->title . ". Untuk mendapatkan promo, tambahkan " . $transaction . ' ' . $qty;
                     }
-                } else if ($row->detail_termcondition == 2) {                                                                            // if detail_termcondition jumlah transaksi && per product 
+                } else if ($row->detail_termcondition == 2) {                                                                            // if detail_termcondition jumlah transaksi && per product
                     if ($promo_status == 1) {
                         $promo_result = "Selamat anda mendapatkan promo " . $row->title;
                         $min_qty = $row->sku->where('promo_id', $row->id)->where('min_qty', '!=', NULL)->pluck('min_qty')->first();
@@ -1021,7 +1021,7 @@ class CheckPromoController extends Controller
             }
 
             // give promo status && reward
-            if ($promo_status) {                                                                                                         // give promo status 
+            if ($promo_status) {                                                                                                         // give promo status
                 $promo_reward['product']    = null;
                 $promo_reward['disc']       = null;
                 $promo_reward['nominal']    = null;
@@ -1116,7 +1116,7 @@ class CheckPromoController extends Controller
         return $response;
     }
 
-    // to count transaction if get promo 
+    // to count transaction if get promo
     private function countPromo($shopping_cart_id, $promo_result, $user_id)
     {
         $total_point                      = null;
@@ -1170,7 +1170,7 @@ class CheckPromoController extends Controller
 
                         // $total = $total_price_disc;
                         $total      = (float)$row['promo_reward']['disc'] . "% " . "(" . round($disc) . ")";   // give discount description
-                        $row['promo_reward']['nominal'] = round($disc);                                         // give nominal discount 
+                        $row['promo_reward']['nominal'] = round($disc);                                         // give nominal discount
                         $promo_id   =   $row['promo_id'];
                     } else if ($row['promo_reward']['nominal']) {
                         $total_price_potongan = $cart->total_price - $row['promo_reward']['nominal']; // count nominal
@@ -1181,7 +1181,7 @@ class CheckPromoController extends Controller
                         // $total = $total_price_potongan;
                         $total      = $row['promo_reward']['nominal'];
                         $promo_id   =   $row['promo_id'];
-                    } else if ($row['promo_reward']['point']) {                                       // count nominal  
+                    } else if ($row['promo_reward']['point']) {                                       // count nominal
                         $total          = null;
                         $total_point = $row['promo_reward']['point'];
                         $promo_id   =   $row['promo_id'];
@@ -1593,7 +1593,7 @@ class CheckPromoController extends Controller
                 }
             }
         }
-        // return id_shopingchart and product_id 
+        // return id_shopingchart and product_id
         return $validate_id;
     }
 }

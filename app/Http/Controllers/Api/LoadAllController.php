@@ -43,13 +43,13 @@ class LoadAllController extends Controller
 
     // private function arraySelectProduct()
     // {
-    //     return ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+    //     return ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
     // }
 
     // // array for select product
     // private function arraySelectProductOld()
     // {
-    //     return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+    //     return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     // }
 
 
@@ -126,7 +126,7 @@ class LoadAllController extends Controller
         };
 
         if ($app_version == '1.1.1') {
-            $array      = ['id', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'type_status', 'status_terbaru', 'created_at', 'updated_at', 'image_backup'];
+            $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'type_status', 'status_terbaru', 'created_at', 'updated_at', 'image_backup'];
 
             try {
                 if (cache()->has('banners-' . $userId)) {
@@ -379,7 +379,7 @@ class LoadAllController extends Controller
                 'products_recent'   => [$products_recent]
             ];
         } else {
-            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'image_backup'];
+            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'image_backup'];
 
             try {
                 if ($app_version == '1.1.2') {

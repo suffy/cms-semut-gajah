@@ -17,13 +17,13 @@ class AlertController extends Controller
     // array for select product
     private function arraySelectProduct()
     {
-        return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
     }
 
     // array for select product
     private function arraySelectProductOld()
     {
-        return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
     }
 
     public function promo($id)
@@ -60,11 +60,11 @@ class AlertController extends Controller
             $userId         = auth()->user()->id;
             $app_version    = auth()->user()->app_version;
             if($app_version == '1.1.1') {
-                $array      = $this->arraySelectProductOld();             
+                $array      = $this->arraySelectProductOld();
             } else {
-                $array      = $this->arraySelectProduct();             
+                $array      = $this->arraySelectProduct();
             }
-            
+
             $promos = Promo::with(['sku.product' => function($query) use ($array, $userId) {
                                         $query->select($array)
                                         ->with(['price', 'review' => function($q) {

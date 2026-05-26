@@ -27,15 +27,15 @@ class PromoController extends Controller
     // array for select product
     private function arraySelectProduct()
     {
-        return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
     }
 
     // array for select product
     private function arraySelectProductOld()
     {
-        return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru'];
     }
-    
+
     public function get(Request $request)
     {
         try {                                                                   // check token
@@ -71,16 +71,16 @@ class PromoController extends Controller
             $promos      = $this->promo->query();
             $userId      = auth()->user()->id;
             if($app_version == '1.1.1') {
-                $array      = $this->arraySelectProductOld();             
+                $array      = $this->arraySelectProductOld();
             } else {
-                $array      = $this->arraySelectProduct();             
+                $array      = $this->arraySelectProduct();
             }
-            
-            if($request->status == 'active') { 
+
+            if($request->status == 'active') {
                 $promos = $promos
                             ->where('status', '1')
                             ->limit(10);
-                
+
                 if ($request->order == 'asc') {
                     $promos   = $promos->orderBy('created_at', 'asc');
                 } else if ($request->order == 'desc') {
@@ -93,11 +93,11 @@ class PromoController extends Controller
             $promos = $promos
                         ->where('status', '1');
 
-            if($request->status == 'non active') { 
+            if($request->status == 'non active') {
                 $promos = $promos
                             ->where('status', '0')
                             ->limit(10);
-                
+
                 if ($request->order == 'asc') {
                     $promos   = $promos->orderBy('created_at', 'asc');
                 } else if ($request->order == 'desc') {
@@ -141,7 +141,7 @@ class PromoController extends Controller
             // search products
             if ($request->search) {
                 $promos = $promos
-                                ->where('highlight', 'like', '%' . $request->search . '%'); 
+                                ->where('highlight', 'like', '%' . $request->search . '%');
             }
 
             if ($request->order == 'asc') {
@@ -160,7 +160,7 @@ class PromoController extends Controller
                                         ->paginate(10);
                 } else {
                     $promos = $promos
-                                    ->select('promos.*', 
+                                    ->select('promos.*',
                                                 DB::raw("COALESCE(promos.start, DATE('" . Carbon::now()->startOfMonth()->format('Y-m-d') . "') ) as start"),
                                                 DB::raw("COALESCE(promos.end,  DATE('" . Carbon::now()->endOfMonth()->format('Y-m-d')   . "') ) as end"),
                                             )
@@ -188,7 +188,7 @@ class PromoController extends Controller
                                         }])
                                     ->paginate(10);
                 }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Get promo successfully',
@@ -237,14 +237,14 @@ class PromoController extends Controller
             $app_version = Auth::user()->app_version;
             $userId      = auth()->user()->id;
             if($app_version == '1.1.1') {
-                $array      = $this->arraySelectProductOld();             
+                $array      = $this->arraySelectProductOld();
             } else {
-                $array      = $this->arraySelectProduct();             
+                $array      = $this->arraySelectProduct();
             }
 
             // array_walk($array, function(&$value, $key) { $value = 'products.' . $value; } );
             // array_push($array, 'promo_skus.promo_id');
-            
+
             $promoSku       = $this->promoSku
                                         ->where('promo_id', $id)
                                         // ->join('products', 'products.id', '=', 'promo_skus.product_id')

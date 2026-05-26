@@ -14,7 +14,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class PointHistoriesController extends Controller
 {
     protected $pointHistory;
-    
+
     public function __construct(PointHistory $pointHistory)
     {
         $this->pointHistory = $pointHistory;
@@ -55,9 +55,9 @@ class PointHistoriesController extends Controller
             $appVersion = auth()->user()->app_version;
 
             if($appVersion == '1.1.1') {
-                $arrayProduct      = ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $arrayProduct      = ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $arrayProduct      = ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];            
+                $arrayProduct      = ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             }
 
             $arrayOrder = ['id', 'invoice', 'customer_id', 'subscribe_id', 'name', 'phone', 'app_version', 'address', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'payment_method', 'payment_total', 'payment_final', 'payment_point', 'delivery_fee', 'notes', 'status', 'status_faktur', 'site_code', 'complaint_id', 'review_at', 'point', 'created_at', 'updated_at', 'deleted_at', 'delivery_service'];
@@ -83,7 +83,7 @@ class PointHistoriesController extends Controller
                                                 }]);
                                         }, 'topSpender'])
                                         ->paginate(10);
-            
+
             return response()->json([
                 'success'   => true,
                 'messages'  => 'Get Point Histories Successfully',

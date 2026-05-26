@@ -39,13 +39,13 @@ class ProductController extends Controller
     // // array for select product
     // private function arraySelectProduct()
     // {
-    //     return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at'];
+    //     return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at'];
     // }
 
     // // array for select product
     // private function arraySelectProductOld()
     // {
-    //     return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+    //     return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     // }
 
     // array for select product!
@@ -67,34 +67,34 @@ class ProductController extends Controller
         // return ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
         if ($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
             return DB::raw("
-                                    product_prices.id, 
-                                    product_id,  
-                                    harga_grosir_mt, 
-                                    harga_promosi_coret_ritel_gt, 
-                                    harga_promosi_coret_grosir_mt, 
+                                    product_prices.id,
+                                    product_id,
+                                    harga_grosir_mt,
+                                    harga_promosi_coret_ritel_gt,
+                                    harga_promosi_coret_grosir_mt,
                                     products.brand_id,
                                     harga_ritel_gt as ritel_gt,
-                                    (CASE 
-                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt 
+                                    (CASE
+                                        WHEN products.brand_id::integer=005 THEN harga_ritel_gt
                                         WHEN products.brand_id::integer=001 THEN harga_ritel_gt
-                                        ELSE harga_grosir_mt 
+                                        ELSE harga_grosir_mt
                                         END) as harga_ritel_gt
                                 ");
         } else {
             return DB::raw("
-                                    product_prices.id, 
-                                    product_id, 
-                                    harga_ritel_gt, 
-                                    harga_grosir_mt, 
-                                    harga_promosi_coret_ritel_gt, 
-                                    harga_promosi_coret_grosir_mt, 
+                                    product_prices.id,
+                                    product_id,
+                                    harga_ritel_gt,
+                                    harga_grosir_mt,
+                                    harga_promosi_coret_ritel_gt,
+                                    harga_promosi_coret_grosir_mt,
                                     products.brand_id,
                                     harga_ritel_gt as rt_backup
                                 ");
         };
     }
 
-    public function get(Request $request)                                    // get data mpm api product promo 
+    public function get(Request $request)                                    // get data mpm api product promo
     {
         try {                                                                   // check token
             if (!JWTAuth::parseToken()->authenticate()) {
@@ -130,42 +130,42 @@ class ProductController extends Controller
             $app_version    = auth()->user()->app_version;
             $siteCode       = auth()->user()->site_code;
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at', 'products.type_status'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at', 'products.type_status'];
                 array_walk($array, function (&$value, $key) {
                     $value = 'products.' . $value;
                 });
-                $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array              = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'products.type_status'];
+                $array              = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'products.type_status'];
                 $arrayProductPromo = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'products.kodeprod', 'products.name', 'products.description', 'products.image', 'products.brand_id', 'products.category_id', 'products.satuan_online',  'products.kecil', 'products.konversi_sedang_ke_kecil', 'products.status_promosi_coret', 'products.status_herbana', 'products.status_terlaris', 'products.status_terbaru', 'products.status_renceng', 'products.created_at'];
             }
-            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];     
+            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
             $arrayPrice     = $this->arraySelectPrice();
 
             // Kondisi untuk harga biar sesuai dengan user yang login
             // if($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
             //     $arrayPrice = DB::raw("
-            //                             product_prices.id, 
-            //                             product_id,  
-            //                             harga_grosir_mt, 
-            //                             harga_promosi_coret_ritel_gt, 
-            //                             harga_promosi_coret_grosir_mt, 
+            //                             product_prices.id,
+            //                             product_id,
+            //                             harga_grosir_mt,
+            //                             harga_promosi_coret_ritel_gt,
+            //                             harga_promosi_coret_grosir_mt,
             //                             products.brand_id,
             //                             harga_ritel_gt as ritel_gt,
-            //                             (CASE 
-            //                                 WHEN products.brand_id=005 THEN harga_ritel_gt 
+            //                             (CASE
+            //                                 WHEN products.brand_id=005 THEN harga_ritel_gt
             //                                 WHEN products.brand_id=0001 THEN harga_ritel_gt
-            //                                 ELSE harga_grosir_mt 
+            //                                 ELSE harga_grosir_mt
             //                                 END) as harga_ritel_gt
             //                         ");
             // } else {
             //     $arrayPrice = DB::raw("
-            //                             product_prices.id, 
-            //                             product_id, 
-            //                             harga_ritel_gt, 
-            //                             harga_grosir_mt, 
-            //                             harga_promosi_coret_ritel_gt, 
-            //                             harga_promosi_coret_grosir_mt, 
+            //                             product_prices.id,
+            //                             product_id,
+            //                             harga_ritel_gt,
+            //                             harga_grosir_mt,
+            //                             harga_promosi_coret_ritel_gt,
+            //                             harga_promosi_coret_grosir_mt,
             //                             products.brand_id,
             //                             harga_ritel_gt as rt_backup
             //                         ");
@@ -300,7 +300,7 @@ class ProductController extends Controller
                 $products = $products
                     ->where('products.name', 'like', '%' . ucwords($request->search) . '%')
                     // ->whereRaw(
-                    //         "MATCH(name) AGAINST(?)", 
+                    //         "MATCH(name) AGAINST(?)",
                     //         array($request->search)
                     // )
                     ->where('product_availability.status', '1')
@@ -491,9 +491,9 @@ class ProductController extends Controller
             $app_version    = Auth::user()->app_version;
             $siteCode       = auth()->user()->site_code;
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             }
             $arrayCart      = $this->arraySelectCart();
             $arrayPromoSku  = $this->arraySelectPromoSku();
@@ -549,7 +549,7 @@ class ProductController extends Controller
 
                 $productsByname = $products                                                                 //  get product by similar name from recent view
                     // ->whereRaw(
-                    //     "MATCH(products.name) AGAINST(?)", 
+                    //     "MATCH(products.name) AGAINST(?)",
                     //     array($name[0])
                     // )
                     ->where('products.name', 'like', '%' . ucwords($name[0]) . '%')
@@ -728,7 +728,7 @@ class ProductController extends Controller
             if ($app_version == '1.1.1') {
                 $array      = ['products.id', 'products.kodeprod', 'products.name', 'products.description', 'products.image_backup as image', 'products.brand_id', 'products.category_id', 'products.satuan_online', 'products.konversi_sedang_ke_kecil', 'products.status', 'products.status_herbana', 'products.status_promosi_coret', 'products.status_terlaris', 'products.status_terbaru', 'products.created_at', 'products.updated_at'];
             } else {
-                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             }
             $arrayPrice     = $this->arraySelectPrice();
 
@@ -900,20 +900,20 @@ class ProductController extends Controller
 
         $review     = "SELECT product_id, star_review FROM product_review WHERE product_id = " . $id;
         $star   = "" .
-            "SELECT 
-            product_id, 
-            SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) as total_five_star, 
-            SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) as total_four_star, 
-            SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) as total_three_star, 
-            SUM(CASE WHEN star_review  = 2 THEN 1 ELSE 0 END) as total_two_star, 
-            SUM(CASE WHEN star_review  = 1 THEN 1 ELSE 0 END) as total_one_star 
-            FROM product_review 
+            "SELECT
+            product_id,
+            SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) as total_five_star,
+            SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) as total_four_star,
+            SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) as total_three_star,
+            SUM(CASE WHEN star_review  = 2 THEN 1 ELSE 0 END) as total_two_star,
+            SUM(CASE WHEN star_review  = 1 THEN 1 ELSE 0 END) as total_one_star
+            FROM product_review
             WHERE product_id = " . $id .
             "GROUP BY product_id";
 
         $percent = "" .
-            "SELECT 
-            product_id, 
+            "SELECT
+            product_id,
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 5 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_five_star,
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 4 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_four_star,
             CONCAT(ROUND(SUM(CASE WHEN star_review  = 3 THEN 1 ELSE 0 END) / ROUND(COUNT(*),2) * 100), '%') AS percent_three_star,
@@ -925,18 +925,18 @@ class ProductController extends Controller
 
         $response = DB::select(DB::raw("
             SELECT
-            review.product_id, 
-            ROUND(avg(star_review)::numeric, 1) as avg_star, 
+            review.product_id,
+            ROUND(avg(star_review)::numeric, 1) as avg_star,
             star.*,
             percent.*
-            from (" . $review . ") as review 
-            left join (" . $star . ") as star 
+            from (" . $review . ") as review
+            left join (" . $star . ") as star
             on review.product_id = star.product_id
-            left join (" . $percent . ") as percent 
+            left join (" . $percent . ") as percent
             on review.product_id = percent.product_id
-            group by 
-                review.product_id, 
-                star.product_id, star.total_five_star, star.total_four_star, star.total_three_star, star.total_two_star, star.total_one_star, 
+            group by
+                review.product_id,
+                star.product_id, star.total_five_star, star.total_four_star, star.total_three_star, star.total_two_star, star.total_one_star,
                 percent.product_id, percent.percent_five_star, percent.percent_four_star, percent.percent_three_star, percent.percent_two_star, percent.percent_one_star,
                 percent.avg_rating
         "));
@@ -991,13 +991,13 @@ class ProductController extends Controller
         $siteCode       = auth()->user()->site_code;
         $app_version = Auth::user()->app_version;
         if ($app_version == '1.1.1') {
-            $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+            $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             array_walk($array, function (&$value, $key) {
                 $value = 'products.' . $value;
             });
-            $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+            $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
         } else {
-            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             $arrayProductPromo = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'products.kodeprod', 'products.name', 'products.description', 'products.image', 'products.brand_id', 'products.category_id', 'products.satuan_online',  'products.kecil', 'products.konversi_sedang_ke_kecil', 'products.status_promosi_coret', 'products.status_herbana', 'products.status_terlaris', 'products.status_terbaru', 'products.status_renceng', 'products.created_at'];
         }
         $arrayCart      = $this->arraySelectCart();
@@ -1700,11 +1700,11 @@ class ProductController extends Controller
             $app_version    = auth()->user()->app_version;
 
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array      = ['products.id', 'status', 'kodeprod', 'name', 'description', 'image', 'kecil', 'status_renceng', 'status_redeem', 'redeem_point', 'redeem_desc', 'redeem_snk', 'products.created_at'];
+                $array      = ['products.id', 'status', 'kodeprod', 'name', 'description', 'image','image_backup', 'kecil', 'status_renceng', 'status_redeem', 'redeem_point', 'redeem_desc', 'redeem_snk', 'products.created_at'];
             }
-            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];    
+            // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
 
             $products       = $products
                 // ->where('status', '1')
@@ -1772,27 +1772,27 @@ class ProductController extends Controller
             // Kondisi untuk harga biar sesuai dengan user yang login
             if ($salurCode == 'SW' || $salurCode == 'WS' || $salurCode == 'SO') {
                 $arrayPrice = DB::raw("
-                                        product_prices.id, 
-                                        product_id,  
-                                        harga_grosir_mt, 
-                                        harga_promosi_coret_ritel_gt, 
-                                        harga_promosi_coret_grosir_mt, 
+                                        product_prices.id,
+                                        product_id,
+                                        harga_grosir_mt,
+                                        harga_promosi_coret_ritel_gt,
+                                        harga_promosi_coret_grosir_mt,
                                         products.brand_id,
                                         harga_ritel_gt as ritel_gt,
-                                        (CASE 
-                                            WHEN products.brand_id::integer=005 THEN harga_ritel_gt 
+                                        (CASE
+                                            WHEN products.brand_id::integer=005 THEN harga_ritel_gt
                                             WHEN products.brand_id::integer=001 THEN harga_ritel_gt
-                                            ELSE harga_grosir_mt 
+                                            ELSE harga_grosir_mt
                                             END) as harga_ritel_gt
                                     ");
             } else {
                 $arrayPrice = DB::raw("
-                                        product_prices.id, 
-                                        product_id, 
-                                        harga_ritel_gt, 
-                                        harga_grosir_mt, 
-                                        harga_promosi_coret_ritel_gt, 
-                                        harga_promosi_coret_grosir_mt, 
+                                        product_prices.id,
+                                        product_id,
+                                        harga_ritel_gt,
+                                        harga_grosir_mt,
+                                        harga_promosi_coret_ritel_gt,
+                                        harga_promosi_coret_grosir_mt,
                                         products.brand_id,
                                         harga_ritel_gt as rt_backup
                                     ");
@@ -1802,7 +1802,7 @@ class ProductController extends Controller
 
             $siteCode   = Auth::user()->site_code;
             $subgroup   = $this->products->select('subgroup')->where('id', $id)->first()->subgroup;
-            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             $varian     = $this->products
                 ->where('product_availability.status', '1')
                 ->where('product_availability.site_code', $siteCode)

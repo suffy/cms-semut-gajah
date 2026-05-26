@@ -39,13 +39,13 @@ class ProductController extends Controller
     // // array for select product
     // private function arraySelectProduct()
     // {
-    //     return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at'];
+    //     return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'kecil', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'status_renceng', 'created_at'];
     // }
 
     // // array for select product
     // private function arraySelectProductOld()
     // {
-    //     return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+    //     return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     // }
 
     // array for select product!
@@ -130,13 +130,13 @@ class ProductController extends Controller
             $app_version    = auth()->user()->app_version;
             $siteCode       = auth()->user()->site_code;
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at', 'products.type_status'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at', 'products.type_status'];
                 array_walk($array, function (&$value, $key) {
                     $value = 'products.' . $value;
                 });
-                $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array              = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'products.type_status'];
+                $array              = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at', 'products.type_status'];
                 $arrayProductPromo = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'products.kodeprod', 'products.name', 'products.description', 'products.image', 'products.brand_id', 'products.category_id', 'products.satuan_online',  'products.kecil', 'products.konversi_sedang_ke_kecil', 'products.status_promosi_coret', 'products.status_herbana', 'products.status_terlaris', 'products.status_terbaru', 'products.status_renceng', 'products.created_at'];
             }
             // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
@@ -491,9 +491,9 @@ class ProductController extends Controller
             $app_version    = Auth::user()->app_version;
             $siteCode       = auth()->user()->site_code;
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             }
             $arrayCart      = $this->arraySelectCart();
             $arrayPromoSku  = $this->arraySelectPromoSku();
@@ -728,7 +728,7 @@ class ProductController extends Controller
             if ($app_version == '1.1.1') {
                 $array      = ['products.id', 'products.kodeprod', 'products.name', 'products.description', 'products.image_backup as image', 'products.brand_id', 'products.category_id', 'products.satuan_online', 'products.konversi_sedang_ke_kecil', 'products.status', 'products.status_herbana', 'products.status_promosi_coret', 'products.status_terlaris', 'products.status_terbaru', 'products.created_at', 'products.updated_at'];
             } else {
-                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+                $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             }
             $arrayPrice     = $this->arraySelectPrice();
 
@@ -991,13 +991,13 @@ class ProductController extends Controller
         $siteCode       = auth()->user()->site_code;
         $app_version = Auth::user()->app_version;
         if ($app_version == '1.1.1') {
-            $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+            $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             array_walk($array, function (&$value, $key) {
                 $value = 'products.' . $value;
             });
-            $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+            $arrayProductPromo = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
         } else {
-            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             $arrayProductPromo = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'products.kodeprod', 'products.name', 'products.description', 'products.image', 'products.brand_id', 'products.category_id', 'products.satuan_online',  'products.kecil', 'products.konversi_sedang_ke_kecil', 'products.status_promosi_coret', 'products.status_herbana', 'products.status_terlaris', 'products.status_terbaru', 'products.status_renceng', 'products.created_at'];
         }
         $arrayCart      = $this->arraySelectCart();
@@ -3780,9 +3780,9 @@ class ProductController extends Controller
             $app_version    = auth()->user()->app_version;
 
             if ($app_version == '1.1.1') {
-                $array      = ['id', 'kodeprod', 'name', 'description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+                $array      = ['id', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
             } else {
-                $array      = ['products.id', 'status', 'kodeprod', 'name', 'description', 'image', 'kecil', 'status_renceng', 'status_redeem', 'redeem_point', 'redeem_desc', 'redeem_snk', 'products.created_at'];
+                $array      = ['products.id', 'status', 'kodeprod', 'name', 'description', 'image','image_backup', 'kecil', 'status_renceng', 'status_redeem', 'redeem_point', 'redeem_desc', 'redeem_snk', 'products.created_at'];
             }
             // $arrayPrice     = ['product_id', 'harga_ritel_gt', 'harga_grosir_mt', 'harga_promosi_coret_ritel_gt', 'harga_promosi_coret_grosir_mt'];
 
@@ -3882,7 +3882,7 @@ class ProductController extends Controller
 
             $siteCode   = Auth::user()->site_code;
             $subgroup   = $this->products->select('subgroup')->where('id', $id)->first()->subgroup;
-            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
+            $array      = ['products.id', 'product_availability.site_code', 'product_availability.status as status', 'kodeprod', 'name', 'description', 'image','image_backup', 'brand_id', 'subgroup', 'category_id', 'satuan_online',  'kecil', 'konversi_sedang_ke_kecil', 'status_promosi_coret', 'status_herbana', 'status_terlaris', 'status_terbaru', 'status_renceng', 'products.created_at'];
             $varian     = $this->products
                 ->where('product_availability.status', '1')
                 ->where('product_availability.site_code', $siteCode)

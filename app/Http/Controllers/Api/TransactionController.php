@@ -25,13 +25,13 @@ class TransactionController extends Controller
     // array for select product
     private function arraySelectProduct()
     {
-        return ['id', 'kodeprod', 'name','description', 'image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
 
     // array for select product
     private function arraySelectProductOld()
     {
-        return ['id', 'kodeprod', 'name','description', 'image_backup as image', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
+        return ['id', 'kodeprod', 'name','description', 'image','image_backup', 'brand_id', 'category_id', 'satuan_online', 'konversi_sedang_ke_kecil', 'status', 'status_herbana', 'status_promosi_coret', 'status_terlaris', 'status_terbaru', 'created_at', 'updated_at'];
     }
 
   // array for select product
@@ -80,9 +80,9 @@ class TransactionController extends Controller
         $id             = Auth::user()->id;
         $app_version    = Auth::user()->app_version;
         if($app_version == '1.1.1') {
-            $array      = $this->arraySelectProductOld();             
+            $array      = $this->arraySelectProductOld();
         } else {
-            $array      = $this->arraySelectProduct();             
+            $array      = $this->arraySelectProduct();
         }
         $arrayOrder         = ['id', 'invoice','stock_status', 'customer_id', 'subscribe_id', 'name', 'phone', 'address', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'payment_method', 'order_time', 'status', 'payment_total', 'payment_final', 'payment_point', 'status_faktur', 'point', 'status_complaint', 'status_review', 'site_code', 'created_at', 'updated_at', 'delivery_service', 'delivery_fee'];
         $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point'];
@@ -91,16 +91,16 @@ class TransactionController extends Controller
 
         // request search
         $searchString = $request->search;
-        
+
         try {
             $transactions   = $this->orders->query();
-            
+
             if ($searchString) {
                 $transactions   = $transactions
                                 ->whereHas('data_item.product', function($query) use ($searchString){
                                     $query->where('name', 'like', '%'.ucwords($searchString).'%');
                                     // $query->whereRaw(
-                                    //     "MATCH(search_name) AGAINST(?)", 
+                                    //     "MATCH(search_name) AGAINST(?)",
                                     //     array($searchString)
                                     // );
                                 })
@@ -113,47 +113,47 @@ class TransactionController extends Controller
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'F')
                                 ->where('status', '1');
-            } 
+            }
 
             if ($request->status == 'order confirmed') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'F')
                                 ->where('status', '2');
-            } 
+            }
 
             if ($request->status == 'delivery process') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'F')
                                 ->where('status', '3');
-            } 
+            }
 
             if ($request->status == 'completed') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'F')
                                 ->where('status', '4');
-            } 
+            }
 
             if ($request->status == 'canceled') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'F')
                                 ->where('status', '10');
-            } 
+            }
 
             if ($request->status == 'R') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'R');
-            } 
+            }
 
             if ($request->status == 'Redeem') {
                 $transactions   = $transactions
                                 ->where('customer_id', $id)
                                 ->where('status_faktur', 'Redeem');
-            } 
+            }
 
             if ($request->date) {
                 $transactions   = $transactions
@@ -188,7 +188,7 @@ class TransactionController extends Controller
                     ->whereHas('data_item.product', function($query) use ($searchString){
                         $query->where('search_name', 'like', '%'.$searchString.'%');
                         // $query->whereRaw(
-                        //     "MATCH(name) AGAINST(?)", 
+                        //     "MATCH(name) AGAINST(?)",
                         //     array($searchString)
                         // );
                     });
@@ -208,7 +208,7 @@ class TransactionController extends Controller
                                 ->where('status_faktur', 'F')
                                 ->whereBetween('order_time', [$request->start_date, $request->end_date]);
             }
-      
+
             if ($request->status && $request->start_date && $request->end_date) {
                 if($request->status == 'new transaction') {
                     $status = '1';
@@ -225,14 +225,14 @@ class TransactionController extends Controller
                 }
 
 
-            
-                
+
+
                 if($request->search) {
                     $transactions = $transactions
                     ->whereHas('data_item.product', function($query) use ($searchString){
                         // $query->where('name', 'like', '%'.$searchString.'%');
                         $query->whereRaw(
-                            "MATCH(search_name) AGAINST(?)", 
+                            "MATCH(search_name) AGAINST(?)",
                             array($searchString)
                         );
                     });
@@ -269,7 +269,7 @@ class TransactionController extends Controller
                 }
             }
 
-            $transactions = $transactions                                
+            $transactions = $transactions
                                 ->with(['data_item' => function($query) use($array, $arrayOrderDetail) {
                                     $query->where('product_id', '!=', null)
                                         ->select($arrayOrderDetail)
@@ -282,13 +282,13 @@ class TransactionController extends Controller
                                     ->with(['product' => function ($q) use ($array) {
                                         $q->select($array)->with('price');
                                     }]);
-                                },  
+                                },
                                 'data_success' => function($query) use($array,$arrayOrderDetailSuccess) {
                                     $query->select($arrayOrderDetailSuccess)
                                     ->with(['product' => function ($q) use ($array) {
                                         $q->select($array)->with('price');
                                     }]);
-                                },  
+                                },
                                 'data_promo' => function($query) use($arrayOrderDetail) {
                                     $query->select($arrayOrderDetail);
                                 }, 'data_review', 'data_complaint'])
@@ -344,37 +344,37 @@ class TransactionController extends Controller
             $app_version    = Auth::user()->app_version;
             // $transactions   = $this->orders->query();
             if($app_version == '1.1.1') {
-                $array      = $this->arraySelectProductOld();             
+                $array      = $this->arraySelectProductOld();
             } else {
-                $array      = $this->arraySelectProduct();             
+                $array      = $this->arraySelectProduct();
             }
-           
+
             $arrayOrder         = ['id', 'invoice','stock_status', 'customer_id', 'subscribe_id', 'name', 'phone', 'address', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'payment_method', 'order_time', 'status', 'payment_total', 'payment_final', 'payment_point', 'status_faktur', 'point', 'status_complaint', 'status_review', 'site_code', 'created_at', 'updated_at', 'delivery_service', 'delivery_fee'];
             $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point'];
             $arrayOrderDetailCancel = $this->arraySelectOrderDetailCancel();
             $arrayOrderDetailSuccess = $this->arraySelectOrderDetailSuccess();
 
-            
-            $transactions = $this->orders                             
+
+            $transactions = $this->orders
                                 ->with(['data_item' => function($query) use($array, $arrayOrderDetail) {
                                     $query->where('product_id', '!=', null)
                                         ->select($arrayOrderDetail)
                                         ->with(['product' => function ($q) use ($array) {
                                             $q->select($array)->with('price');
                                         }]);
-                                }, 
+                                },
                                 'data_cancel' => function($query) use($array,$arrayOrderDetailCancel) {
                                     $query->select($arrayOrderDetailCancel)
                                     ->with(['product' => function ($q) use ($array) {
                                         $q->select($array)->with('price');
                                     }]);
-                                },  
+                                },
                                 'data_success' => function($query) use($array,$arrayOrderDetailSuccess) {
                                     $query->select($arrayOrderDetailSuccess)
                                     ->with(['product' => function ($q) use ($array) {
                                         $q->select($array)->with('price');
                                     }]);
-                                },  
+                                },
                                 'data_promo' => function($query) use($arrayOrderDetail) {
                                     $query->select($arrayOrderDetail);
                                 }, 'data_review', 'data_complaint'])

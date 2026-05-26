@@ -20,7 +20,7 @@ class BlogController extends Controller
         $highlights     = $this->blogs
                                     ->orderBy('id', 'DESC')
                                     ->where('status_highlight', 1)
-                                    ->select('id', 'title', 'description', 'image', 'created_at')
+                                    ->select('id', 'title', 'description', 'image','image_backup', 'created_at')
                                     ->limit(2)
                                     ->get();
 
@@ -35,10 +35,10 @@ class BlogController extends Controller
 
         return response()->json(
                                 [
-                                    'success'   => true, 
-                                    'data'      => 
+                                    'success'   => true,
+                                    'data'      =>
                                                     [
-                                                        'left'      => $highlights, 
+                                                        'left'      => $highlights,
                                                         'right'    => $newests
                                                     ]
                                 ], 201);
