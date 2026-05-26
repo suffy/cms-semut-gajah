@@ -52,14 +52,14 @@ class ShoppingCartController extends Controller
             'shopping_cart.order_disc',
             'shopping_cart.disc_cabang',
             'shopping_cart.status_disc',
-            'shopping_cart.status', 'shopping_cart.order_disc as item_discount', 'products.brand_id', 'products.name', 'products.image', 'products.ratio', 'products.min_pembelian', 'products.status_herbana', 'products.status_promosi_coret', 'products.status'
+            'shopping_cart.status', 'shopping_cart.order_disc as item_discount', 'products.brand_id', 'products.name', 'products.image', 'products.image_backup', 'products.ratio', 'products.min_pembelian', 'products.status_herbana', 'products.status_promosi_coret', 'products.status'
         ];
     }
 
     // array for select product
     private function arraySelectOld()
     {
-        return ['shopping_cart.*', 'shopping_cart.order_disc as item_discount', 'products.brand_id', 'products.name', 'products.image_backup as image', 'products.ratio', 'products.min_pembelian', 'products.status_herbana', 'products.status_promosi_coret', 'products.status'];
+        return ['shopping_cart.*', 'shopping_cart.order_disc as item_discount', 'products.brand_id', 'products.name', 'products.image', 'products.image_backup', 'products.ratio', 'products.min_pembelian', 'products.status_herbana', 'products.status_promosi_coret', 'products.status'];
     }
 
     public function get(Request $request)
@@ -284,7 +284,7 @@ class ShoppingCartController extends Controller
 
             // update shopping cart
             $shoppingCarts = $this->handlingPriceUpdate($request, $id, $userId, $salurCode, $class, $request->qty, $cart->half);
-            // return response()->json($shoppingCarts); 
+            // return response()->json($shoppingCarts);
 
             // logs
             $logs = $this->logs;
@@ -434,7 +434,7 @@ class ShoppingCartController extends Controller
         if ($herbana->status_promosi_coret) {
             $harga_ritel_gt         = $herbana->price->harga_promosi_coret_ritel_gt * $request->qty;
             $harga_grosir_mt        = $herbana->price->harga_promosi_coret_grosir_mt * $request->qty;
-            // $harga_semi_grosir      = $productPrice->harga_promosi_coret_semi_grosir * $request->qty;  
+            // $harga_semi_grosir      = $productPrice->harga_promosi_coret_semi_grosir * $request->qty;
             // check if halc
             if ($half == 1) {
                 $harga_ritel_gt  = $harga_ritel_gt / 2;
@@ -443,7 +443,7 @@ class ShoppingCartController extends Controller
         } else {
             $harga_ritel_gt         = $herbana->price->harga_ritel_gt * $request->qty;
             $harga_grosir_mt        = $herbana->price->harga_grosir_mt * $request->qty;
-            // $harga_semi_grosir      = $productPrice->harga_semi_grosir * $request->qty;  
+            // $harga_semi_grosir      = $productPrice->harga_semi_grosir * $request->qty;
             // check if halc
             if ($half == 1) {
                 $harga_ritel_gt  = $harga_ritel_gt / 2;
@@ -463,8 +463,8 @@ class ShoppingCartController extends Controller
         // Disc By class
         if (!$discClass) {
             // RT => Retail
-            // WS => 
-            // SO => 
+            // WS =>
+            // SO =>
             // SW =>
             $status_disc = 'class';
             if ($salurCode == 'WS' || $salurCode == 'SO' || $salurCode == 'SW') {
@@ -590,7 +590,7 @@ class ShoppingCartController extends Controller
         } else {
             $harga_ritel_gt         = $herbana->price->harga_ritel_gt * $qty;
             $harga_grosir_mt        = $herbana->price->harga_grosir_mt * $qty;
-            // $harga_semi_grosir      = $herbana->price->harga_semi_grosir * $qty;  
+            // $harga_semi_grosir      = $herbana->price->harga_semi_grosir * $qty;
             if ($half == 1) {
                 $harga_ritel_gt  = $harga_ritel_gt / 2;
                 $harga_grosir_mt = $harga_grosir_mt / 2;
