@@ -52,10 +52,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('customerbinaan:daily')->daily();         // Tidak Kepakai
         // $schedule->command('completecomplaint:daily')->daily();      // Tidak Kepakai
         $schedule->command('completeorder:daily')->daily();
-        $schedule->command('product:daily')->daily();
-        $schedule->command('productSite:daily')->dailyAt('3.00');
+        // $schedule->command('product:daily')->daily();
+        // $schedule->command('productSite:daily')->dailyAt('3.00');
         $schedule->command('promo:daily')->daily();
-        // $schedule->command('stock:daily')->daily();                  // Tidak Kepakai        
+        // $schedule->command('stock:daily')->daily();                  // Tidak Kepakai
         // $schedule->command('cod:daily')->hourly();                   // Tidak Kepakai
         $schedule->command('orderstatus:hourly')->hourly();
         // $schedule->command('creditlimit:month')->dailyAt('1.00');    // Tidak Kepakai
