@@ -18,7 +18,7 @@ class ManagerMiddleware
     {
         if (Auth::user())
         {
-            if ($request->user() && $request->user()->account_role == 'manager') {
+            if ($request->user() &&  in_array($request->user()->account_role, ['manager', 'superadmin'])) {
                 return $next($request);
             }
 

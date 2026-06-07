@@ -5,7 +5,7 @@
 @php
     $account_role = auth()->user()->account_role;
 @endphp
-<a 
+<a
     href="
         @if(auth()->user()->account_role == 'manager')
             {{url('manager/products/create')}}
@@ -16,11 +16,11 @@
         @elseif(auth()->user()->account_role == 'distributor')
             {{url('distributor/products/create')}}
         @endif
-    " 
-    class="btn btn-blue" 
+    "
+    class="btn btn-blue"
     onclick="return togglePage()"
 >Tambah Produk</a> &nbsp
-<a 
+<a
     href="
         @if(auth()->user()->account_role == 'manager')
             {{url('manager/product-import')}}
@@ -31,7 +31,7 @@
         @elseif(auth()->user()->account_role == 'distributor')
             {{url('distributor/product-import')}}
         @endif
-    " 
+    "
     class="btn btn-blue"
 >Import Produk</a>
 <br>
@@ -42,7 +42,7 @@
         Products
     </header>
     <div class="card-body">
-        
+
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-4 col-md-4 col-lg-3">
@@ -85,8 +85,8 @@
             <div class="table-responsive">
                 <div class="scroll-table-outer">
                     <div class="scroll-table-inner card-body">
-                        
-                    <a 
+
+                    <a
                         href="
                             @if($account_role == "manager")
                                 {{url('manager/products?status=')}}
@@ -100,7 +100,7 @@
                         "
                         class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status')=="") active @endif"
                     >Semua</a>
-                    <a 
+                    <a
                         href="
                             @if($account_role == "manager")
                                 {{url('manager/products?status=1')}}
@@ -111,10 +111,10 @@
                             @elseif($account_role == "distributor")
                                 {{url('distributor/products?status=1')}}
                             @endif
-                        " 
+                        "
                         class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status')=="1") active @endif"
                     >Aktif</a>
-                    <a 
+                    <a
                         href="
                             @if($account_role == "manager")
                                 {{url('manager/products?status=0')}}
@@ -125,10 +125,10 @@
                             @elseif($account_role == "distributor")
                                 {{url('distributor/products?status=0')}}
                             @endif
-                        " 
+                        "
                         class="btn btn-tab @if(\Illuminate\Support\Facades\Request::get('status')=="0") active @endif"
                     >NonAktif</a>
-                    
+
                         <table class="table default-table dataTable">
                             <thead>
                                 <tr align="center">
@@ -189,13 +189,13 @@
                                         @endif
                                     </td> --}}
                                     {{-- <td class="align-middle" width="40px">
-                                        @if(auth()->user()->account_role == 'distributor') 
-                                            @if($row->status == 1) 
+                                        @if(auth()->user()->account_role == 'distributor')
+                                            @if($row->status == 1)
                                             <span class="status status-success">Aktif</span>
                                             @else
                                             <span class="status status-danger">NonAktif</span>
                                             @endif
-                                        @else 
+                                        @else
                                             <label class="switch">
                                                 <input data-id="{{$row->id}}" class="toggle-class success" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" data-size="mini" {{ $row->status ? 'checked' : '' }}>
                                                 <span class="slider round"></span>
@@ -214,21 +214,21 @@
                                                     @elseif($account_role == "distributor")
                                                         {{url('distributor/products/'.$row->id.'?slug='.$row->slug)}}
                                                     @endif
-                                                " 
+                                                "
                                                 class="btn btn-blue btn-sm"
                                             ><i class="fa fa-eye"></i></a>
-                                            @if(!file_exists(public_path($row->image))) 
+                                            @if(!file_exists(public_path($row->image)))
                                                 {{-- File Gambar Kosong --}}
-                                                <button class="btn btn-green btn-sm modal-image" data-id="{{$row->id}}" data-toggle="modal" data-target="#upload-image" data-keyboard="false"> 
+                                                <button class="btn btn-green btn-sm modal-image" data-id="{{$row->id}}" data-toggle="modal" data-target="#upload-image" data-keyboard="false">
                                                     <i class="fa fa-picture-o" aria-hidden="true"></i>
                                                 </button>
                                             @elseif(is_null($row->image) && $row->image_backup)
                                                 {{-- Data Gambar Kosong --}}
-                                                <button class="btn btn-neutral btn-sm btn-get-image-name" data-id="{{$row->id}}"> 
+                                                <button class="btn btn-neutral btn-sm btn-get-image-name" data-id="{{$row->id}}">
                                                     <i class="fa fa-picture-o" aria-hidden="true"></i>
                                                 </button>
                                             @endif
-                                    {{-- <form 
+                                    {{-- <form
                                         action="
                                             @if($account_role == "manager")
                                                 {{ url('manager/duplicate-product/'.$row->id) }}
@@ -239,9 +239,9 @@
                                             @elseif($account_role == "distributor")
                                                 {{ url('distributor/duplicate-product/'.$row->id) }}
                                             @endif
-                                        " 
-                                        method="POST" 
-                                        style="display: inline-block;" 
+                                        "
+                                        method="POST"
+                                        style="display: inline-block;"
                                         onsubmit="return confirm('Duplikat produk?')"
                                     >
                                         @method('post')
@@ -250,7 +250,7 @@
                                             <i class=" fa fa-copy" title="Duplicate"></i>
                                         </button>
                                     </form> --}}
-                                    {{-- <form 
+                                    {{-- <form
                                         action="
                                             @if($account_role == "manager")
                                                 {{ url('manager/products/'.$row->id) }}
@@ -261,9 +261,9 @@
                                             @elseif($account_role == "distributor")
                                                 {{ url('distributor/products/'.$row->id) }}
                                             @endif
-                                        " 
-                                        method="POST" 
-                                        style="display: inline-block;" 
+                                        "
+                                        method="POST"
+                                        style="display: inline-block;"
                                         onsubmit="return confirm('Hapus produk?')"
                                     >
                                         @method('delete')
@@ -338,7 +338,7 @@
 
     $("#input-image").change(function() {
         readURL(this, '#image');
-    }); 
+    });
 
                 // save
     $('#insert').on('submit', function(e) {
@@ -350,17 +350,21 @@
         fd.append('_token', token);
         fd.append('image', image);
 
-        $.ajax({ 
+        $.ajax({
             url: "/manager/products/image/" + id,
             type: 'POST',
             data: fd,
             dataType: 'json',
             contentType: false,
             processData: false,
-            success: function(response) { 
+            success: function(response) {
                 $('#upload-image').modal('hide');
                 showNotif("Upload image sukses");
                 setTimeout(location.reload(true), 30000);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
             }
         });
     });
@@ -393,10 +397,10 @@
         var id = $(this).attr('data-id');
         $('#form-price-buy-'+id).toggle();
 
-        
-            
+
+
             $('#form-price-buy-'+id).submit(function(e){
-                
+
                 var form_data = new FormData($('#form-price-buy-'+id)[0]);
                 var url = "{{url('/admin/update-product-price-buy')}}"+"/"+id
 
@@ -421,7 +425,7 @@
                 });
 
                 e.preventDefault();
-                
+
             })
 
 
@@ -431,10 +435,10 @@
         var id = $(this).attr('data-id');
         $('#form-price-sell-'+id).toggle();
 
-        
-            
+
+
             $('#form-price-sell-'+id).submit(function(e){
-                
+
                 var form_data = new FormData($('#form-price-sell-'+id)[0]);
                 var url = "{{url('/admin/update-product-price-sell')}}"+"/"+id
 
@@ -459,7 +463,7 @@
                 });
 
                 e.preventDefault();
-                
+
             })
 
 
@@ -471,7 +475,7 @@
         $('#form-stock-'+id).toggle();
 
         $('#form-stock-'+id).submit(function(e){
-                
+
                 var form_data = new FormData($('#form-stock-'+id)[0]);
                 var url = "{{url('/admin/update-product-stock')}}"+"/"+id
 
@@ -496,7 +500,7 @@
                 });
 
                 e.preventDefault();
-                
+
             })
 
     });

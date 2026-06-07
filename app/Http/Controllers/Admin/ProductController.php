@@ -900,6 +900,7 @@ class ProductController extends Controller
 
     public function uploadImage(Request $request, $id)
     {
+
         try {
             $product = null;
             if ($request->hasFile('image')) {
