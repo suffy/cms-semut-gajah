@@ -859,17 +859,25 @@ class ProductController extends Controller
             ->with('rating', $rating);
     }
 
-    public function availability()
+    public function availability(Request $request)
     {
-        $mappingSites = $this->mappingSites->paginate(10);
+        $mappingSites = $this->mappingSites
+            ->where(function ($query) use ($request) {
+                $query->where('kode', 'like', '%' . $request->search . '%');
+                $query->orWhere('branch_name', 'like', '%' . $request->search . '%');
+            })
+            ->paginate(10);
         return view('admin/pages/product-availability', compact('mappingSites'));
     }
 
-    public function siteCode($site_code)
+    public function siteCode(Request $request, $site_code)
     {
         $products = $this->productAvailability
             ->where('site_code', $site_code)
             ->with(['product'])
+            ->whereHas('product', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
             ->paginate(10);
         return view('admin/pages/product-availability-detail', compact('products', 'site_code'));
     }

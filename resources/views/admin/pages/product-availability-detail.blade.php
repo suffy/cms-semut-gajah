@@ -6,7 +6,7 @@
     $account_role = auth()->user()->account_role;
 @endphp
 
-<a 
+<a
     href="
         @if(auth()->user()->account_role == 'manager')
             {{ url('manager/product/availability') }}
@@ -17,7 +17,7 @@
         @elseif(auth()->user()->account_role == 'distributor')
             {{ url('distributor/product/availability') }}
         @endif
-    " 
+    "
     class="btn btn-primary"
 ><i class="fa fa-arrow-left mr-2"></i>Kembali</a>
 <br><br>
@@ -27,24 +27,24 @@
         Products Availability | {{$site_code}}
     </header>
     <div class="card-body">
-        
+
         <div class="card-body">
             <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
                 <form method="get" action="
                     @if(auth()->user()->account_role == 'manager')
-                        {{url('manager/product/availability')}}
+                        {{url('manager/product/availability/'.$site_code)}}
                     @elseif(auth()->user()->account_role == 'superadmin')
-                        {{url('superadmin/product/availability')}}
+                        {{url('superadmin/product/availability/'.$site_code)}}
                     @elseif(auth()->user()->account_role == 'admin')
-                        {{url('admin/product/availability')}}
+                        {{url('admin/product/availability/'.$site_code)}}
                     @elseif(auth()->user()->account_role == 'distributor')
-                        {{url('distributor/product/availability')}}
+                        {{url('distributor/product/availability/'.$site_code)}}
                     @endif
                 ">
                     <div class="input-group mt-4">
-                        <input type="text" class="form-control" name="search" placeholder="Search...">
+                        <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ Request::get('search') }}">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -83,13 +83,13 @@
                                         </td>
                                         <td class="align-middle">{{$product->product->name}}</td>
                                         <td class="align-middle" width="40px">
-                                            @if(auth()->user()->account_role == 'distributor') 
-                                                @if($product->status == 1) 
+                                            @if(auth()->user()->account_role == 'distributor')
+                                                @if($product->status == 1)
                                                 <span class="status status-success">Aktif</span>
                                                 @else
                                                 <span class="status status-danger">NonAktif</span>
                                                 @endif
-                                            @else 
+                                            @else
                                                 <label class="switch">
                                                     <input data-id="{{$product->id}}" class="toggle-class success" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" data-size="mini" {{ $product->status ? 'checked' : '' }}>
                                                     <span class="slider round"></span>

@@ -11,7 +11,7 @@
         Products Availability
     </header>
     <div class="card-body">
-        
+
         <div class="card-body">
             <div class="row">
                 <div class="col-md-9"></div>
@@ -28,7 +28,7 @@
                     @endif
                 ">
                     <div class="input-group mt-4">
-                        <input type="text" class="form-control" name="search" placeholder="Search...">
+                        <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ Request::get('search') }}">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="submit">
                                 <i class="fa fa-search"></i>
