@@ -239,7 +239,7 @@ class ProductController extends Controller
         // count product
         $salesToday     = $this->order
                         ->join('order_detail', 'order_detail.order_id', '=', 'orders.id')
-                        ->whereRaw('date(order_time) = curdate()')
+                        ->whereDate('order_time', now()->toDateString())
                         ->where('order_detail.product_id', $id)
                         ->count();
         $salesLastMonth = $this->order
@@ -726,15 +726,15 @@ class ProductController extends Controller
     public function uploadExcelOld(Request $request)
     {
 
-        
+
         if ($request->hasFile('file')) {
             $path = $request->file('file');
-            
+
             $prod_import = Excel::toArray([], $path);
-            
+
             $no_saved = 0;
             $no_unsaved = 0;
-            
+
             foreach ($prod_import[0] as $no => $row) {
 
                 $data = Product::where('sku', $row[1])->first();
@@ -757,7 +757,7 @@ class ProductController extends Controller
                     } else {
                         $data->status = '0';
                     }
-                    
+
                     $data->save();
                     $no_saved++;
 
@@ -779,7 +779,7 @@ class ProductController extends Controller
     public function uploadExcel()
     {
         Excel::import(new ProductsImport, request()->file('file'));
-        
+
         // logs
         $logs = $this->logs;
 
