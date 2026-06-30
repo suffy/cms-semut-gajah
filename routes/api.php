@@ -48,6 +48,7 @@ Route::group([
 ], function () {
     Route::post('/login', 'Api\UserController@authenticate');
     Route::post('/register', 'Api\UserController@register');
+    Route::post('/register-user-lama', 'Api\UserController@registerUserLama');
     Route::post('/logout', 'Api\UserController@logout');
     Route::post('/forgot-password', 'Api\UserController@forgotPassword');
 });

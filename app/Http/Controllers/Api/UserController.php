@@ -1021,4 +1021,85 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function registerUserLama(Request $request)
+    {
+        info('Register user lama', $request->all());
+        $dataUser =  $this->user::where('email', $request->get('email'))->first();
+
+        // cek apabila data user sudah ada
+        if ($dataUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Account has been registered',
+                'data' => null,
+            ], 200);
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|string|max:255',
+                'customer_code' => 'required|string|max:255',
+                'email' => 'nullable|string|email|max:255|unique:users',
+                'password' => 'required|string|min:6|confirmed',
+
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+                'data' => null,
+            ], 200);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // for response
+            $user = $this->user::where('customer_code', $request->customer_code)->first();
+            $user->password = Hash::make($request->password);
+            $user->email = $request->email;
+            $user->save();
+
+            $token = JWTAuth::fromUser($user);
+
+            // logs
+            $logs = $this->logs;
+
+            $logs->log_time = Carbon::now();
+            $logs->activity = "New user has been registered with id " . $user->id;
+            $logs->table_name = 'users, user_address';
+            $logs->table_id = $user->id;
+            $logs->from_user = $user->id;
+            $logs->to_user = null;
+            $logs->platform = "apps";
+
+            $logs->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User registered successfully',
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                    'token_created_at' => Carbon::now(),
+                ],
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            info('User register failed', $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'data' => null,
+            ], 500);
+        }
+    }
 }
