@@ -1060,8 +1060,19 @@ class UserController extends Controller
 
             // for response
             $user = $this->user::where('customer_code', $request->customer_code)->first();
+
+            if ($user->status_blacklist == '1') {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => 'User ' . $request->customer_code . ' Masuk Dalam Daftar Blacklist',
+                    'data'      => null
+                ], 200);
+            }
             $user->password = Hash::make($request->password);
             $user->email = $request->email;
+            $user->email_verified_at = Carbon::now();
+            $user->otp_verified_at = Carbon::now();
+            $user->platform = 'app';
             $user->save();
 
             $token = JWTAuth::fromUser($user);
