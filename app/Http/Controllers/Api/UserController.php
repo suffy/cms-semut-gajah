@@ -187,6 +187,7 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        info('Register user', $request->all());
         $dataUser = $this->user::where('phone', $request->get('phone'))->with(['user_address', 'credit_limits']);
         if (!is_null($request->get('email')) && ($request->get('email') ?? "") != "") {
             $dataUser = $dataUser->where('email', $request->get('email'));
@@ -213,7 +214,7 @@ class UserController extends Controller
         if (isset($coverage['code']) && $coverage['code'] != '200') {
             return response()->json([
                 'success' => false,
-                'message' => 'Mapping code undefined',
+                'message' => 'Mapping code undefined '.$coverage['message'],
                 'data' => null,
             ], 200);
         }
