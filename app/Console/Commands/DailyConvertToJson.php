@@ -45,10 +45,10 @@ class DailyConvertToJson extends Command
         // data folder
         $rel_path   = '/json/' . $folder . '/';
 
-        // cek jika folder sudah ada 
+        // cek jika folder sudah ada
         if (file_exists(public_path($rel_path))) {
             // menghapus file lama
-            \File::deleteDirectory(public_path() . $rel_path); 
+            \File::deleteDirectory(public_path() . $rel_path);
         }
     }
 
@@ -85,10 +85,25 @@ class DailyConvertToJson extends Command
 
     public function handle()
     {
+        $this->sendWaGroup('Convert customer from erp to json sedang di proses');
         $this->delete();
 
         $this->get();
 
+        $this->sendWaGroup('Convert customer from erp to json sukses di proses');
         $this->info('convert customer from erp to json file successfully');
+    }
+
+    // notif wa
+    public function sendWaGroup($msg)
+    {
+        $link = config('app.url');
+
+        Http::withHeaders([
+            'x-api-key' => config('wabot.x_api_key')
+        ])->post(config('wabot.url').'/send-group', [
+            'groupId' => config('wabot.group_id'),
+            'message' =>  $link."\n".$msg
+        ])->json();
     }
 }

@@ -64,7 +64,7 @@ class DailyCustomer extends Command
         // ambil data tanggal sekarang
         $folder = Carbon::now()->format('Y-m-d');
         // ambil nama directory
-        $path   = public_path() . "/json/" . $folder . "/customer.json"; 
+        $path   = public_path() . "/json/" . $folder . "/customer.json";
 
         // simpan kedalam variable json
         $json   = json_decode(file_get_contents($path), true);
@@ -103,14 +103,14 @@ class DailyCustomer extends Command
                         'type_payment'      => $site['status_payment'],
                         'status_blacklist'  => $site['status_blacklist']]
                     );
-                    
+
                     // insert to notification verification table
                     // $this->notification->updateOrCreate(
-                    //     ['user_id' => $user->id], 
+                    //     ['user_id' => $user->id],
                     //     ['user_id' => $user->id,
                     //     'checked_at' => Carbon::now()]
                     // );
-    
+
                     // simpan kedalam logs
                     $this->log->updateOrCreate(['table_id'     => $user['id']],
                                 ['log_time'     => Carbon::now(),
@@ -129,7 +129,7 @@ class DailyCustomer extends Command
                         // jika user belum registrasi ke dalam apps
                         if($check->otp_verified_at == null) {
                             // if($check->updated_at != $site['erp_last_updated']) {
-                                $this->info('updated_at != erpl_last_updated');
+                                $this->info('updated_at != erp_last_updated');
                                 // update data user
                                 $user = $this->users->updateOrCreate(
                                     ['customer_code' => $site['kode_lang']],
@@ -147,27 +147,27 @@ class DailyCustomer extends Command
                                     'status_blacklist'  => $site['status_blacklist'],
                                     'updated_at'        => $site['erp_last_updated']]
                                 );
-                
+
                                 // if($user->code_approval == null) {
                                 //     // random string
                                 //     $characters = '0123456789';
                                 //     $charactersLength = strlen($characters);
                                 //     $code_approval = '';
-                
+
                                 //     for ($i = 0; $i < 6; $i++) {
                                 //         $code_approval .= $characters[rand(0, $charactersLength - 1)];
                                 //     }
-                
+
                                 //     $user->code_approval = $code_approval;
                                 //     // $this->info($code_approval);
                                 //     $user->save();
                                 // }
-        
+
                                 // ambil data site_id
                                 $mappingSite    = $this->mappingSites
                                                             ->where('kode', $site['kode'])
                                                             ->first();
-        
+
                                 // update data alamat user
                                 $this->userAddress->updateOrCreate(
                                                         ['user_id'           => $user['id']],
@@ -176,7 +176,7 @@ class DailyCustomer extends Command
                                                         'address'           => $site['alamat'],
                                                         'default_address'   => '1']
                                                         );
-    
+
                                 // simpan data logs
                                 $this->log->updateOrCreate(['table_id'     => $user['id']],
                                             ['log_time'     => Carbon::now(),
@@ -191,8 +191,8 @@ class DailyCustomer extends Command
                                             'created_at'    => Carbon::now()]);
                             // }
                             $this->info('otp verified null');
-    
-                        // jika user sudah registrasi 
+
+                        // jika user sudah registrasi
                         } else {
                             $user = $check;
                             $this->info('otp verified not null');
@@ -209,13 +209,13 @@ class DailyCustomer extends Command
                             //     'platform'      => 'web',
                             //     'created_at'    => Carbon::now()]
                             //     );
-    
-    
+
+
                             // get site_id
                             // $mappingSite    = $this->mappingSites
                             //                         ->where('kode', $site['kode'])
                             //                         ->first();
-    
+
                             // // insert into user_address table
                             // $this->userAddress->updateOrCreate(
                             //                     ['user_id'           => $user->id],
@@ -224,7 +224,7 @@ class DailyCustomer extends Command
                             //                     'address'           => $site['alamat'],
                             //                     'default_address'   => '1']
                             //                     );
-    
+
                             $this->log->updateOrCreate(['table_id'     => $user->id],
                                         ['log_time'     => Carbon::now(),
                                         // 'activity'      => 'Insert new customer with id : ' . $user->id,
@@ -252,9 +252,9 @@ class DailyCustomer extends Command
                         //     'class'         => $site['class'],
                         //     'type_payment'  => $site['status_payment']]
                         // );
-    
+
                         $this->info('create data');
-    
+
                         // simpan data ke dalam database
                         $user = $this->users->create(
                             ['customer_code' => $site['kode_lang'],
@@ -272,27 +272,27 @@ class DailyCustomer extends Command
                             'status_blacklist'  => $site['status_blacklist'],
                             'updated_at'        => $site['erp_last_updated']]
                         );
-        
+
                         // if($user->code_approval == null) {
                         //     // random string
                         //     $characters = '0123456789';
                         //     $charactersLength = strlen($characters);
                         //     $code_approval = '';
-        
+
                         //     for ($i = 0; $i < 6; $i++) {
                         //         $code_approval .= $characters[rand(0, $charactersLength - 1)];
                         //     }
-        
+
                         //     $user->code_approval = $code_approval;
                         //     // $this->info($code_approval);
                         //     $user->save();
                         // }
-    
+
                         // get site_id
                         $mappingSite    = $this->mappingSites
                                                     ->where('kode', $site['kode'])
                                                     ->first();
-    
+
                         // insert into user_address table
                         $this->userAddress->updateOrCreate(
                                                         ['user_id'           => $user->id],
@@ -301,7 +301,7 @@ class DailyCustomer extends Command
                                                         'address'           => $site['alamat'],
                                                         'default_address'   => '1']
                                                         );
-    
+
                         // insert to logs table
                         // $log = $this->log->updateOrCreate(
                         //                                 ['table_id'     => $user['id']],
@@ -315,7 +315,7 @@ class DailyCustomer extends Command
                         //                                 'platform'      => 'web',
                         //                                 'created_at'    => Carbon::now()]
                         //                                 );
-    
+
                         $this->log->updateOrCreate(
                                 ['table_id'     => $user['id']],
                                 ['log_time'     => Carbon::now(),
@@ -357,8 +357,24 @@ class DailyCustomer extends Command
      */
     public function handle()
     {
+        $this->sendWaGroup('Insert customer from erp sedang di proses');
+
         $this->get();
 
+        $this->sendWaGroup('Insert customer from erp sukses di proses');
         $this->info('Insert customer from erp successfully');
+    }
+
+    // notif wa
+    public function sendWaGroup($msg)
+    {
+        $link = config('app.url');
+
+        Http::withHeaders([
+            'x-api-key' => config('wabot.x_api_key')
+        ])->post(config('wabot.url').'/send-group', [
+            'groupId' => config('wabot.group_id'),
+            'message' =>  $link."\n".$msg
+        ])->json();
     }
 }
