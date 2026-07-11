@@ -78,13 +78,16 @@ class DailyCustomer extends Command
     {
         try {
             $logs = [];
+            $mappingSiteNotFound = [];
             // looping data dari json
             foreach ($sites as $site) {
+
                 // ambil data dari user dari platform app
                 $user_app      = DB::table('users')->where('phone', $site['phone'])->where('platform', 'app')->first();
                 // ambil data dengan condisi customer_code
                 $check         = DB::table('users')->where('customer_code' ,$site['kode_lang'])->first();
                 // jika ada data dari platform app
+
                 if($user_app) {
                     $this->info('app data');
                     // update data user app
@@ -168,14 +171,20 @@ class DailyCustomer extends Command
                                                             ->where('kode', $site['kode'])
                                                             ->first();
 
-                                // update data alamat user
-                                $this->userAddress->updateOrCreate(
-                                                        ['user_id'           => $user['id']],
-                                                        ['mapping_site_id'   => $mappingSite->id,
-                                                        'name'              => $site['nama_lang'],
-                                                        'address'           => $site['alamat'],
-                                                        'default_address'   => '1']
-                                                        );
+                                if ($mappingSite) {
+                                    // update data alamat user
+                                    $this->userAddress->updateOrCreate(
+                                        ['user_id'           => $user['id']],
+                                        ['mapping_site_id'   => $mappingSite->id,
+                                        'name'              => $site['nama_lang'],
+                                        'address'           => $site['alamat'],
+                                        'default_address'   => '1']
+                                    );
+                                } else {
+                                    if (!in_array($site['kode'], $mappingSiteNotFound)) {
+                                        $mappingSiteNotFound[] = $site['kode'];
+                                    }
+                                }
 
                                 // simpan data logs
                                 $this->log->updateOrCreate(['table_id'     => $user['id']],
@@ -293,14 +302,20 @@ class DailyCustomer extends Command
                                                     ->where('kode', $site['kode'])
                                                     ->first();
 
-                        // insert into user_address table
-                        $this->userAddress->updateOrCreate(
-                                                        ['user_id'           => $user->id],
-                                                        ['mapping_site_id'   => $mappingSite->id,
-                                                        'name'              => $site['nama_lang'],
-                                                        'address'           => $site['alamat'],
-                                                        'default_address'   => '1']
-                                                        );
+                        if ($mappingSite) {
+                            // insert into user_address table
+                            $this->userAddress->updateOrCreate(
+                                ['user_id'           => $user->id],
+                                ['mapping_site_id'   => $mappingSite->id,
+                                'name'              => $site['nama_lang'],
+                                'address'           => $site['alamat'],
+                                'default_address'   => '1']
+                            );
+                        } else {
+                            if (!in_array($site['kode'], $mappingSiteNotFound)) {
+                                $mappingSiteNotFound[] = $site['kode'];
+                            }
+                        }
 
                         // insert to logs table
                         // $log = $this->log->updateOrCreate(
@@ -329,6 +344,10 @@ class DailyCustomer extends Command
                                 'created_at'    => Carbon::now()]);
                     }
                 }
+            }
+
+            if (!empty($mappingSiteNotFound)) {
+                $this->sendWaGroup('Mapping site not found : ' . implode(',', $mappingSiteNotFound));
             }
         } catch (\Exception $e) {
             $this->log->updateOrCreate(
