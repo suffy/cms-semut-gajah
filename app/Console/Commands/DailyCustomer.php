@@ -92,7 +92,10 @@ class DailyCustomer extends Command
                     $this->info('app data');
                     // update data user app
                     $user = $this->users->updateOrCreate(
-                        ['phone'            => $site['phone']],
+                        [
+                            'phone'            => $site['phone'],
+                            'customer_code'    => $site['kode_lang'],
+                        ],
                         ['name'             => $site['nama_lang'],
                         'account_type'      => '4',
                         'account_role'      => 'user',
@@ -350,6 +353,7 @@ class DailyCustomer extends Command
                 $this->sendWaGroup('Mapping site not found : ' . implode(',', $mappingSiteNotFound));
             }
         } catch (\Exception $e) {
+            dd($e->getMessage());
             $this->log->updateOrCreate(
                     ['table_id'     => 1],
                     ['log_time'     => Carbon::now(),
