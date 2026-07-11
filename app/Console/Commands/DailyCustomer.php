@@ -353,7 +353,6 @@ class DailyCustomer extends Command
                 $this->sendWaGroup('Mapping site not found : ' . implode(',', $mappingSiteNotFound));
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             $this->log->updateOrCreate(
                     ['table_id'     => 1],
                     ['log_time'     => Carbon::now(),
