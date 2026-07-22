@@ -124,8 +124,23 @@ Route::get('custom-convert/{code}', function ($code) {
     // dd("Running customer job successfully");
 });
 
+// Route::get('convert-daily', function () {
+//     \Artisan::call('convert:daily ');
+
+//     return response()->json([
+//         'status' => 'success'
+//     ]);
+//     // dd("Running customer job successfully");
+// });
+
 Route::get('convert-daily', function () {
-    \Artisan::call('convert:daily ');
+    $command = sprintf(
+        '%s %s convert:daily > /dev/null 2>&1 &',
+        escapeshellarg('/usr/bin/php'),
+        escapeshellarg(base_path('artisan'))
+    );
+
+    exec($command);
 
     return response()->json([
         'status' => 'success'
