@@ -92,14 +92,13 @@ Route::get('remind-checkout', function () {
 // });
 
 Route::get('customer-daily', function () {
-    $artisan = base_path('artisan');
-    $php = PHP_BINARY;
-
-    exec(sprintf(
+    $command = sprintf(
         '%s %s customer:daily > /dev/null 2>&1 &',
-        escapeshellcmd($php),
-        escapeshellarg($artisan)
-    ));
+        escapeshellarg('/usr/bin/php'),
+        escapeshellarg(base_path('artisan'))
+    );
+
+    exec($command);
 
     return response()->json([
         'status' => 'success'
