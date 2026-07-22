@@ -83,7 +83,7 @@ class DailyCustomer extends Command
             foreach ($sites as $site) {
 
                 // ambil data dari user dari platform app
-                $user_app      = DB::table('users')->where('phone', $site['phone'])->where('platform', 'app')->first();
+                $user_app      = isset($site['phone']) ? DB::table('users')->where('phone', $site['phone'])->where('platform', 'app')->first() : null;
                 // ambil data dengan condisi customer_code
                 $check         = DB::table('users')->where('customer_code' ,$site['kode_lang'])->first();
                 // jika ada data dari platform app

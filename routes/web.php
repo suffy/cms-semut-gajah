@@ -82,13 +82,28 @@ Route::get('remind-checkout', function () {
     // dd("Running salesman job successfully");
 });
 
+// Route::get('customer-daily', function () {
+//     \Artisan::call('customer:daily');
+
+//     return response()->json([
+//         'status' => 'success'
+//     ]);
+//     // dd("Running customer job successfully");
+// });
+
 Route::get('customer-daily', function () {
-    \Artisan::call('customer:daily');
+    $artisan = base_path('artisan');
+    $php = PHP_BINARY;
+
+    exec(sprintf(
+        '%s %s customer:daily > /dev/null 2>&1 &',
+        escapeshellcmd($php),
+        escapeshellarg($artisan)
+    ));
 
     return response()->json([
         'status' => 'success'
     ]);
-    // dd("Running customer job successfully");
 });
 
 
