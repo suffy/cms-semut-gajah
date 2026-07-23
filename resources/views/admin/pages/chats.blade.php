@@ -10,13 +10,13 @@
     <div class="card-body">
         <main class="content">
             <div class="container p-0">
-        
+
                 <h1 class="h3 mb-3">Messages</h1>
-        
+
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-12 col-lg-5 col-xl-3 border-right chat-box">
-        
+
                             <div class="px-4 d-none d-md-block">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
@@ -24,21 +24,21 @@
                                     </div>
                                 </div>
                             </div>
-        
+
                             <div id="list-chat">
                                 @foreach ($lists as $list)
                                     @php
                                         $unread = DB::table('chats')->where('chat_id', $list['chat_id'])->where('status', null)->where('to_id', auth()->id())->count();
                                     @endphp
-    
+
                                     <div class="chat-list">
                                         <form id="form-message" action="#" method="POST">
                                             @csrf
                                             <meta name="csrf-token" content="{{ csrf_token() }}">
                                             <input type="hidden" name="chat_id" value="{{ $list['chat_id'] }}">
                                             <input type="hidden" class="input-name" name="name" value="{{ $list['name'] }}">
-                                            <a 
-                                                href="#" 
+                                            <a
+                                                href="#"
                                                 class="list-group-item list-group-item-action border-0 list-message"
                                                 data-chat-id="{{ $list['chat_id'] }}"
                                                 data-name="{{ $list['name'] }}"
@@ -57,7 +57,7 @@
                                     </div>
                                 @endforeach
                             </div>
-        
+
                             <hr class="d-block d-lg-none mt-1 mb-0">
                         </div>
 
@@ -76,10 +76,10 @@
                                     </div>
                                 </div>
                             </div>
-        
+
                             <div class="position-relative">
                                 <div class="chat-messages p-4" id="list-message">
-        
+
                                     {{-- <div class="chat-message-right pb-4">
                                         <div>
                                             <img src="{{ asset('images/core/icon-user-one.svg') }}" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
@@ -90,7 +90,7 @@
                                             Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
                                         </div>
                                     </div>
-        
+
                                     <div class="chat-message-left pb-4">
                                         <div>
                                             <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
@@ -101,10 +101,10 @@
                                             Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
                                         </div>
                                     </div> --}}
-                                    
+
                                 </div>
                             </div>
-        
+
                             @php
                                 $userCheck = DB::table('users')->where('id', auth()->id())->first();
                             @endphp
@@ -121,7 +121,7 @@
                                         </div>
                                     </form>
                                 </div>
-                            @else 
+                            @else
                                 <div class="flex-grow-0 py-3 px-4 border-top">
                                     <form id="send-message-form-member" action="" method="POST">
                                         @csrf
@@ -133,7 +133,7 @@
                                     </form>
                                 </div>
                             @endif
-        
+
                         </div>
                     </div>
                 </div>
@@ -195,8 +195,8 @@
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
                                         <input type="hidden" name="chat_id" value="${ value.chat_id }">
                                         <input type="hidden" class="input-name" name="name" value="${ value.name }">
-                                        <a 
-                                            href="#" 
+                                        <a
+                                            href="#"
                                             class="list-group-item list-group-item-action border-0 list-message"
                                             data-chat-id="${ value.chat_id }"
                                             data-name="${ value.name }"
@@ -240,7 +240,7 @@
                 setTimeout( function() {
                     $('.chat-message-list').remove()
                     // $('.unread').hide()
-                    
+
                     if(response.status == 1){
                         var chats = ""
 
@@ -277,7 +277,7 @@
                             let days   = weekdays[day];
 
                             chats += `
-                                <div 
+                                <div
                                     class="${ value.from_id == {{ auth()->id() }} ? 'chat-message-right' : 'chat-message-left' } pb-4 chat-message-list">
                                     <div>
                                         <img src="{{ asset('images/core/icon-user-one.svg') }}" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
@@ -295,7 +295,8 @@
 
                         $('#chat-name').html(name)
                         $('#list-message').append(chats)
-                        $('.chat-messages').scrollTop($('.chat-messages').height());
+                        let chat = $('.chat-messages');
+                        chat.animate({ scrollTop: chat.prop('scrollHeight') }, 300);
                     }
                 }, 1000);
             },
@@ -308,7 +309,7 @@
     $('#send-message-form-admin').keypress((e) => {
         if (e.which === 13) {
             e.preventDefault()
-            
+
             var chatId = localStorage.getItem('chatId')
             var message = $('.input-message').val()
 
@@ -377,6 +378,8 @@
                             // });
                         }
                     }, 1000);
+
+                    showMessage(chatId, localStorage.getItem('name'))
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert("Error: " + errorThrown);
@@ -388,7 +391,7 @@
     $('#send-message-form-member').keypress((e) => {
         if (e.which === 13) {
             e.preventDefault()
-            
+
             var message = $('.input-message').val()
 
             $.ajax({
@@ -563,7 +566,7 @@
                 </div>
             </div>
         `;
-        
+
         if (value.from_id == {{auth()->user()->id}} && value.to_id != {{auth()->user()->id}}) {
             $('#chat-name').html(name)
             $('#list-message').append(chatsRight)

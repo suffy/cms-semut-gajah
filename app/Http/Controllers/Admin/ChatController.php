@@ -35,7 +35,7 @@ class ChatController extends Controller
         // $manager        = $this->user->where('account_role', 'manager')->first();
         // $superadmin     = $this->user->where('account_role', 'superadmin')->first();
         // $admin          = $this->user->where('account_role', 'admin')->first();
-        
+
         if ($user->account_role == 'manager' || $user->account_role == 'superadmin' || $user->account_role == 'admin') {
             // $lists = $this->chat
             //             ->select('chats.chat_id as chat_id', 'users.name as name', 'users.photo as photo', 'chats.created_at as sended_at', 'chats.status as status')
@@ -71,12 +71,12 @@ class ChatController extends Controller
                 $sites = $this->mappingSite->where('kode', Auth::user()->site_code)->with(['ho_child' => function($q) {
                     $q->select('kode', 'sub');
                 }])->first();
-                
+
                 $array_child = [];
                 foreach($sites->ho_child as $child) {
                     array_push($array_child, $child->kode);
                 }
-                
+
                 $distributor_id = $this->user->where('account_role', 'distributor')->whereIn('site_code', $array_child)->get(['id']);
                 $array_id = [];
                 foreach($distributor_id as $distri) {
@@ -94,13 +94,13 @@ class ChatController extends Controller
                             ->orderBy('chats.chat_id', 'asc')
                             ->first()
                             ->toArray();
-                
+
                             array_push($lists, $data);
             }
 
             return view('admin.pages.chats', compact('lists'));
         }
-        
+
         // if ($user->account_role == 'user') {
         //     $lists = $this->chat->select('chats.chat_id as chat_id', 'users.name as name', 'users.photo as photo', 'chats.created_at as sended_at', 'chats.status as status')
         //                 ->join('users', 'users.id', '=', 'chats.to_id')
@@ -121,7 +121,7 @@ class ChatController extends Controller
         $manager = $this->user->where('account_role', 'manager')->first();
         $superadmin = $this->user->where('account_role', 'superadmin')->first();
         $admin = $this->user->where('account_role', 'admin')->first();
-        
+
         if ($user->account_role == 'manager' || $user->account_role == 'superadmin' || $user->account_role == 'admin') {
             // $lists = $this->chat
             //             ->select('chats.chat_id as chat_id', 'users.name as name', 'users.photo as photo', 'chats.created_at as sended_at', 'chats.status as status')
@@ -132,7 +132,7 @@ class ChatController extends Controller
             //             ->orderBy('chats.id', 'desc')
             //             ->groupBy('chats.from_id', 'chats.id', 'users.name', 'users.photo')
             //             ->paginate(10);
-                        
+
             $list_chat = $this->chat->distinct()->get(['chat_id']);
             $lists = array();
             foreach($list_chat as $row) {
@@ -146,7 +146,7 @@ class ChatController extends Controller
                             ->orderBy('chats.chat_id', 'asc')
                             ->first()
                             ->toArray();
-                
+
                             array_push($lists, $data);
             }
 
@@ -155,7 +155,7 @@ class ChatController extends Controller
                 'message' => 'Success',
                 'data' => $lists
             );
-    
+
             return $response;
             // return view('admin.pages.chats', compact('lists'));
         } else if ($user->account_role == 'distributor') {
@@ -170,7 +170,7 @@ class ChatController extends Controller
                             ->orderBy('chats.chat_id', 'asc')
                             ->first()
                             ->toArray();
-                
+
                             array_push($lists, $data);
             }
 
@@ -179,10 +179,10 @@ class ChatController extends Controller
                 'message' => 'Success',
                 'data' => $lists
             );
-    
+
             return $response;
         }
-        
+
         if ($user->account_role == 'user') {
             $lists = $this->chat->select('chats.chat_id as chat_id', 'users.name as name', 'users.photo as photo', 'chats.created_at as sended_at', 'chats.status as status')
                         ->join('users', 'users.id', '=', 'chats.to_id')
@@ -197,7 +197,7 @@ class ChatController extends Controller
                 'message' => 'Success',
                 'data' => $lists
             );
-    
+
             return $response;
             // return view('admin.pages.chats', compact('lists'));
         }
@@ -223,13 +223,13 @@ class ChatController extends Controller
                                 'status' => '1'
                             ]);
             }
-            
+
             $response = array(
                 'status' => 1,
                 'message' => 'Success',
                 'data' => $messages
             );
-    
+
             return $response;
         } else if ($user->account_role == 'distributor') {
             $messages = User::select('chats.id as id', 'users.name as name', 'chats.from_id as from_id', 'chats.to_id as to_id', 'chats.message as message', 'chats.created_at as sended_at')
@@ -246,13 +246,13 @@ class ChatController extends Controller
                                 'status' => '1'
                             ]);
             }
-            
+
             $response = array(
                 'status' => 1,
                 'message' => 'Success',
                 'data' => $messages
             );
-    
+
             return $response;
         }
 
@@ -269,13 +269,13 @@ class ChatController extends Controller
 
                 $message->save();
             }
-            
+
             $response = array(
                 'status' => 1,
                 'message' => 'Success',
                 'data' => $messages
             );
-    
+
             return $response;
         }
     }
@@ -291,7 +291,7 @@ class ChatController extends Controller
         if (count($firstMessage) == 0) {
             $message = $this->chat->create([
                         'chat_id'   => Str::uuid()->toString(),
-                        'from_id'   => $user->id, 
+                        'from_id'   => $user->id,
                         'to_id'     => $id,
                         'message'   => $request->message
                     ]);
@@ -309,8 +309,8 @@ class ChatController extends Controller
             $logs->platform     = 'web';
 
             $logs->save();
-            
-            $this->broadcastMessage(auth()->user()->name, $user->id, $request->message, Carbon::now());
+
+            //$this->broadcastMessage(auth()->user()->name, $user->id, $request->message, Carbon::now());
 
             $response = array(
                 'status' => 1,
@@ -323,7 +323,7 @@ class ChatController extends Controller
             $uuid = $this->chat->where('from_id', $user->id)->orWhere('from_id', $user->id)->value('chat_id');
             $message = $this->chat->create([
                         'chat_id'   => $uuid,
-                        'from_id'   => $user->id, 
+                        'from_id'   => $user->id,
                         'to_id'     => $id,
                         'message'   => $request->message
                     ]);
@@ -342,8 +342,8 @@ class ChatController extends Controller
 
             $logs->save();
 
-            $this->broadcastMessage(auth()->user()->name, $user->id, $id, $request->message, Carbon::now());
-    
+            //$this->broadcastMessage(auth()->user()->name, $user->id, $id, $request->message, Carbon::now());
+
             $response = array(
                 'status' => 1,
                 'message' => 'Success',
@@ -360,10 +360,10 @@ class ChatController extends Controller
         $user = $this->user->find(auth()->id());
 
         $messageSelect = $this->chat->where('chat_id', $chatId)->orderBy('id', 'asc')->first();
-        
+
         $message = $this->chat->create([
                     'chat_id'   => $chatId,
-                    'from_id'   => $user->id, 
+                    'from_id'   => $user->id,
                     'to_id'     => $messageSelect->from_id,
                     'message'   => $request->message
                 ]);
@@ -381,9 +381,9 @@ class ChatController extends Controller
         $logs->platform     = 'web';
 
         $logs->save();
-        
-        $this->broadcastMessage(auth()->user()->name, $user->id, $messageSelect->from_id, $request->message, Carbon::now());
-        
+
+        //$this->broadcastMessage(auth()->user()->name, $user->id, $messageSelect->from_id, $request->message, Carbon::now());
+
         $response = array(
             'status' => 1,
             'message' => 'Success',
@@ -438,17 +438,17 @@ class ChatController extends Controller
             "registration_ids" => $fcm_token,
             "notification" => [
                 "title" => 'Pesan Dari Admin',
-                "body" => 'Pesan kamu telah dibalas oleh admin, silahkan buka apps Semut Gajah.',  
+                "body" => 'Pesan kamu telah dibalas oleh admin, silahkan buka apps Semut Gajah.',
             ]
         ];
-        
+
         $dataString = json_encode($data);
-    
+
         $headers = [
             'Authorization: key=' . $SERVER_API_KEY,
             'Content-Type: application/json',
         ];
-    
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
