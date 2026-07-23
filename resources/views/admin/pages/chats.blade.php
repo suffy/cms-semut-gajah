@@ -143,18 +143,27 @@
 </section>
 
 <script>
-    $( document ).ready(function() {
-        if (!localStorage.getItem('chatId')) {
-            $('.start').show()
-            $('.show-chat').hide()
-        } else {
-            $('.start').hide()
-            $('.show-chat').show()
-        }
-        $('.chat-messages').scrollTop($('.chat-messages').height());
+    $(document).ready(function () {
+        const chatId = localStorage.getItem('chatId');
+        const name = localStorage.getItem('name');
 
-        // showChat(localStorage.getItem('name'))
-        showMessage(localStorage.getItem('chatId'), localStorage.getItem('name'))
+        if (!chatId) {
+            $('.start').show();
+            $('.show-chat').hide();
+        } else {
+            $('.start').hide();
+            $('.show-chat').show();
+            showMessage(chatId, name);
+        }
+
+        setInterval(function () {
+            const chatId = localStorage.getItem('chatId');
+            const name = localStorage.getItem('name');
+
+            if (chatId) {
+                showMessage(chatId, name);
+            }
+        }, 5000);
     });
 
     $(document).on('click', '.list-message', function() {
