@@ -60,6 +60,9 @@ class DailySubscribe extends Command
      */
     public function handle()
     {
+        $this->sendWaGroup('Subscribe sedang di proses');
+        $countTwoWeek = 0;
+        $countMonth = 0;
         // get subscribes data
         $subscribes = $this->subscribe->with('product.price')->get();
 
@@ -83,16 +86,19 @@ class DailySubscribe extends Command
             // per 2 week
             if ($subscribe->time == '2_week') {
                 $end_at = date('Y-m-d', strtotime('+14 day', strtotime($subscribe->start_at)));
+
                 if ($subscribe->start_at == Carbon::now()->subDays(14)->format('Y-m-d')) {
                     // handling price
                     $this->handlingPrice($subscribe, $user, $subscribe->product);
-                    // update start_at 
+                    // update start_at
                     $subscribe->start_at = Carbon::now();
                     $subscribe->save();
 
                     $activity     = 'Pesanan langgananmu  ' . $subscribe->product->name . ' sudah diproses';
                     // send notif
                     $this->sendNotification($user->id, $activity);
+
+                    $countTwoWeek++;
                 }
             }
 
@@ -103,13 +109,15 @@ class DailySubscribe extends Command
                 if (Carbon::now()->format('Y-m-d') == date('Y-m-d', strtotime('+1 month', strtotime($subscribe->start_at)))) {
                     // handling price
                     $this->handlingPrice($subscribe, $user, $subscribe->product);
-                    // update start_at 
+                    // update start_at
                     $subscribe->start_at = Carbon::now();
                     $subscribe->save();
 
                     $activity     = 'Pesanan langgananmu  ' . $subscribe->product->name . ' sudah diproses';
                     // send notif
                     $this->sendNotification($user->id, $activity);
+
+                    $countMonth++;
                 }
             }
 
@@ -166,6 +174,7 @@ class DailySubscribe extends Command
             }
         }
 
+        $this->sendWaGroup('Subscribe sukses di proses. Per 2 Mingguan: ' . $countTwoWeek . ', Per Bulan: ' . $countMonth);
         $this->info('Successfully create auto order from subscribe');
     }
 
@@ -256,7 +265,7 @@ class DailySubscribe extends Command
             if ($product->status_promosi_coret) {
                 $harga_ritel_gt         = $product->price->harga_ritel_gt * $subscribe->qty;
                 $harga_grosir_mt        = $product->price->harga_grosir_mt * $subscribe->qty;
-                // $harga_semi_grosir      = $product->price->harga_promosi_coret_semi_grosir * $request->qty;  
+                // $harga_semi_grosir      = $product->price->harga_promosi_coret_semi_grosir * $request->qty;
                 if ($half == 1) {
                     $harga_ritel_gt  = $harga_ritel_gt / 2;
                     $harga_grosir_mt = $harga_grosir_mt / 2;
@@ -264,7 +273,7 @@ class DailySubscribe extends Command
             } else {
                 $harga_ritel_gt         = $product->price->harga_ritel_gt * $subscribe->qty;
                 $harga_grosir_mt        = $product->price->harga_grosir_mt * $subscribe->qty;
-                // $harga_semi_grosir      = $product->price->harga_semi_grosir * $request->qty;  
+                // $harga_semi_grosir      = $product->price->harga_semi_grosir * $request->qty;
                 // check if halc
                 if ($half == 1) {
                     $harga_ritel_gt  = $harga_ritel_gt / 2;
@@ -553,5 +562,18 @@ class DailySubscribe extends Command
             'disc_cabang'               => $disc_cabang,
             'rp_cabang'                 => $rp_cabang
         ]);
+    }
+
+    // notif wa
+    public function sendWaGroup($msg)
+    {
+        $link = config('app.url');
+
+        Http::withHeaders([
+            'x-api-key' => config('wabot.x_api_key')
+        ])->post(config('wabot.url').'/send-group', [
+            'groupId' => config('wabot.group_id'),
+            'message' =>  $link."\n".$msg
+        ])->json();
     }
 }
