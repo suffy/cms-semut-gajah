@@ -121,12 +121,12 @@ $user = Auth::user();
                                         <!-- looping -->
                                         <form action="{{url('member/submit-review/'.$order->id)}}" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        @php 
+                                        @php
                                             $total = 0;
                                             $weight = 0;
                                         @endphp
                                         @foreach($order->data_item as $row)
-        
+
                                         @if($row->product)
                                         <div class="row">
                                             <div class="col-2">
@@ -134,10 +134,12 @@ $user = Auth::user();
                                             </div>
                                             <div class="col-8">
                                                 <p>{{$row->product->name}}<br>
-                                                <span style="color: red">Rp. {{number_format($row->price)}} | {{$row->qty}} Item </span></p>
+                                                <span style="color: red">Rp. {{number_format($row->price)}} | {{$row->qty}} Item </span><br>
+                                                Catatan : {{$row->notes ? $row->notes : '-'}}
+                                                </p>
                                             </div>
 
-                                            @php 
+                                            @php
                                                 $val = 0;
                                                 $review = "";
                                                 $prod_review = \App\ProductReview::where('order_id', $order->id)->where('product_id', $row->product->id)->first();
@@ -184,21 +186,21 @@ $user = Auth::user();
                                             </div>
 
                                             @endif
-                                            
+
                                         </div>
                                         @endif
-                                        @php 
+                                        @php
                                             $total = $total + ((float)$row->price*(float)$row->qty);
                                             $weight = $weight + ((float)$row->weight*(float)$row->qty);
                                         @endphp
                                         @endforeach
                                             @if($order->status=='4')
-                                            <button type="submit" class="btn button-blue">Simpan Review</button> 
+                                            <button type="submit" class="btn button-blue">Simpan Review</button>
                                             @endif
                                         </form>
                                     </div>
                                     <hr>
-                                        @php 
+                                        @php
                                             $weight = (float)$weight * 1000;
                                         @endphp
                                     <div class="text-right">Total Belanja : Rp. {{number_format($total)}}</div>
@@ -246,13 +248,13 @@ $user = Auth::user();
                                                         <div class="digit">1</div>
                                                         <div class="digit">5</div>
                                                     </div>
-                                            
+
                                                     <div class="dash minutes_dash">
                                                         <span class="dash_title">minutes</span>
                                                         <div class="digit">0</div>
                                                         <div class="digit">4</div>
                                                     </div>
-                                            
+
                                                     <div class="dash seconds_dash">
                                                         <span class="dash_title">seconds</span>
                                                         <div class="digit">3</div>
@@ -266,25 +268,25 @@ $user = Auth::user();
                                                             <div class="digit">0</div>
                                                             <div class="digit">6</div>
                                                         </div>
-                                            
+
                                                         <div class="dash hours_dash">
                                                             <span class="dash_title">hours</span>
                                                             <div class="digit">1</div>
                                                             <div class="digit">5</div>
                                                         </div>
-                                            
+
                                                         <div class="dash minutes_dash">
                                                             <span class="dash_title">minutes</span>
                                                             <div class="digit">0</div>
                                                             <div class="digit">4</div>
                                                         </div>
-                                            
+
                                                         <div class="dash seconds_dash">
                                                             <span class="dash_title">seconds</span>
                                                             <div class="digit">3</div>
                                                             <div class="digit">3</div>
                                                         </div>
-                                                    @endif                                                    
+                                                    @endif
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <!-- Countdown dashboard end -->
@@ -368,7 +370,7 @@ $user = Auth::user();
   /*border:1px solid #eee;*/
   background: rgba(255,255,255,0.1);
   box-shadow: 5px;
-  
+
 }
 
 .dash {
@@ -402,7 +404,7 @@ $user = Auth::user();
 }
 
 .dash_title {
-	
+
 	display: block;
 	font-size: 7.5pt;
   margin-bottom: 5px;
@@ -447,13 +449,13 @@ hr.light {
 @endif
 
 @if($order->status==1)
-    @php 
+    @php
         $date = date("Y-m-d H:i:s", strtotime('+24 hours', strtotime($order->created_at)));
     @endphp
 @endif
 
 @if($order->status==2)
-    @php 
+    @php
         $date = date("Y-m-d H:i:s", strtotime('+12 hours', strtotime($order->updated_at)));
     @endphp
 @endif
@@ -546,7 +548,7 @@ $.fn.doCountDown = function (id, diffSecs, duration) {
         days = Math.floor(diffSecs/60/60/24);
         weeks = Math.floor(diffSecs/60/60/24/7);
     }
-    else 
+    else
     {
         days = Math.floor(diffSecs/60/60/24)%7;
         weeks = Math.floor(diffSecs/60/60/24/7);
@@ -564,8 +566,8 @@ $.fn.doCountDown = function (id, diffSecs, duration) {
         e = $this;
         t = setTimeout(function() { e.doCountDown(id, diffSecs-1) } , 1000);
         $.data(e[0], 'timer', t);
-    } 
-    else if (cb = $.data($this[0], 'callback')) 
+    }
+    else if (cb = $.data($this[0], 'callback'))
     {
         $.data($this[0], 'callback')();
     }
@@ -600,7 +602,7 @@ $.fn.digitChangeTo = function (digit, n, duration) {
             $(digit + ' div.bottom').css({'display': 'block', 'height': ''});
             $(digit + ' div.top').hide().slideUp(10);
 
-        
+
         });
     }
     }
@@ -620,7 +622,7 @@ $(document).ready(function() {
     var ts=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
     console.log(ts.getDate()+"-"+(ts.getMonth()+1)+"-"+ts.getFullYear()+"-"+ts.getHours()+"-"+ts.getMinutes()+"-"+ts.getSeconds())
     @endif
-    
+
     $('#countdown_dashboard').countDown({
         targetDate: {
             'day': 		ts.getDate(),
@@ -631,21 +633,21 @@ $(document).ready(function() {
             'sec': 		ts.getSeconds(),
             'utc':    true
         }, omitWeeks: true
-      
+
     });
 });
 })(jQuery);
 
 
 $(".btnrating").on('click',(function(e) {
-                                    
+
     var id = $(this).attr('data-id');
 
     var previous_value = $("#selected_rating"+id).val();
 
     var selected_value = $(this).attr("data-attr");
     $("#selected_rating"+id).val(selected_value);
-    
+
     $(".selected-rating"+id).empty();
     $(".selected-rating"+id).html(selected_value);
 
@@ -653,7 +655,7 @@ $(".btnrating").on('click',(function(e) {
         $("#rating-star-"+id+"-"+i).toggleClass('btn-warning');
         $("#rating-star-"+id+"-"+i).toggleClass('btn-default');
     }
-    
+
     for (ix = 1; ix <= previous_value; ++ix) {
         $("#rating-star-"+id+"-"+ix).toggleClass('btn-warning');
         $("#rating-star-"+id+"-"+ix).toggleClass('btn-default');
@@ -676,7 +678,7 @@ $(".btnrating").on('click',(function(e) {
 			var _hour = _minute * 60;
 			var _day = _hour * 24;
 			var timer;
-            
+
             function showRemaining() {
                 var now = new Date();
                 var distance = countDownDate - now;
@@ -700,7 +702,7 @@ $(".btnrating").on('click',(function(e) {
 			var _hour = _minute * 60;
 			var _day = _hour * 24;
 			var timer;
-            
+
             function showRemaining() {
                 var now = new Date();
                 var distance = countDownDate - now;
