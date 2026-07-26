@@ -85,7 +85,7 @@ class TransactionController extends Controller
             $array      = $this->arraySelectProduct();
         }
         $arrayOrder         = ['id', 'invoice','stock_status', 'customer_id', 'subscribe_id', 'name', 'phone', 'address', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'payment_method', 'order_time', 'status', 'payment_total', 'payment_final', 'payment_point', 'status_faktur', 'point', 'status_complaint', 'status_review', 'site_code', 'created_at', 'updated_at', 'delivery_service', 'delivery_fee'];
-        $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point'];
+        $arrayOrderDetail   = ['id', 'product_id', 'order_id', 'small_unit', 'konversi_sedang_ke_kecil', 'half', 'qty_konversi', 'qty', 'price_apps', 'total_price', 'product_review_id', 'promo_id', 'disc_cabang', 'rp_cabang', 'disc_principal', 'rp_principal', 'point_principal', 'bonus', 'bonus_qty', 'bonus_name', 'bonus_konversi', 'point', 'notes'];
         $arrayOrderDetailCancel = $this->arraySelectOrderDetailCancel();
         $arrayOrderDetailSuccess = $this->arraySelectOrderDetailSuccess();
 
