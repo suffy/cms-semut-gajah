@@ -64,7 +64,7 @@
             </form>
             &nbsp
             @endif
-            
+
             </div>
 
             <div class="card-body">
@@ -198,7 +198,7 @@
                                             <b>Status Order</b>
                                         </div>
                                         <div class="col-sm-8">
-                                            : 
+                                            :
                                             @if ($order->status == '1')
                                                 Menunggu konfirmasi
                                             @elseif($order->status == '2')
@@ -259,15 +259,18 @@
                                                 @endphp
                                                     <tr>
                                                         {{-- <th scope="row">{{ $key+1 }}</th> --}}
-                                                        <td>{{ $orderDetail->product->name }}</td>
+                                                        <td>
+                                                            <p>{{ $orderDetail->product->name }}</p>
+                                                            <p>Catatan : {{ $orderDetail->notes ? $orderDetail->notes : '-' }}</p>
+                                                        </td>
                                                         <td>{{ $orderDetail->qty }}</td>
                                                         <td>Rp. {{ number_format($orderDetail->price_apps, 2, ',', '.') }}</td>
                                                         <td>{{ucfirst(strtolower($orderDetail->order->user->class))}}</td>
                                                         {{-- <td>{{$orderDetail->product->brand_id}}</td> --}}
                                                         <td>
-                                                            {{-- @if($orderDetail->order->user->salur_code == 'RT') Tidak ada diskon 
-                                                            @elseif($orderDetail->order->user->salur_code == 'SW') 3% 
-                                                            @elseif($orderDetail->order->user->salur_code == 'WS' || $orderDetail->order->user->salur_code == 'SO') 4.5% 
+                                                            {{-- @if($orderDetail->order->user->salur_code == 'RT') Tidak ada diskon
+                                                            @elseif($orderDetail->order->user->salur_code == 'SW') 3%
+                                                            @elseif($orderDetail->order->user->salur_code == 'WS' || $orderDetail->order->user->salur_code == 'SO') 4.5%
                                                             @endif --}}
                                                             Rp. {{number_format($orderDetail->rp_cabang, 2, ',', '.')}} ({{$orderDetail->disc_cabang}} %)
                                                         </td>
@@ -326,7 +329,7 @@
                                                   <td>{{ $orderDetail->payment_discount_code }}</td>
                                                 </tr> -->
                                                 @if($orderPromos)
-                                                    @foreach($orderPromos as $row) 
+                                                    @foreach($orderPromos as $row)
                                                     <tr>
                                                         <th scope="row">{{ $row->promo->title }}</th>
                                                         <td></td>
@@ -364,7 +367,7 @@
                                                   <td></td>
                                                   <td></td>
                                                   <td>Rp. {{ number_format($order->payment_final, 2, ',', '.') }}</td>
-                                                  @php 
+                                                  @php
                                                     $total_price = 0;
                                                   @endphp
                                                   @foreach($orderDetails as $row)
@@ -378,7 +381,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="box-order-status">
                                 <div class="order-header">
                                     Order Status
@@ -405,11 +408,11 @@
                                             <div class="col text-center"><p>Pengiriman</p></div>
                                             <div class="col text-center"><p>Selesai</p></div>
                                         </div>
-                                    @elseif($order->status == '10')     
+                                    @elseif($order->status == '10')
                                     <div class="row pgb p-0 mt-3">
                                         <div class="col step active p-0"><p></p>
                                             <span class="img-circle"></span>
-                                        </div>                
+                                        </div>
                                     </div>
                                     <div class="row pgb p-0">
                                         <div class="col text-center"><p>Batal</p></div>
@@ -435,7 +438,7 @@
                                         <span>{{$created->diffForHumans($now)}}</span><br>
                                         <strong>New Order</strong>
                                     </div>
-                                    
+
                                     {{-- @if ($order->status >= 2 && $payment_date != null)
                                         <div class="alert alert-primary" role="alert">
                                             <span>{{$payment_date->diffForHumans($now)}}</span><br>
@@ -489,7 +492,7 @@
                                 <div class="order-body">
 
                                     <div class="col-md-12">
-                                        <div class="payment-notif">                                            
+                                        <div class="payment-notif">
                                             <!-- Countdown dashboard start -->
                                                 <div id="countdown_dashboard">
                                                     @if($order->status==2 && $order->payment_link=="")
@@ -508,19 +511,19 @@
                                                             <div class="digit">0</div>
                                                             <div class="digit">6</div>
                                                         </div>
-                                            
+
                                                         <div class="dash hours_dash">
                                                             <span class="dash_title">hours</span>
                                                             <div class="digit">1</div>
                                                             <div class="digit">5</div>
                                                         </div>
-                                            
+
                                                         <div class="dash minutes_dash">
                                                             <span class="dash_title">minutes</span>
                                                             <div class="digit">0</div>
                                                             <div class="digit">4</div>
                                                         </div>
-                                            
+
                                                         <div class="dash seconds_dash">
                                                             <span class="dash_title">seconds</span>
                                                             <div class="digit">3</div>
@@ -534,19 +537,19 @@
                                                             <div class="digit">0</div>
                                                             <div class="digit">6</div>
                                                         </div>
-                                            
+
                                                         <div class="dash hours_dash">
                                                             <span class="dash_title">hours</span>
                                                             <div class="digit">1</div>
                                                             <div class="digit">5</div>
                                                         </div>
-                                            
+
                                                         <div class="dash minutes_dash">
                                                             <span class="dash_title">minutes</span>
                                                             <div class="digit">0</div>
                                                             <div class="digit">4</div>
                                                         </div>
-                                            
+
                                                         <div class="dash seconds_dash">
                                                             <span class="dash_title">seconds</span>
                                                             <div class="digit">3</div>
@@ -618,7 +621,7 @@
   /*border:1px solid #eee;*/
   background: rgba(255,255,255,0.1);
   box-shadow: 5px;
-  
+
 }
 
 .dash {
@@ -652,7 +655,7 @@
 }
 
 .dash_title {
-	
+
 	display: block;
 	font-size: 7.5pt;
   margin-bottom: 5px;
@@ -797,13 +800,13 @@ hr.light {
 </style>
 
 @if($order->status==1)
-    @php 
+    @php
         $date = date("Y-m-d H:i:s", strtotime('+24 hours', strtotime($order->created_at)));
     @endphp
 @endif
 
 @if($order->status==2)
-    @php 
+    @php
         $date = date("Y-m-d H:i:s", strtotime('+24 hours', strtotime($order->updated_at)));
     @endphp
 @endif
@@ -896,7 +899,7 @@ $.fn.doCountDown = function (id, diffSecs, duration) {
         days = Math.floor(diffSecs/60/60/24);
         weeks = Math.floor(diffSecs/60/60/24/7);
     }
-    else 
+    else
     {
         days = Math.floor(diffSecs/60/60/24)%7;
         weeks = Math.floor(diffSecs/60/60/24/7);
@@ -914,8 +917,8 @@ $.fn.doCountDown = function (id, diffSecs, duration) {
         e = $this;
         t = setTimeout(function() { e.doCountDown(id, diffSecs-1) } , 1000);
         $.data(e[0], 'timer', t);
-    } 
-    else if (cb = $.data($this[0], 'callback')) 
+    }
+    else if (cb = $.data($this[0], 'callback'))
     {
         $.data($this[0], 'callback')();
     }
@@ -950,7 +953,7 @@ $.fn.digitChangeTo = function (digit, n, duration) {
             $(digit + ' div.bottom').css({'display': 'block', 'height': ''});
             $(digit + ' div.top').hide().slideUp(10);
 
-        
+
         });
     }
     }
@@ -970,7 +973,7 @@ $(document).ready(function() {
     var ts=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
     console.log(ts.getDate()+"-"+(ts.getMonth()+1)+"-"+ts.getFullYear()+"-"+ts.getHours()+"-"+ts.getMinutes()+"-"+ts.getSeconds())
     @endif
-    
+
     $('#countdown_dashboard').countDown({
         targetDate: {
             'day': 		ts.getDate(),
@@ -981,7 +984,7 @@ $(document).ready(function() {
             'sec': 		ts.getSeconds(),
             'utc':    true
         }, omitWeeks: true
-      
+
     });
 });
 })(jQuery);
@@ -1001,7 +1004,7 @@ $(document).ready(function() {
 			var _hour = _minute * 60;
 			var _day = _hour * 24;
 			var timer;
-            
+
             function showRemaining() {
                 var now = new Date();
                 var distance = countDownDate - now;
@@ -1025,7 +1028,7 @@ $(document).ready(function() {
 			var _hour = _minute * 60;
 			var _day = _hour * 24;
 			var timer;
-            
+
             function showRemaining() {
                 var now = new Date();
                 var distance = countDownDate - now;
