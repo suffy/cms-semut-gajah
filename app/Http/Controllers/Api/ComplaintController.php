@@ -19,20 +19,22 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as InterImage;
+use App\Services\ClientService;
 
 
 class ComplaintController extends Controller
 {
-    protected $complaints, $complaintDetails, $complaintFiles, $order;
+    protected $complaints, $complaintDetails, $complaintFiles, $order, $logs, $credit, $clientService;
 
-    public function __construct(Complaint $complaint, ComplaintDetail $complaintDetail, ComplaintFile $complaintFile, Order $order, Log $log, Credit $credit)
+    public function __construct(Complaint $complaint, ComplaintDetail $complaintDetail, ComplaintFile $complaintFile, Order $order, Log $logs, Credit $credit, ClientService $clientService)
     {
         $this->complaints       = $complaint;
         $this->complaintDetails = $complaintDetail;
         $this->complaintFiles   = $complaintFile;
         $this->order            = $order;
-        $this->logs             = $log;
+        $this->logs             = $logs;
         $this->credit           = $credit;
+        $this->clientService    = $clientService;
     }
 
     // array for select product
@@ -684,6 +686,16 @@ class ComplaintController extends Controller
                                 'to_user'       => null,
                                 'platform'      => 'apps',
                             ]);
+
+            // send notification to manager
+            $content = "New Complaint : " . url('manager/order-detail/' . $complaint->id);
+            $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $order->site_code);
+            $this->clientService->sendNotification($emails, 'New Complaint', $content);
+
+            // send notification to distributor
+            $content = "New Complaint : " . url('distributor/order-detail/' . $complaint->id);
+            $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $order->site_code);
+            $this->clientService->sendNotification($emails, 'New Complaint', $content);
 
             return response()->json([
                 'success' => true,

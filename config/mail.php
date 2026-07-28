@@ -133,4 +133,7 @@ return [
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
 
+    'email_server' => env('EMAIL_SERVER'),
+    'email_server_key' => env('EMAIL_SERVER_KEY'),
+
 ];

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use App\User;
 
 class ClientService
 {
@@ -19,5 +20,41 @@ class ClientService
         );
 
         return json_decode($res->getBody(), true);
+    }
+
+    public function sendEmail($recipients = [], $subject = "", $content = "", $file = "", $encode = "url")
+    {
+        $url = config('mail.email_server').'/send';
+        $apiKey = config('mail.email_server_key');
+
+        $header = [
+            'apikey' => $apiKey
+        ];
+
+        $payload = [
+            "recipients" => $recipients,
+            "subject" => $subject,
+            "encode" => $encode,
+            "content" => $content,
+            "file" => $file
+        ];
+
+        return $this->request('post', $url, 'json', $header, $payload);
+    }
+
+    public function getEmailByRoleAndSiteCode($roles = [], $site_code = null)
+    {
+        $query = User::whereIn('account_role', $roles);
+
+        if ($site_code) {
+            $query->where('site_code', $site_code);
+        }
+
+        return $query->pluck('email')->toArray();
+    }
+
+    public function sendNotification($recipients = [], $subject = "", $content = "")
+    {
+        $this->sendEmail($recipients, $subject, $content);
     }
 }

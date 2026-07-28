@@ -236,8 +236,8 @@ class OtpController extends Controller
             $otpCodeMsg = implode(' ',str_split($otpCode));
 
             // send otp code
-            $url = 'https://sds-mail.onevour.com/send';
-            $apiKey = '0a8504351e384e7c8fa1688ff160f815';
+            $url = config('mail.email_server').'/send';
+            $apiKey = config('mail.email_server_key');
 
             $payload = [
                 "recipients" => [
@@ -586,8 +586,8 @@ class OtpController extends Controller
             $otpCodeMsg = implode(' ',str_split($otpCode));
 
             // send otp code
-            $url = 'https://sds-mail.onevour.com/send';
-            $apiKey = '0a8504351e384e7c8fa1688ff160f815';
+            $url = config('mail.email_server').'/send';
+            $apiKey = config('mail.email_server_key');
 
             $payload = [
                 "recipients" => [

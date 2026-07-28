@@ -28,12 +28,12 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use App\Services\ClientService;
 class OrderController extends Controller
 {
-    protected $orders, $orderDetail, $users, $userAddress, $logs, $shoppingCarts, $vouchers, $mappingSites, $creditLimit, $orderPromo, $orderPromoReward, $products, $productStrata;
+    protected $orders, $orderDetail, $users, $userAddress, $logs, $shoppingCarts, $vouchers, $mappingSites, $creditLimit, $orderPromo, $orderPromoReward, $products, $productStrata, $clientService;
 
-    public function __construct(Order $order, OrderDetail $orderDetail, User $user, UserAddress $userAddress, Log $log, ShoppingCart $shoppingCart, Voucher $voucher, MappingSite $mappingSite, CreditLimit $creditLimit, PointHistory $pointHistory, Product $product, ProductStrata $productStrata)
+    public function __construct(Order $order, OrderDetail $orderDetail, User $user, UserAddress $userAddress, Log $log, ShoppingCart $shoppingCart, Voucher $voucher, MappingSite $mappingSite, CreditLimit $creditLimit, PointHistory $pointHistory, Product $product, ProductStrata $productStrata, ClientService $clientService)
     {
         $this->orders = $order;
         $this->orderDetail = $orderDetail;
@@ -47,6 +47,7 @@ class OrderController extends Controller
         $this->pointHistory = $pointHistory;
         $this->products = $product;
         $this->productStrata      = $productStrata;
+        $this->clientService = $clientService;
     }
 
     // array for select product
@@ -828,6 +829,16 @@ class OrderController extends Controller
                     'to_user' => null,
                     'platform' => 'apps',
                 ]);
+
+            // send notification to manager
+            $content = "New Order : " . url('manager/order-detail/' . $orders->id);
+            $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $siteCode->kode);
+            $this->clientService->sendNotification($emails, 'New Order', $content);
+
+            // send notification to distributor
+            $content = "New Order : " . url('distributor/order-detail/' . $orders->id);
+            $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $siteCode->kode);
+            $this->clientService->sendNotification($emails, 'New Order', $content);
 
             return response()->json([
                 'success' => true,
