@@ -14,7 +14,8 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 class OrderController extends Controller
 {
     protected $order;
@@ -52,7 +53,7 @@ class OrderController extends Controller
         $ordersLastMonth    = $this->order
                                         ->whereBetween('order_time', [Carbon::now()->startOfMonth()->subMonth(), Carbon::now()->endOfMonth()->subMonth()])
                                         ->count();
-        $ordersLastYear     = $this->order  
+        $ordersLastYear     = $this->order
                                         ->whereBetween('order_time', [Carbon::now()->startOfYear()->subYear(), Carbon::now()->endOfYear()->subYear()])
                                         ->count();
 
@@ -98,12 +99,12 @@ class OrderController extends Controller
             $sites = $this->mappingSites->where('kode', Auth::user()->site_code)->with(['ho_child' => function($q) {
                 $q->select('kode', 'sub');
             }])->first();
-            
+
             $array_child = [];
             foreach($sites->ho_child as $child) {
                 array_push($array_child, $child->kode);
             }
-            
+
             if ($request->has('end_date')) {
                 $orders = $orders->whereIn('orders.site_code', $array_child)->whereBetween('orders.order_time', [$request->start_date, $request->end_date]);
             }
@@ -139,7 +140,7 @@ class OrderController extends Controller
                         ->whereNull('orders.deleted_at')
                         ->paginate(10);
         }
-        
+
         return view('admin.pages.orders', compact('ordersToday', 'ordersLastWeek', 'ordersLastMonth', 'ordersLastYear', 'categories', 'orders'));
     }
 
@@ -161,7 +162,7 @@ class OrderController extends Controller
 
         $ordering = $request->input('ordering');
         $params = $request->input('params');
-        
+
 
         $mulai = $request->input('mulai');
         $sampai = $request->input('sampai');
@@ -341,7 +342,7 @@ class OrderController extends Controller
                             $p->save();
                         }
                     endforeach;
-                    
+
                 }else if($status=='6'){
                     $activity = 'payment pending';
                 }else if($status=='7'){
@@ -371,7 +372,7 @@ class OrderController extends Controller
                 ]);
 
                 // update data to erp
-                if ($status == 4 || $status == 10) {
+                // if ($status == 4 || $status == 10) {
                     Http::put('http://site.muliaputramandiri.com/restapi/api/master_data/order', [
                         'X-API-KEY'         => config('erp.x_api_key'),
                         'token'             => config('erp.token_api'),
@@ -379,14 +380,14 @@ class OrderController extends Controller
                         'kode'              => $order->data_user->site_code,
                         'status_update_erp' => $status
                     ]);
-                }
+                //}
 
                 DB::commit();
 
                 return redirect('/admin/order-detail/'.$order->id)
                     ->with('status', 1)
                     ->with('message', "Pesanan telah diupdate!");
-                
+
             }else{
 
                 DB::rollBack();
@@ -396,21 +397,21 @@ class OrderController extends Controller
 
     public function updateResi(Request $request) {
         $trans = Order::find($request->id);
- 
+
         $trans->delivery_track =  $request->resi;
          if ($request->hasFile('file')) {
              $file = $request->file('file');
              $ext  = $file->getClientOriginalExtension();
- 
+
              $newName = "resi-".date('Y-m-d-His') . "." . $ext;
- 
+
              $image_resize = Image::make($file->getRealPath());
              $image_resize->save(('images/' .$newName));
- 
+
              $trans->photo = $newName;
- 
+
          }
- 
+
      $trans->save();
      return redirect('/admin/order-detail/'.$trans->id)
          ->with('status', 1)
@@ -422,7 +423,7 @@ class OrderController extends Controller
 		$order = Order::where('id', $order_id)->first();
         $orderPromos = OrderDetail::whereNull('product_id')->where('order_id', $order_id)->with('promo')->get();
         $pdf = PDF::loadview('public/member/invoice-order',[
-                                                            'order'         => $order, 
+                                                            'order'         => $order,
                                                             'orderPromos'   => $orderPromos
                                                         ]);
         return $pdf->stream();
@@ -494,7 +495,7 @@ class OrderController extends Controller
             $user_address = UserAddress::find($request->input('address-id'));
 
             $order = Order::create([
-            
+
                 "invoice" => "",
                 "customer_id" => $user->id,
                 "name" => $user_address->address_name,
@@ -529,7 +530,7 @@ class OrderController extends Controller
                 "confirmation_time" => null,
                 "notes" => $request->input('notes'),
                 "status" => 1
-            
+
             ]);
 
         // logs
@@ -581,7 +582,7 @@ class OrderController extends Controller
                     ->with('status', 2)
                     ->with('message', "Order Gagal, coba lagi beberapa saat!");
                 }
-                
+
         }else{
 
             DB::rollBack();
@@ -612,7 +613,7 @@ class OrderController extends Controller
                 $order->payment_date= date('Y-m-d H:i:s');
                 $order->save();
             }
-            
+
 
             return redirect(url('member/order-detail/'.$order->id));
         }
@@ -638,7 +639,7 @@ class OrderController extends Controller
 
     //     $ordering = $request->input('ordering');
     //     $params = $request->input('params');
-        
+
 
     //     $mulai = $request->input('mulai');
     //     $sampai = $request->input('sampai');
@@ -772,7 +773,7 @@ class OrderController extends Controller
                 $total += $order_detail->total_price;
             }
         }
-                
+
         return view('admin.pages.report-sales', compact('orders', 'total'));
     }
 
@@ -811,7 +812,7 @@ class OrderController extends Controller
                 $total += $order_detail->total_price;
             }
         }
-                
+
         return view('admin.pages.report-sales', compact('orders', 'total'));
     }
 
@@ -841,15 +842,15 @@ class OrderController extends Controller
                     ->where('status', '2')
                     ->orWhere('status', '3')
                     ->orWhere('status', '4')
-                    ->where('status_faktur', $status_faktur);                    
+                    ->where('status_faktur', $status_faktur);
         }
 
         $orders = $order->get();
         $total = $order->sum('payment_final');
-                
+
         return view('admin.pages.report-sales-transaksi', compact('orders', 'total'));
     }
-    
+
     public function reportStatistik(Request $request)
 	{
 		$valsearch = preg_replace('/[^A-Za-z0-9 ]/', '', $request->input('search'));
@@ -869,7 +870,7 @@ class OrderController extends Controller
 
         $ordering = $request->input('ordering');
         $params = $request->input('params');
-        
+
 
         $mulai = $request->input('mulai');
         $sampai = $request->input('sampai');
@@ -904,17 +905,17 @@ class OrderController extends Controller
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfYear(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfYear(),
             ])->where('status', $status_total)->count();
-    
+
             $this_month = Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth(),
             ])->where('status', $status_total)->count();
-    
+
             $this_weeks =  Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfWeek(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfWeek(),
             ])->where('status', $status_total)->count();
-    
+
             $today = Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfDay(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfDay(),
@@ -924,17 +925,17 @@ class OrderController extends Controller
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfYear(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfYear(),
             ])->count();
-    
+
             $this_month = Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth(),
             ])->count();
-    
+
             $this_weeks =  Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfWeek(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfWeek(),
             ])->count();
-    
+
             $today = Order::whereBetween('created_at', [
                 Carbon::now()->setTimezone('Asia/Jakarta')->startOfDay(),
                 Carbon::now()->setTimezone('Asia/Jakarta')->endOfDay(),
@@ -993,8 +994,8 @@ class OrderController extends Controller
 
     public function sendNotification($user_id, $status)
     {
-        $activity = ""; 
-                                                                    // give status 
+        $activity = "";
+                                                                    // give status
         if ($status         ==  '1') {
             $activity = 'Pesanan Baru';
         } else if ($status  ==  '2') {
@@ -1016,17 +1017,17 @@ class OrderController extends Controller
             "registration_ids" => $fcm_token,
             "notification"  => [
                 "title" => 'Status Orderan',
-                "body"  => $activity,  
+                "body"  => $activity,
             ]
         ];
-        
+
         $dataString = json_encode($data);
-    
+
         $headers = [
             'Authorization: key=' . $SERVER_API_KEY,
             'Content-Type: application/json',
         ];
-    
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
