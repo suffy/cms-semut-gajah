@@ -687,15 +687,16 @@ class ComplaintController extends Controller
                                 'platform'      => 'apps',
                             ]);
 
+            $body = "Hi,\nKomplain Order telah masuk\n\nNomor Order : ".$order->invoice."\nTanggal Order : ".Carbon::parse($order->order_time)->format('l, d M Y H:i:s')."\nCreated at : ".Carbon::parse($complaint->created_at)->format('l, d M Y H:i:s')."\nCustomer : ".$order->name."\nOption : ".$complaint->option."\n\nLink Web : Silahkan klik -> %s\n\nSilahkan lakukan respon pada komplain tersebut pada halaman Complaints.\n\nTerima Kasih,\nRegards,\nSemut Gajah";
             // send notification to manager
-            $content = "New Complaint : " . url('manager/order-detail/' . $complaint->id);
+            $content = sprintf($body, url('manager/complaints'));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $order->site_code);
-            $this->clientService->sendNotification($emails, 'New Complaint', $content);
+            $this->clientService->sendNotification($emails, 'New Complaint Semut Gajah', $content);
 
             // send notification to distributor
-            $content = "New Complaint : " . url('distributor/order-detail/' . $complaint->id);
+            $content = sprintf($body, url('distributor/complaints'));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $order->site_code);
-            $this->clientService->sendNotification($emails, 'New Complaint', $content);
+            $this->clientService->sendNotification($emails, 'New Complaint Semut Gajah', $content);
 
             return response()->json([
                 'success' => true,

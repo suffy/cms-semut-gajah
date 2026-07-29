@@ -29,6 +29,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Services\ClientService;
+use Illuminate\Support\Str;
 class OrderController extends Controller
 {
     protected $orders, $orderDetail, $users, $userAddress, $logs, $shoppingCarts, $vouchers, $mappingSites, $creditLimit, $orderPromo, $orderPromoReward, $products, $productStrata, $clientService;
@@ -830,15 +831,17 @@ class OrderController extends Controller
                     'platform' => 'apps',
                 ]);
 
+            $body = "Hi,\nOrder baru telah masuk\n\nNomor Order : ".$orders->invoice."\nTanggal Order : ".Carbon::parse($orders->order_time)->format('l, d M Y H:i:s')."\nCustomer : ".$orders->name."\nPayment Type : ".Str::upper($orders->payment_method)."\n\nLink Web : Silahkan klik -> %s\n\nSilahkan lakukan approval pada order tersebut pada halaman Orders.\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+
             // send notification to manager
-            $content = "New Order : " . url('manager/order-detail/' . $orders->id);
+            $content = sprintf($body, url('manager/order-detail/' . $orders->id));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $siteCode->kode);
-            $this->clientService->sendNotification($emails, 'New Order', $content);
+            $this->clientService->sendNotification($emails, 'New Order Semut Gajah', $content);
 
             // send notification to distributor
-            $content = "New Order : " . url('distributor/order-detail/' . $orders->id);
+            $content = sprintf($body, url('distributor/order-detail/' . $orders->id));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $siteCode->kode);
-            $this->clientService->sendNotification($emails, 'New Order', $content);
+            $this->clientService->sendNotification($emails, 'New Order Semut Gajah', $content);
 
             return response()->json([
                 'success' => true,
