@@ -23,7 +23,7 @@ class Order extends Model
     {
         return $this->hasMany('App\OrderDetail', 'order_id', 'id')->where('qty_cancel', '!=', 0);
     }
-    
+
     public function data_success()
     {
         return $this->hasMany('App\OrderDetail', 'order_id', 'id')->where('qty_update', '!=', 0);
@@ -73,5 +73,14 @@ class Order extends Model
     public function point_history()
     {
         return $this->hasOne('App\PointHistory', 'order_id', 'id');
+    }
+
+    public function diskonOutletAttribute()
+    {
+        $diskonOutlet = 0;
+        foreach ($this->order_details as $orderDetail) {
+             $diskonOutlet +=  $orderDetail->rp_cabang;
+        }
+        return $diskonOutlet;
     }
 }

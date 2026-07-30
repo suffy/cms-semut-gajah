@@ -435,7 +435,7 @@
                                         $now = \Carbon\Carbon::now();
                                     @endphp
                                     <div class="alert alert-primary" role="alert">
-                                        <span>{{$created->diffForHumans($now)}}</span><br>
+                                        <span>{{$created->format('d M Y H:i:s')}}</span><br>
                                         <strong>New Order</strong>
                                     </div>
 
@@ -455,28 +455,28 @@
 
                                     @if ($order->status >= 2)
                                         <div class="alert alert-primary" role="alert">
-                                            <span>{{$payment_confirm_date->diffForHumans($now)}}</span><br>
+                                            <span>{{$payment_confirm_date->format('d M Y H:i:s')}}</span><br>
                                             <strong>Order Confirmed</strong>
                                         </div>
                                     @endif
 
                                     @if ($order->status >= 3 && $delivery_time != null && $order->status != 7)
                                         <div class="alert alert-primary" role="alert">
-                                            <span>{{$delivery_time->diffForHumans($now)}}</span><br>
+                                            <span>{{$delivery_time->format('d M Y H:i:s')}}</span><br>
                                             <strong>Delivery Process</strong>
                                         </div>
                                     @endif
 
                                     @if ($order->status == 4 && $final_time != null)
                                         <div class="alert alert-success" role="alert">
-                                            <span>{{$final_time->diffForHumans($now)}}</span><br>
+                                            <span>{{$final_time->format('d M Y H:i:s')}}</span><br>
                                             <strong>Confirmation</strong>
                                         </div>
                                     @endif
 
                                     @if ($order->status == 10 && $final_time != null)
                                         <div class="alert alert-danger" role="alert">
-                                            <span>{{$final_time->diffForHumans($now)}}</span><br>
+                                            <span>{{$final_time->format('d M Y H:i:s')}}</span><br>
                                             <strong>Cancel Order</strong>
                                         </div>
                                     @endif
