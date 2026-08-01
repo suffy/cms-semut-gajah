@@ -33,7 +33,7 @@ class ProfileController extends Controller
         $user = $this->user->find(auth()->id());
 
         if ($request->hasFile('photo')) {
-    
+
             if($request->photo!==""){
                 if (file_exists(public_path().$user->photo)) {
                     unlink(public_path().$user->photo); //menghapus file lama
@@ -54,6 +54,7 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->second_email = $request->second_email;
         $user->phone = $request->phone;
 
         $user->save();
@@ -65,7 +66,7 @@ class ProfileController extends Controller
         $logs->activity     = "Update profile user with id : " . auth()->id();
         $logs->data_content  = $user;
         $logs->table_name   = 'users';
-        $logs->column_name  = 'name, email, phone';
+        $logs->column_name  = 'name, email, phone, second_email';
         $logs->from_user    = auth()->user()->id;
         $logs->to_user      = null;
         $logs->platform     = "web";

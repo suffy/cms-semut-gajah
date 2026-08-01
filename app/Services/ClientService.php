@@ -4,6 +4,7 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use App\User;
+use App\Setting;
 
 class ClientService
 {
@@ -50,11 +51,16 @@ class ClientService
             $query->where('site_code', $site_code);
         }
 
-        return $query->pluck('email')->toArray();
+        return $query->pluck('email')->merge($query->pluck('second_email'))->unique()->filter(fn ($val) => $val)->toArray();
     }
 
     public function sendNotification($recipients = [], $subject = "", $content = "")
     {
         $this->sendEmail($recipients, $subject, $content);
+    }
+
+    public function getEmailCc()
+    {
+        return Setting::where('key', 'email_cc')->pluck('value')->toArray();
     }
 }

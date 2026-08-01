@@ -688,15 +688,21 @@ class ComplaintController extends Controller
                             ]);
 
             $body = "Hi,\nKomplain Order telah masuk\n\nNomor Order : ".$order->invoice."\nTanggal Order : ".Carbon::parse($order->order_time)->format('l, d M Y H:i:s')."\nCreated at : ".Carbon::parse($complaint->created_at)->format('l, d M Y H:i:s')."\nCustomer : ".$order->name."\nOption : ".$complaint->option."\n\nLink Web : Silahkan klik -> %s\n\nSilahkan lakukan respon pada komplain tersebut pada halaman Complaints.\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+            $emailCc = $this->clientService->getEmailCc();
+
             // send notification to manager
             $content = sprintf($body, url('manager/complaints'));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $order->site_code);
-            $this->clientService->sendNotification($emails, 'New Complaint Semut Gajah', $content);
+            $this->clientService->sendNotification(array_merge($emails, $emailCc), 'New Complaint Semut Gajah', $content);
 
             // send notification to distributor
             $content = sprintf($body, url('distributor/complaints'));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $order->site_code);
-            $this->clientService->sendNotification($emails, 'New Complaint Semut Gajah', $content);
+            $this->clientService->sendNotification(array_merge($emails, $emailCc), 'New Complaint Semut Gajah', $content);
+
+            // send notification to customer
+            $content = "Hi ".$order->user->name.",\nKomplain Order telah kami terima,\n\nNomor Order : ".$order->invoice."\nOption : ".$complaint->option."\n\nTerima kasih sudah mengajukan komplain kepada kami. Selanjutnya, silahkan tunggu informasi \ndari kami.\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+            $this->clientService->sendNotification([$order->user->email], 'Pesanan '.$order->invoice.' Di ajukan komplen', $content);
 
             return response()->json([
                 'success' => true,

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Services\ClientService;
 class OrderController extends Controller
 {
     protected $order;
@@ -26,8 +27,9 @@ class OrderController extends Controller
     protected $product;
     protected $logs;
     protected $mappingSites;
+    protected $clientService;
 
-    public function __construct(Order $order, User $user, Location $location, OrderDetail $order_detail, Category $category, Product $product, Log $log, MappingSite $mappingSite)
+    public function __construct(Order $order, User $user, Location $location, OrderDetail $order_detail, Category $category, Product $product, Log $log, MappingSite $mappingSite, ClientService $clientService)
     {
         $this->order = $order;
         $this->user = $user;
@@ -37,6 +39,7 @@ class OrderController extends Controller
         $this->product = $product;
         $this->logs = $log;
         $this->mappingSites = $mappingSite;
+        $this->clientService = $clientService;
     }
 
     public function index(Request $request)
@@ -300,10 +303,15 @@ class OrderController extends Controller
                     $activity = 'new order';
                 }else if($status=='2'){
                     $activity = 'order confirm';
+                    $content = "Hi, ".$order->user->name."\nPesanan ".$order->invoice." telah di setujui pada ".Carbon::parse($order->confirmation_time)->format('d M Y').".\n\nTanggal Order : ".Carbon::parse($order->order_time)->format('l, d M Y H:i:s')."\n\nPayment Type : ".Str::upper($order->payment_method)."\nSubtotal : Rp. ".number_format($order->payment_total, 2, ',', '.')."\nOngkos Kirim  : Rp 0,00\nDiskon Outlet : Rp ".number_format($order->diskonOutlet, 2, ',', '.')."\nTotal Pembayaran : Rp ".number_format($order->payment_final, 2, ',', '.')."\n\nDan akan segera di kirim ke alamat tujuan, \nSilahkan lakukan tracking order tersebut pada halaman \"Semua Transaksi\".\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+                    $this->clientService->sendNotification([$order->user->email], 'Pesanan '.$order->invoice.' Di setujui', $content);
                 }else if($status=='3'){
                     $activity = 'order process';
                     $order->delivery_time = Carbon::now();
                     $order->save();
+
+                    $content = "Hi, ".$order->user->name."\nPesanan ".$order->invoice." telah di kirim pada ".Carbon::parse($order->delivery_time)->format('d M Y').".\n\nTanggal Order : ".Carbon::parse($order->order_time)->format('l, d M Y H:i:s')."\n\nPayment Type : ".Str::upper($order->payment_method)."\nSubtotal : Rp. ".number_format($order->payment_total, 2, ',', '.')."\nOngkos Kirim  : Rp 0,00\nDiskon Outlet : Rp ".number_format($order->diskonOutlet, 2, ',', '.')."\nTotal Pembayaran : Rp ".number_format($order->payment_final, 2, ',', '.')."\n\nSilahkan lakukan tracking order tersebut pada halaman \"Semua Transaksi\".\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+                    $this->clientService->sendNotification([$order->user->email], 'Pesanan '.$order->invoice.' Proses Kirim', $content);
                 }else if($status=='4'){
                     $activity = 'order completed';
                     $order->complete_time = Carbon::now();

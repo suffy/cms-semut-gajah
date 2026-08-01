@@ -832,16 +832,17 @@ class OrderController extends Controller
                 ]);
 
             $body = "Hi,\nOrder baru telah masuk\n\nNomor Order : ".$orders->invoice."\nTanggal Order : ".Carbon::parse($orders->order_time)->format('l, d M Y H:i:s')."\nCustomer : ".$orders->name."\nPayment Type : ".Str::upper($orders->payment_method)."\n\nLink Web : Silahkan klik -> %s\n\nSilahkan lakukan approval pada order tersebut pada halaman Orders.\n\nTerima Kasih,\nRegards,\nSemut Gajah";
+            $emailCc = $this->clientService->getEmailCc();
 
             // send notification to manager
             $content = sprintf($body, url('manager/order-detail/' . $orders->id));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['manager'], $siteCode->kode);
-            $this->clientService->sendNotification($emails, 'New Order Semut Gajah', $content);
+            $this->clientService->sendNotification(array_merge($emails, $emailCc), 'New Order Semut Gajah', $content);
 
             // send notification to distributor
             $content = sprintf($body, url('distributor/order-detail/' . $orders->id));
             $emails = $this->clientService->getEmailByRoleAndSiteCode(['distributor_ho', 'distributor'], $siteCode->kode);
-            $this->clientService->sendNotification($emails, 'New Order Semut Gajah', $content);
+            $this->clientService->sendNotification(array_merge($emails, $emailCc), 'New Order Semut Gajah', $content);
 
             return response()->json([
                 'success' => true,

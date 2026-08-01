@@ -11,7 +11,7 @@
         <form action="{{ url('admin/profile/update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('put')
-            
+
             <img src="@if($user->photo != null) {{ asset($user->photo) }} @else {{ asset('no-images.png') }} @endif" width="200px" height="200px">
             <input type="file" name="photo" id="photo">
             <h4>Account Information</h4>
@@ -25,6 +25,12 @@
             <div class="form-group row">
                 <div class="col-md-6">
                     <input type="email" class="form-control" name="email" id="email" value="{{ $user->email }}" placeholder="Your Email" required>
+                </div>
+            </div>
+            <label for="email">Second Email</label>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <input type="email" class="form-control" name="second_email" id="second_email" value="{{ $user->second_email }}" placeholder="Your Second Email">
                 </div>
             </div>
             <label for="phone">Phone</label>
