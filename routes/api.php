@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FirebaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,3 +246,8 @@ Route::group([
     // register user erp
     Route::post('/register', 'Api\UserErpController@register');
 });
+
+Route::post('/firebase/test', [
+    FirebaseController::class,
+    'test'
+]);
