@@ -468,7 +468,7 @@ class DailyProduct extends Command
             if ($product['apps_last_updated'] == '0000-00-00 00:00:00') {
                 return true;
             } else {
-                if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 24) {
+                if (Carbon::parse($product['apps_last_updated'])->diffInHours($nowDate) <= 720) {
                     return true;
                 }
             }
